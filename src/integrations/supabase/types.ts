@@ -44,6 +44,117 @@ export type Database = {
         }
         Relationships: []
       }
+      properties: {
+        Row: {
+          address: string
+          area_sqm: number
+          available_from: string | null
+          balcony: boolean | null
+          city_id: string | null
+          coordinates: unknown | null
+          created_at: string
+          deposit_months: number | null
+          description: string | null
+          elevator: boolean | null
+          features: string[] | null
+          floor: number | null
+          furnished: boolean | null
+          id: string
+          images: string[] | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          neighborhood: string | null
+          parking: boolean | null
+          pets_allowed: boolean | null
+          postal_code: string | null
+          price_monthly: number
+          property_type_id: string | null
+          rooms: string
+          title: string
+          total_floors: number | null
+          updated_at: string
+          utilities_included: boolean | null
+          year_built: number | null
+        }
+        Insert: {
+          address: string
+          area_sqm: number
+          available_from?: string | null
+          balcony?: boolean | null
+          city_id?: string | null
+          coordinates?: unknown | null
+          created_at?: string
+          deposit_months?: number | null
+          description?: string | null
+          elevator?: boolean | null
+          features?: string[] | null
+          floor?: number | null
+          furnished?: boolean | null
+          id?: string
+          images?: string[] | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          neighborhood?: string | null
+          parking?: boolean | null
+          pets_allowed?: boolean | null
+          postal_code?: string | null
+          price_monthly: number
+          property_type_id?: string | null
+          rooms: string
+          title: string
+          total_floors?: number | null
+          updated_at?: string
+          utilities_included?: boolean | null
+          year_built?: number | null
+        }
+        Update: {
+          address?: string
+          area_sqm?: number
+          available_from?: string | null
+          balcony?: boolean | null
+          city_id?: string | null
+          coordinates?: unknown | null
+          created_at?: string
+          deposit_months?: number | null
+          description?: string | null
+          elevator?: boolean | null
+          features?: string[] | null
+          floor?: number | null
+          furnished?: boolean | null
+          id?: string
+          images?: string[] | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          neighborhood?: string | null
+          parking?: boolean | null
+          pets_allowed?: boolean | null
+          postal_code?: string | null
+          price_monthly?: number
+          property_type_id?: string | null
+          rooms?: string
+          title?: string
+          total_floors?: number | null
+          updated_at?: string
+          utilities_included?: boolean | null
+          year_built?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "properties_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "properties_property_type_id_fkey"
+            columns: ["property_type_id"]
+            isOneToOne: false
+            referencedRelation: "property_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_types: {
         Row: {
           created_at: string
