@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { HorizontalPropertyCard, Property } from "@/components/HorizontalPropertyCard";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => {
+export const PropertyListings = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,88 +17,53 @@ export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => 
 
   useEffect(() => {
     fetchProperties();
-  }, [sortBy, currentPage, searchFilters]);
+  }, [sortBy, currentPage]);
 
   const fetchProperties = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Build the query with filters
-      let countQuery = supabase
+      // First get the total count
+      const { count } = await supabase
         .from('properties')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
 
-      let dataQuery = supabase
+      setTotalCount(count || 0);
+
+      // Then get the paginated data
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+
+      let query = supabase
         .from('properties')
         .select(`
           *,
           city:cities(name),
           property_type:property_types(name)
         `)
-        .eq('is_active', true);
-
-      // Apply search filters
-      if (searchFilters) {
-        if (searchFilters.location) {
-          const cityFilter = `city:cities!inner(slug.eq.${searchFilters.location})`;
-          countQuery = countQuery.or(cityFilter);
-          dataQuery = dataQuery.or(cityFilter);
-        }
-        if (searchFilters.propertyType) {
-          const typeFilter = `property_type:property_types!inner(slug.eq.${searchFilters.propertyType})`;
-          countQuery = countQuery.or(typeFilter);
-          dataQuery = dataQuery.or(typeFilter);
-        }
-        if (searchFilters.minPrice) {
-          countQuery = countQuery.gte('price_monthly', parseInt(searchFilters.minPrice));
-          dataQuery = dataQuery.gte('price_monthly', parseInt(searchFilters.minPrice));
-        }
-        if (searchFilters.maxPrice) {
-          countQuery = countQuery.lte('price_monthly', parseInt(searchFilters.maxPrice));
-          dataQuery = dataQuery.lte('price_monthly', parseInt(searchFilters.maxPrice));
-        }
-        if (searchFilters.minArea) {
-          countQuery = countQuery.gte('area_sqm', parseInt(searchFilters.minArea));
-          dataQuery = dataQuery.gte('area_sqm', parseInt(searchFilters.minArea));
-        }
-        if (searchFilters.rooms && searchFilters.rooms !== '5+') {
-          countQuery = countQuery.eq('rooms', searchFilters.rooms);
-          dataQuery = dataQuery.eq('rooms', searchFilters.rooms);
-        } else if (searchFilters.rooms === '5+') {
-          countQuery = countQuery.gte('rooms', '5');
-          dataQuery = dataQuery.gte('rooms', '5');
-        }
-      }
-
-      // Get total count
-      const { count } = await countQuery;
-      setTotalCount(count || 0);
-
-      // Get paginated data
-      const from = (currentPage - 1) * itemsPerPage;
-      const to = from + itemsPerPage - 1;
-      dataQuery = dataQuery.range(from, to);
+        .eq('is_active', true)
+        .range(from, to);
 
       // Apply sorting
       switch (sortBy) {
         case 'price_low':
-          dataQuery = dataQuery.order('price_monthly', { ascending: true });
+          query = query.order('price_monthly', { ascending: true });
           break;
         case 'price_high':
-          dataQuery = dataQuery.order('price_monthly', { ascending: false });
+          query = query.order('price_monthly', { ascending: false });
           break;
         case 'area':
-          dataQuery = dataQuery.order('area_sqm', { ascending: false });
+          query = query.order('area_sqm', { ascending: false });
           break;
         case 'newest':
         default:
-          dataQuery = dataQuery.order('created_at', { ascending: false });
+          query = query.order('created_at', { ascending: false });
           break;
       }
 
-      const { data, error: fetchError } = await dataQuery;
+      const { data, error: fetchError } = await query;
 
       if (fetchError) {
         throw fetchError;
@@ -140,31 +104,18 @@ export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => 
           </div>
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="overflow-hidden bg-white rounded-lg border shadow-sm">
-                <div className="flex flex-col md:flex-row min-h-[200px] md:h-auto">
-                  <div className="w-full md:w-80 flex-shrink-0">
-                    <Skeleton className="w-full aspect-[16/10] md:aspect-[4/3] md:h-56" />
+              <div key={i} className="flex gap-4">
+                <Skeleton className="w-80 h-48 rounded-lg flex-shrink-0" />
+                <div className="flex-1 space-y-3">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <div className="grid grid-cols-4 gap-4">
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <Skeleton key={j} className="h-12 w-full" />
+                    ))}
                   </div>
-                  <div className="flex-1 p-4 md:p-6 space-y-3">
-                    <div className="flex flex-col md:flex-row md:justify-between gap-2">
-                      <Skeleton className="h-5 w-32" />
-                      <Skeleton className="h-6 w-24" />
-                    </div>
-                    <Skeleton className="h-6 w-3/4" />
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {Array.from({ length: 4 }).map((_, j) => (
-                        <div key={j} className="text-center space-y-1">
-                          <Skeleton className="h-4 w-4 mx-auto" />
-                          <Skeleton className="h-4 w-12 mx-auto" />
-                          <Skeleton className="h-3 w-16 mx-auto" />
-                        </div>
-                      ))}
-                    </div>
-                    <Skeleton className="h-4 w-full" />
-                    <div className="flex justify-end">
-                      <Skeleton className="h-8 w-24" />
-                    </div>
-                  </div>
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
                 </div>
               </div>
             ))}

@@ -1,16 +1,9 @@
-import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CompactPropertySearchFilter } from "@/components/CompactPropertySearchFilter";
 import { PropertyListings } from "@/components/PropertyListings";
 
 const Mietangebote = () => {
-  const [searchFilters, setSearchFilters] = useState({});
-
-  const handleSearch = (filters: any) => {
-    setSearchFilters(filters);
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -32,14 +25,14 @@ const Mietangebote = () => {
         {/* Search Filter */}
         <section className="py-6 bg-muted/30">
           <div className="container mx-auto px-4">
-            <CompactPropertySearchFilter onSearch={handleSearch} />
+            <CompactPropertySearchFilter />
           </div>
         </section>
 
         {/* Property Listings */}
         <section className="py-12">
           <div className="container mx-auto px-4">
-            <PropertyListings searchFilters={searchFilters} />
+            <PropertyListings />
           </div>
         </section>
       </main>
