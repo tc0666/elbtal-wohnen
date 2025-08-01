@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { PropertyCard, Property } from "@/components/PropertyCard";
+import { HorizontalPropertyCard, Property } from "@/components/HorizontalPropertyCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle, SlidersHorizontal, ArrowUp } from "lucide-react";
+import { AlertCircle, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const PropertyListings = () => {
@@ -11,15 +11,30 @@ export const PropertyListings = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'price_low' | 'price_high' | 'newest' | 'area'>('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchProperties();
-  }, [sortBy]);
+  }, [sortBy, currentPage]);
 
   const fetchProperties = async () => {
     try {
       setLoading(true);
       setError(null);
+
+      // First get the total count
+      const { count } = await supabase
+        .from('properties')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
+
+      setTotalCount(count || 0);
+
+      // Then get the paginated data
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
 
       let query = supabase
         .from('properties')
@@ -28,7 +43,8 @@ export const PropertyListings = () => {
           city:cities(name),
           property_type:property_types(name)
         `)
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .range(from, to);
 
       // Apply sorting
       switch (sortBy) {
@@ -62,6 +78,13 @@ export const PropertyListings = () => {
     }
   };
 
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const getSortLabel = (sort: string) => {
     switch (sort) {
       case 'price_low': return 'Preis aufsteigend';
@@ -74,24 +97,30 @@ export const PropertyListings = () => {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-10 w-32" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="space-y-4">
-              <Skeleton className="aspect-[4/3] w-full rounded-lg" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-4 w-2/3" />
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-10 w-32" />
+          </div>
+          <div className="space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex gap-4">
+                <Skeleton className="w-80 h-48 rounded-lg flex-shrink-0" />
+                <div className="flex-1 space-y-3">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <div className="grid grid-cols-4 gap-4">
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <Skeleton key={j} className="h-12 w-full" />
+                    ))}
+                  </div>
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
     );
   }
 
@@ -113,7 +142,8 @@ export const PropertyListings = () => {
             Verfügbare Immobilien
           </h2>
           <p className="text-muted-foreground">
-            {properties.length} {properties.length === 1 ? 'Immobilie' : 'Immobilien'} gefunden
+            {totalCount} {totalCount === 1 ? 'Immobilie' : 'Immobilien'} gefunden
+            {totalPages > 1 && ` • Seite ${currentPage} von ${totalPages}`}
           </p>
         </div>
 
@@ -133,13 +163,67 @@ export const PropertyListings = () => {
         </div>
       </div>
 
-      {/* Property Grid */}
+      {/* Property List */}
       {properties.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
-        </div>
+        <>
+          <div className="space-y-6">
+            {properties.map((property) => (
+              <HorizontalPropertyCard key={property.id} property={property} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-8">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Zurück
+              </Button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(pageNum)}
+                      className="w-10 h-10"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Weiter
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="text-center py-12">
           <div className="max-w-md mx-auto">

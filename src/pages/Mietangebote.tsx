@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { PropertySearchFilter } from "@/components/PropertySearchFilter";
+import { CompactPropertySearchFilter } from "@/components/CompactPropertySearchFilter";
 import { PropertyListings } from "@/components/PropertyListings";
 
 const Mietangebote = () => {
@@ -9,13 +9,13 @@ const Mietangebote = () => {
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-primary to-primary-dark py-16 md:py-24">
+        <section className="bg-background border-b border-border py-12 md:py-16">
           <div className="container mx-auto px-4">
-            <div className="text-center text-white">
-              <h1 className="text-3xl md:text-5xl font-bold mb-4">
+            <div className="text-center">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
                 Mietangebote
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Entdecken Sie unsere hochwertigen Mietwohnungen in den besten Lagen Deutschlands
               </p>
             </div>
@@ -23,9 +23,9 @@ const Mietangebote = () => {
         </section>
 
         {/* Search Filter */}
-        <section className="py-8 bg-gradient-to-b from-primary-dark to-background">
+        <section className="py-6 bg-muted/30">
           <div className="container mx-auto px-4">
-            <PropertySearchFilter />
+            <CompactPropertySearchFilter />
           </div>
         </section>
 
