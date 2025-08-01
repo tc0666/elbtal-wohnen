@@ -70,8 +70,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
   useEffect(() => {
     console.log('PropertyForm received property:', property);
-    if (property) {
+    fetchCitiesAndTypes();
+  }, [property]);
+
+  // Separate useEffect to set form data after both property and dropdown data are loaded
+  useEffect(() => {
+    if (property && cities.length > 0 && propertyTypes.length > 0) {
       console.log('Setting form data with property:', property);
+      console.log('Available cities:', cities);
+      console.log('Available property types:', propertyTypes);
+      
       setFormData({
         title: property.title || '',
         description: property.description || '',
@@ -114,9 +122,10 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         is_active: property.is_active !== undefined ? property.is_active : true,
         images: property.images || []
       });
+      
+      console.log('Form data set with city_id:', property.city_id, 'and property_type_id:', property.property_type_id);
     }
-    fetchCitiesAndTypes();
-  }, [property]);
+  }, [property, cities, propertyTypes]);
 
   const fetchCitiesAndTypes = async () => {
     try {
