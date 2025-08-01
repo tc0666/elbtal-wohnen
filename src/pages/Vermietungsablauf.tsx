@@ -134,34 +134,35 @@ const Vermietungsablauf = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Der Vermietungsprozess in 7 Schritten</h2>
           
-          <div className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {steps.map((step, index) => (
-              <Card key={step.number} className="relative overflow-hidden border-l-4 border-l-primary bg-background shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-8">
-                  <div className="flex items-start gap-6">
-                    {/* Step Number Circle */}
-                    <div className="flex-shrink-0">
-                      <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
-                        {step.number}
+              <Card key={step.number} className="relative overflow-hidden border-l-4 border-l-primary bg-background shadow-sm hover:shadow-md transition-shadow h-full">
+                <CardContent className="p-6">
+                  <div className="flex flex-col gap-4">
+                    {/* Step Number Circle and Title */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                          {step.number}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <step.icon className="h-5 w-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground">{step.title}</h3>
                       </div>
                     </div>
                     
                     {/* Content */}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <step.icon className="h-6 w-6 text-primary" />
-                        <h3 className="text-xl font-semibold text-foreground">{step.title}</h3>
-                      </div>
-                      
-                      <p className="text-muted-foreground mb-4 leading-relaxed">
+                    <div>
+                      <p className="text-muted-foreground mb-4 leading-relaxed text-sm">
                         {step.description}
                       </p>
                       
                       <div className="space-y-2">
                         {step.details.map((detail, idx) => (
-                          <div key={idx} className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                            <span className="text-sm text-muted-foreground">{detail}</span>
+                          <div key={idx} className="flex items-start gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                            <span className="text-xs text-muted-foreground">{detail}</span>
                           </div>
                         ))}
                       </div>
