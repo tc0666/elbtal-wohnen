@@ -57,101 +57,103 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white">
-      <div className="flex h-72">
-        {/* Image - Full Height */}
-        <div className="relative w-80 flex-shrink-0 h-full">
-          <img
-            src={property.images[0] || '/placeholder.svg'}
-            alt={property.title}
-            className="w-full h-full object-cover"
-          />
-          {property.is_featured && (
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-primary">
-              Empfohlen
-            </div>
-          )}
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-white">
+      <div className="flex flex-col md:flex-row min-h-[200px] md:h-auto">
+        {/* Image */}
+        <div className="relative w-full md:w-80 flex-shrink-0">
+          <div className="aspect-[16/10] md:aspect-[4/3] md:h-56 overflow-hidden">
+            <img
+              src={property.images[0] || '/placeholder.svg'}
+              alt={property.title}
+              className="w-full h-full object-cover"
+            />
+            {property.is_featured && (
+              <div className="absolute top-3 left-3 bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-medium">
+                Empfohlen
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-6 flex flex-col">
+        <div className="flex-1 p-4 md:p-6 flex flex-col">
           {/* Header */}
-          <div className="flex justify-between items-start mb-4">
-            <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs px-2 py-1">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-3 gap-2">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs">
                 {property.property_type.name}
               </Badge>
-              <div className="flex items-center text-muted-foreground text-sm">
-                <MapPin className="h-4 w-4 mr-1" />
+              <div className="flex items-center">
+                <MapPin className="h-3 w-3 mr-1" />
                 {property.city.name}, {property.neighborhood}
               </div>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold text-foreground">
+              <div className="text-xl md:text-2xl font-bold text-foreground">
                 {formatPrice(property.price_monthly)}
               </div>
-              <div className="text-sm text-muted-foreground">pro Monat</div>
+              <div className="text-xs text-muted-foreground">pro Monat</div>
             </div>
           </div>
 
           {/* Title and Address */}
-          <div className="mb-6">
-            <h3 className="text-xl font-bold text-foreground mb-2">
+          <div className="mb-4">
+            <h3 className="text-lg md:text-xl font-bold text-foreground mb-1 line-clamp-1">
               {property.title}
             </h3>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground line-clamp-1">
               {property.address}
             </p>
           </div>
 
           {/* Details Grid */}
-          <div className="grid grid-cols-4 gap-6 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4">
             <div className="text-center">
-              <div className="flex justify-center mb-2">
-                <Ruler className="h-5 w-5 text-primary" />
+              <div className="flex justify-center mb-1">
+                <Ruler className="h-4 w-4 text-primary" />
               </div>
-              <div className="font-bold text-lg">{property.area_sqm} m²</div>
-              <div className="text-sm text-muted-foreground">Wohnfläche</div>
+              <div className="font-semibold text-sm">{property.area_sqm} m²</div>
+              <div className="text-xs text-muted-foreground">Wohnfläche</div>
             </div>
             <div className="text-center">
-              <div className="flex justify-center mb-2">
-                <Users className="h-5 w-5 text-primary" />
+              <div className="flex justify-center mb-1">
+                <Users className="h-4 w-4 text-primary" />
               </div>
-              <div className="font-bold text-lg">{property.rooms} Zimmer</div>
-              <div className="text-sm text-muted-foreground">Räume</div>
+              <div className="font-semibold text-sm">{property.rooms} Zimmer</div>
+              <div className="text-xs text-muted-foreground">Räume</div>
             </div>
             <div className="text-center">
-              <div className="flex justify-center mb-2">
-                <Calendar className="h-5 w-5 text-primary" />
+              <div className="flex justify-center mb-1">
+                <Calendar className="h-4 w-4 text-primary" />
               </div>
-              <div className="font-bold text-lg">ab {formatDate(property.available_from)}</div>
-              <div className="text-sm text-muted-foreground">Verfügbar</div>
+              <div className="font-semibold text-sm">ab {formatDate(property.available_from)}</div>
+              <div className="text-xs text-muted-foreground">Verfügbar</div>
             </div>
             <div className="text-center">
-              <div className="flex justify-center mb-2">
-                <CheckCircle className="h-5 w-5 text-primary" />
+              <div className="flex justify-center mb-1">
+                <CheckCircle className="h-4 w-4 text-primary" />
               </div>
-              <div className="font-bold text-lg">{property.floor}. OG</div>
-              <div className="text-sm text-muted-foreground">Etage</div>
+              <div className="font-semibold text-sm">{property.floor}. OG</div>
+              <div className="text-xs text-muted-foreground">Etage</div>
             </div>
           </div>
 
           {/* Features */}
-          <div className="flex gap-6 mb-6">
+          <div className="flex flex-wrap gap-3 mb-4">
             {property.balcony && (
-              <div className="flex items-center text-sm font-medium text-green-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+              <div className="flex items-center text-xs font-medium text-green-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
                 Balkon
               </div>
             )}
             {property.elevator && (
-              <div className="flex items-center text-sm font-medium text-blue-600">
-                <ArrowUp className="h-4 w-4 mr-1" />
+              <div className="flex items-center text-xs font-medium text-blue-600">
+                <ArrowUp className="h-3 w-3 mr-1" />
                 Aufzug
               </div>
             )}
             {property.furnished && (
-              <div className="text-sm font-medium text-purple-600">
+              <div className="text-xs font-medium text-purple-600">
                 Möbliert
               </div>
             )}
@@ -159,11 +161,11 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
 
           {/* Description and Button */}
           <div className="flex-1 flex flex-col justify-between">
-            <p className="text-muted-foreground mb-4 line-clamp-2">
+            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
               {property.description}
             </p>
             <div className="flex justify-end">
-              <Button variant="outline" size="lg" className="px-8">
+              <Button variant="outline" size="sm" className="hover-scale">
                 Details ansehen
               </Button>
             </div>

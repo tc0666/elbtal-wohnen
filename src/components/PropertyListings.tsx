@@ -138,29 +138,31 @@ export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => 
             <Skeleton className="h-8 w-48" />
             <Skeleton className="h-10 w-32" />
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="overflow-hidden bg-white rounded-lg border shadow-sm">
-                <div className="flex h-72">
-                  <Skeleton className="w-80 h-full rounded-none flex-shrink-0" />
-                  <div className="flex-1 p-6 space-y-4">
-                    <div className="flex justify-between">
-                      <Skeleton className="h-6 w-48" />
-                      <Skeleton className="h-8 w-24" />
+                <div className="flex flex-col md:flex-row min-h-[200px] md:h-auto">
+                  <div className="w-full md:w-80 flex-shrink-0">
+                    <Skeleton className="w-full aspect-[16/10] md:aspect-[4/3] md:h-56" />
+                  </div>
+                  <div className="flex-1 p-4 md:p-6 space-y-3">
+                    <div className="flex flex-col md:flex-row md:justify-between gap-2">
+                      <Skeleton className="h-5 w-32" />
+                      <Skeleton className="h-6 w-24" />
                     </div>
-                    <Skeleton className="h-6 w-64" />
-                    <div className="grid grid-cols-4 gap-6">
+                    <Skeleton className="h-6 w-3/4" />
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                       {Array.from({ length: 4 }).map((_, j) => (
-                        <div key={j} className="text-center space-y-2">
-                          <Skeleton className="h-5 w-5 mx-auto" />
-                          <Skeleton className="h-5 w-12 mx-auto" />
-                          <Skeleton className="h-4 w-16 mx-auto" />
+                        <div key={j} className="text-center space-y-1">
+                          <Skeleton className="h-4 w-4 mx-auto" />
+                          <Skeleton className="h-4 w-12 mx-auto" />
+                          <Skeleton className="h-3 w-16 mx-auto" />
                         </div>
                       ))}
                     </div>
                     <Skeleton className="h-4 w-full" />
                     <div className="flex justify-end">
-                      <Skeleton className="h-10 w-32" />
+                      <Skeleton className="h-8 w-24" />
                     </div>
                   </div>
                 </div>
