@@ -58,7 +58,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
   };
 
   const loadLeafletCSS = (): Promise<void> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // Check if CSS is already loaded
       if (document.querySelector('link[href*="leaflet"]')) {
         console.log('🗺️ [CSS] Already loaded');
@@ -66,10 +66,11 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
         return;
       }
 
-      console.log('🗺️ [CSS] Loading...');
+      console.log('🗺️ [CSS] Loading from CDN...');
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+      link.crossOrigin = 'anonymous';
       
       link.onload = () => {
         console.log('🗺️ [CSS] Loaded successfully');
@@ -77,17 +78,25 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       };
       
       link.onerror = () => {
-        console.error('🗺️ [CSS] Failed to load');
-        reject(new Error('Failed to load Leaflet CSS'));
+        console.warn('🗺️ [CSS] CDN failed, trying unpkg...');
+        const fallbackLink = document.createElement('link');
+        fallbackLink.rel = 'stylesheet';
+        fallbackLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        fallbackLink.onload = () => resolve();
+        fallbackLink.onerror = () => {
+          console.warn('🗺️ [CSS] All sources failed, continuing without CSS');
+          resolve();
+        };
+        document.head.appendChild(fallbackLink);
       };
       
       document.head.appendChild(link);
       
-      // Fallback timeout
+      // Always resolve after timeout
       setTimeout(() => {
-        console.log('🗺️ [CSS] Timeout fallback');
+        console.log('🗺️ [CSS] Timeout - continuing');
         resolve();
-      }, 3000);
+      }, 2000);
     });
   };
 
@@ -100,9 +109,14 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       setLoading(true);
       setError('');
 
-      // Step 1: Geocode the address
-      const fullAddress = `${address}, ${city}, Germany`;
-      const coords = await geocodeAddress(fullAddress);
+      // Step 1: Try to geocode the specific address first
+      let coords = await geocodeAddress(`${address}, ${city}, Germany`);
+      
+      // Step 2: If specific address fails, try just the city
+      if (!coords) {
+        console.log('🗺️ [INIT] Specific address failed, trying city only');
+        coords = await geocodeAddress(`${city}, Germany`);
+      }
 
       if (!coords) {
         throw new Error('Standort konnte nicht gefunden werden');
@@ -138,12 +152,12 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       }
       mapContainer.current.innerHTML = '';
 
-      // Step 6: Fix default markers
+      // Step 6: Fix default markers with CDN fallback
       delete (L.Icon.Default.prototype as any)._getIconUrl;
       L.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
       });
 
       // Step 7: Create map
