@@ -182,15 +182,28 @@ const PropertyDetails = () => {
                   {property.description}
                 </p>
 
-                {/* Tags/Features */}
-                {property.features && property.features.length > 0 && (
+                {/* Ausstattung Description */}
+                {property.features_description && (
                   <>
                     <div className="mb-6">
                       <h4 className="font-semibold mb-3">Ausstattung</h4>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {property.features_description}
+                      </p>
+                    </div>
+                    <Separator className="my-6" />
+                  </>
+                )}
+
+                {/* Eigenschaften Tags */}
+                {(property as any).eigenschaften_tags && (property as any).eigenschaften_tags.length > 0 && (
+                  <>
+                    <div className="mb-6">
+                      <h4 className="font-semibold mb-3">Eigenschaften Tags</h4>
                       <div className="flex flex-wrap gap-2">
-                        {property.features.map((feature, index) => (
+                        {(property as any).eigenschaften_tags.map((tag: string, index: number) => (
                           <Badge key={index} variant="secondary" className="text-xs">
-                            {feature}
+                            {tag}
                           </Badge>
                         ))}
                       </div>
@@ -199,9 +212,22 @@ const PropertyDetails = () => {
                   </>
                 )}
 
+                {/* Eigenschaften Description */}
+                {(property as any).eigenschaften_description && (
+                  <>
+                    <div className="mb-6">
+                      <h4 className="font-semibold mb-3">Eigenschaften</h4>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {(property as any).eigenschaften_description}
+                      </p>
+                    </div>
+                    <Separator className="my-6" />
+                  </>
+                )}
+
                 {/* Property checkboxes features */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Eigenschaften</h4>
+                  <h4 className="font-semibold mb-3">Ausstattungsmerkmale</h4>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {property.balcony && (
                       <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
@@ -389,13 +415,6 @@ const PropertyDetails = () => {
 
                 <Separator className="my-6" />
 
-                {/* Features Description */}
-                <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Weitere Ausstattungsdetails</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {property.features_description || 'Weitere Ausstattungsdetails werden in Kürze ergänzt.'}
-                  </p>
-                </div>
 
                 <Separator className="my-6" />
 

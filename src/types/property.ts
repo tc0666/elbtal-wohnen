@@ -38,13 +38,14 @@ export interface PropertyBase {
   heating_type: string;
   heating_energy_source: string;
   internet_speed: string;
-  features_description: string;
+  features_description: string; // Ausstattung description
   additional_description: string;
   neighborhood_description: string;
+  eigenschaften_description: string; // Eigenschaften description
+  eigenschaften_tags: string[]; // Eigenschaften custom tags
   is_featured: boolean;
   is_active: boolean;
   images: string[];
-  features: string[];
 }
 
 // Property with populated relations (for display)

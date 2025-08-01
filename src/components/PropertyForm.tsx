@@ -43,6 +43,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     features_description: '',
     additional_description: '',
     neighborhood_description: '',
+    eigenschaften_description: '',
+    eigenschaften_tags: [],
     is_featured: false,
     is_active: true,
     images: []
@@ -55,9 +57,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   const [additionalImageFiles, setAdditionalImageFiles] = useState<File[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
   
-  // Features state
-  const [features, setFeatures] = useState<string[]>([]);
-  const [customTag, setCustomTag] = useState('');
+  // Eigenschaften state
+  const [eigenschaftenTags, setEigenschaftenTags] = useState<string[]>([]);
+  const [customEigenschaftenTag, setCustomEigenschaftenTag] = useState('');
   
   // Feature checkboxes
   const [featureCheckboxes, setFeatureCheckboxes] = useState({
@@ -117,13 +119,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         features_description: property.features_description || '',
         additional_description: property.additional_description || '',
         neighborhood_description: property.neighborhood_description || '',
+        eigenschaften_description: property.eigenschaften_description || '',
+        eigenschaften_tags: property.eigenschaften_tags || [],
         is_featured: property.is_featured || false,
         is_active: property.is_active !== undefined ? property.is_active : true,
         images: property.images || []
       });
       
-      // Set features
-      setFeatures(property.features || []);
+      // Set eigenschaften tags
+      setEigenschaftenTags(property.eigenschaften_tags || []);
       
       // Set feature checkboxes
       setFeatureCheckboxes({
@@ -231,7 +235,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         ...formData,
         images: allImages,
         available_from: formData.available_from || null,
-        features: features,
+        eigenschaften_tags: eigenschaftenTags,
         ...featureCheckboxes
       };
 
@@ -286,15 +290,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     });
   };
 
-  const addCustomTag = () => {
-    if (customTag.trim() && !features.includes(customTag.trim())) {
-      setFeatures([...features, customTag.trim()]);
-      setCustomTag('');
+  const addCustomEigenschaftenTag = () => {
+    if (customEigenschaftenTag.trim() && !eigenschaftenTags.includes(customEigenschaftenTag.trim())) {
+      setEigenschaftenTags([...eigenschaftenTags, customEigenschaftenTag.trim()]);
+      setCustomEigenschaftenTag('');
     }
   };
 
-  const removeTag = (index: number) => {
-    setFeatures(features.filter((_, i) => i !== index));
+  const removeEigenschaftenTag = (index: number) => {
+    setEigenschaftenTags(eigenschaftenTags.filter((_, i) => i !== index));
   };
 
   const handleFeatureCheckboxChange = (feature: string, checked: boolean) => {
@@ -709,38 +713,38 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               </div>
             </div>
 
-            {/* Custom Tags */}
+            {/* Custom Eigenschaften Tags */}
             <div>
-              <h4 className="font-medium mb-3">Benutzerdefinierte Tags</h4>
+              <h4 className="font-medium mb-3">Benutzerdefinierte Eigenschaften Tags</h4>
               <div className="flex gap-2 mb-3">
                 <Input
                   placeholder="Tag hinzufügen (z.B. Klimaanlage, Sauna, etc.)"
-                  value={customTag}
-                  onChange={(e) => setCustomTag(e.target.value)}
+                  value={customEigenschaftenTag}
+                  onChange={(e) => setCustomEigenschaftenTag(e.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
-                      addCustomTag();
+                      addCustomEigenschaftenTag();
                     }
                   }}
                 />
                 <Button
                   type="button"
-                  onClick={addCustomTag}
+                  onClick={addCustomEigenschaftenTag}
                   variant="outline"
                   size="sm"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
-              {features.length > 0 && (
+              {eigenschaftenTags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {features.map((feature, index) => (
+                  {eigenschaftenTags.map((tag, index) => (
                     <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                      {feature}
+                      {tag}
                       <button
                         type="button"
-                        onClick={() => removeTag(index)}
+                        onClick={() => removeEigenschaftenTag(index)}
                         className="ml-1 hover:bg-destructive hover:text-destructive-foreground rounded-full p-0.5"
                       >
                         <X className="h-3 w-3" />
@@ -749,6 +753,17 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   ))}
                 </div>
               )}
+            </div>
+
+            {/* Eigenschaften Description */}
+            <div>
+              <h4 className="font-medium mb-3">Eigenschaften Beschreibung</h4>
+              <Textarea
+                placeholder="Detaillierte Beschreibung der besonderen Eigenschaften (z.B. Diese Wohnung besticht durch ihre moderne Ausstattung und durchdachte Raumaufteilung...)"
+                value={formData.eigenschaften_description || ''}
+                onChange={(e) => setFormData({ ...formData, eigenschaften_description: e.target.value })}
+                rows={3}
+              />
             </div>
           </CardContent>
         </Card>
