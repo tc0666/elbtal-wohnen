@@ -1,22 +1,16 @@
-import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import PropertyMap from "@/components/PropertyMap";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import React, { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import PropertyImageGallery from '@/components/PropertyImageGallery';
+import SimpleLocationDisplay from '@/components/SimpleLocationDisplay';
 import { 
   MapPin, 
   Ruler, 
@@ -40,7 +34,6 @@ import {
 
 const PropertyDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const [featuredImageIndex, setFeaturedImageIndex] = useState(0);
   
   const { data: property, isLoading, error } = useQuery({
     queryKey: ['property', id],
@@ -138,82 +131,44 @@ const PropertyDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Left Column - 60% */}
           <div className="lg:col-span-3">
-            {/* Featured Image */}
-            <div className="relative mb-6">
-              <img
-                src={images[featuredImageIndex]}
-                alt={property.title}
-                className="w-full h-[400px] object-cover rounded-lg"
-                loading="eager"
-                crossOrigin="anonymous"
-              />
+            {/* Property Images */}
+            <PropertyImageGallery 
+              images={images}
+              title={property.title}
+              className="mb-6"
+            />
+
+            {/* Property Title and Info */}
+            <div className="mb-6">
               {property.is_featured && (
-                <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">
+                <Badge className="mb-3 bg-accent text-accent-foreground">
                   <Star className="w-3 h-3 mr-1" />
                   Empfohlen
                 </Badge>
               )}
-              <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-md">
-                <span className="text-lg font-bold text-foreground">
-                  {formatPrice(property.price_monthly)}/Monat
-                </span>
-              </div>
-            </div>
-
-            {/* Image Carousel */}
-            {images.length > 1 && (
-              <div className="mb-6">
-                <Carousel className="w-full">
-                  <CarouselContent className="-ml-1">
-                    {images.map((image, index) => (
-                      <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
-                        <div className="p-1">
-                          <button
-                            onClick={() => setFeaturedImageIndex(index)}
-                            className={`relative w-full h-32 rounded-lg overflow-hidden transition-all duration-200 hover:opacity-80 block ${
-                              featuredImageIndex === index 
-                                ? 'ring-2 ring-primary ring-offset-2' 
-                                : ''
-                            }`}
-                          >
-                            <img
-                              src={image}
-                              alt={`${property.title} - Bild ${index + 1}`}
-                              className="w-full h-full object-cover"
-                              loading="eager"
-                              crossOrigin="anonymous"
-                            />
-                          </button>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="left-4" />
-                  <CarouselNext className="right-4" />
-                </Carousel>
-              </div>
-            )}
-
-            {/* Title and Social Share */}
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="secondary">
-                    {property.property_type?.name || 'Typ nicht verfügbar'}
-                  </Badge>
-                  <div className="flex items-center text-muted-foreground text-sm">
-                    <MapPin className="h-4 w-4 mr-1" />
-                    {property.city?.name || 'Stadt nicht verfügbar'}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge variant="secondary">
+                      {property.property_type?.name || 'Typ nicht verfügbar'}
+                    </Badge>
+                    <div className="flex items-center text-muted-foreground text-sm">
+                      <MapPin className="h-4 w-4 mr-1" />
+                      {property.city?.name || 'Stadt nicht verfügbar'}
+                    </div>
                   </div>
+                  <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
+                  <p className="text-lg text-muted-foreground">
+                    {property.address}, {property.neighborhood}
+                  </p>
                 </div>
-                <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
-                <p className="text-lg text-muted-foreground">
-                  {property.address}, {property.neighborhood}
-                </p>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-primary">
+                    {formatPrice(property.price_monthly)}
+                  </div>
+                  <div className="text-sm text-muted-foreground">pro Monat</div>
+                </div>
               </div>
-              <Button variant="outline" size="icon">
-                <Share2 className="h-4 w-4" />
-              </Button>
             </div>
 
             {/* Property Details */}
@@ -478,20 +433,13 @@ const PropertyDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm font-medium mb-2">
-                  {property.address}, {property.city?.name}
-                </p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Diese Immobilie befindet sich in einer sehr begehrten Wohnlage mit exzellenter 
-                  Infrastruktur. In unmittelbarer Nähe finden Sie Einkaufsmöglichkeiten, Restaurants, 
-                  Schulen und öffentliche Verkehrsmittel. Die Verkehrsanbindung ist ideal für Pendler.
-                </p>
-                
-                {/* Interactive Map */}
-                <PropertyMap 
+                {/* Simple Location Display */}
+                <SimpleLocationDisplay 
                   address={property.address}
                   city={property.city?.name || ''}
-                  className="w-full h-64"
+                  postalCode={property.postal_code || undefined}
+                  neighborhood={property.neighborhood || undefined}
+                  className="w-full"
                 />
               </CardContent>
             </Card>
