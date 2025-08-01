@@ -6,8 +6,8 @@ export const WhyChooseUsSection = () => {
   const features = [
     {
       icon: Award,
-      title: "15+ Jahre Erfahrung",
-      description: "Seit 2009 sind wir erfolgreich im deutschen Immobilienmarkt tätig und haben bereits tausende von Mietern glücklich gemacht.",
+      title: "35+ Jahre Erfahrung",
+      description: "Seit 1988 sind wir erfolgreich im deutschen Immobilienmarkt tätig und haben bereits tausende von Mietern glücklich gemacht.",
     },
     {
       icon: TrendingUp,

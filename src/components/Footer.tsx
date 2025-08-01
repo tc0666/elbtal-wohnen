@@ -13,7 +13,7 @@ export const Footer = () => {
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Ihr vertrauensvoller Partner für hochwertige Mietwohnungen in Deutschland. 
-              Seit über 15 Jahren verbinden wir Menschen mit ihrem perfekten Zuhause.
+              Seit über 35 Jahren verbinden wir Menschen mit ihrem perfekten Zuhause.
             </p>
           </div>
 

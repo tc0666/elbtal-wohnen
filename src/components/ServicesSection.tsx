@@ -48,7 +48,7 @@ export const ServicesSection = () => {
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Wir bieten Ihnen einen Rundumservice für Ihre Immobiliensuche - 
-              professionell, zuverlässig und kundenorientiert. Seit über 15 Jahren 
+              professionell, zuverlässig und kundenorientiert. Seit über 35 Jahren 
               vertrauen uns Kunden in ganz Deutschland.
             </p>
           </div>
