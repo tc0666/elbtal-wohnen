@@ -28,12 +28,19 @@ const AdminDashboard = () => {
       }
 
       try {
-        const { data } = await supabase.functions.invoke('admin-auth', {
+        const { data, error } = await supabase.functions.invoke('admin-auth', {
           body: { action: 'verify', token }
         });
         
-        if (!data.success) {
-          throw new Error('Invalid token');
+        console.log('Auth verification response:', { data, error });
+        
+        if (error) {
+          console.error('Supabase function error:', error);
+          throw new Error('Authentication failed');
+        }
+        
+        if (!data || !data.success) {
+          throw new Error('Invalid token or auth failed');
         }
 
         setAdminUser(JSON.parse(userStr));

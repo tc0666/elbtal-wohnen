@@ -17,7 +17,11 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { action, username, password } = await req.json()
+    // Read request body once and store it
+    const requestBody = await req.json()
+    const { action, username, password, token } = requestBody
+
+    console.log('Admin auth request:', { action, username: username ? 'provided' : 'missing' })
 
     if (action === 'login') {
       // Simple password hashing for demo (in production, use proper bcrypt)
@@ -78,7 +82,7 @@ serve(async (req) => {
     }
 
     if (action === 'verify') {
-      const { token } = await req.json()
+      console.log('Verifying token:', token ? 'provided' : 'missing')
       
       if (!token) {
         return new Response(
