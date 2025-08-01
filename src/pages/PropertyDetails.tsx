@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
@@ -29,7 +29,11 @@ import {
   Phone,
   Mail,
   Clock,
-  MessageSquare
+  MessageSquare,
+  ArrowLeft,
+  Home,
+  Flame,
+  Zap
 } from "lucide-react";
 
 const PropertyDetails = () => {
@@ -118,6 +122,16 @@ const PropertyDetails = () => {
       <Header />
       
       <div className="container mx-auto px-4 py-8">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link to="/mietangebote">
+            <Button variant="outline" className="flex items-center gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Zurück zu Mietangebote
+            </Button>
+          </Link>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Left Column - 60% */}
           <div className="lg:col-span-3">
@@ -126,7 +140,7 @@ const PropertyDetails = () => {
               <img
                 src={images[0]}
                 alt={property.title}
-                className="w-full h-96 object-cover rounded-lg"
+                className="w-full h-[400px] object-cover rounded-lg"
               />
               {property.is_featured && (
                 <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">
@@ -185,38 +199,85 @@ const PropertyDetails = () => {
             </div>
 
             {/* Property Details */}
-            <Card>
+            <Card className="mb-6">
               <CardHeader>
                 <CardTitle>Immobiliendetails</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
-                  <div className="flex items-center">
-                    <Ruler className="h-5 w-5 mr-3 text-primary" />
-                    <div>
-                      <div className="font-semibold">{property.area_sqm} m²</div>
-                      <div className="text-sm text-muted-foreground">Wohnfläche</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <h4 className="font-semibold mb-3">Grunddaten</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ID:</span>
+                        <span className="font-medium">{property.id.slice(0, 8)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Kaltmiete:</span>
+                        <span className="font-medium">{formatPrice(property.price_monthly)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Nebenkosten:</span>
+                        <span className="font-medium">150 €</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Warmmiete:</span>
+                        <span className="font-medium">{formatPrice(property.price_monthly + 150)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Kaution:</span>
+                        <span className="font-medium">{property.deposit_months} Monatsmieten</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <Users className="h-5 w-5 mr-3 text-primary" />
-                    <div>
-                      <div className="font-semibold">{property.rooms} Zimmer</div>
-                      <div className="text-sm text-muted-foreground">Räume</div>
+                  
+                  <div>
+                    <h4 className="font-semibold mb-3">Flächenangaben</h4>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Wohnfläche:</span>
+                        <span className="font-medium">{property.area_sqm} m²</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Zimmer:</span>
+                        <span className="font-medium">{property.rooms}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Etage:</span>
+                        <span className="font-medium">{property.floor}. OG</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Baujahr:</span>
+                        <span className="font-medium">{property.year_built || 'Nicht angegeben'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Verfügbar ab:</span>
+                        <span className="font-medium">{formatDate(property.available_from)}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-3 text-primary" />
+                </div>
+
+                <Separator className="my-6" />
+
+                {/* Energy Information */}
+                <div className="mb-6">
+                  <h4 className="font-semibold mb-3 flex items-center">
+                    <Zap className="h-5 w-5 mr-2" />
+                    Energie & Heizung
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <div className="font-semibold">ab {formatDate(property.available_from)}</div>
-                      <div className="text-sm text-muted-foreground">Verfügbar</div>
+                      <span className="text-sm text-muted-foreground">Energieausweis:</span>
+                      <p className="font-medium">Bedarfsausweis</p>
                     </div>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 mr-3 text-primary" />
                     <div>
-                      <div className="font-semibold">{property.floor}. OG</div>
-                      <div className="text-sm text-muted-foreground">Etage</div>
+                      <span className="text-sm text-muted-foreground">Energieeffizienzklasse:</span>
+                      <p className="font-medium">C</p>
+                    </div>
+                    <div>
+                      <span className="text-sm text-muted-foreground">Heizungsart:</span>
+                      <p className="font-medium">Zentralheizung</p>
                     </div>
                   </div>
                 </div>
@@ -225,37 +286,42 @@ const PropertyDetails = () => {
 
                 {/* Features */}
                 <div className="mb-6">
-                  <h3 className="font-semibold mb-3">Ausstattung</h3>
-                  <div className="flex flex-wrap gap-3">
+                  <h4 className="font-semibold mb-3">Ausstattung</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {property.balcony && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-full">
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                         Balkon
                       </div>
                     )}
                     {property.elevator && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-full">
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
                         <ArrowUp className="h-4 w-4 mr-2" />
                         Aufzug
                       </div>
                     )}
                     {property.parking && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-full">
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
                         <Car className="h-4 w-4 mr-2" />
                         Parkplatz
                       </div>
                     )}
                     {property.pets_allowed && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-full">
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
                         <PawPrint className="h-4 w-4 mr-2" />
                         Haustiere erlaubt
                       </div>
                     )}
                     {property.furnished && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-full">
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <Home className="h-4 w-4 mr-2" />
                         Möbliert
                       </div>
                     )}
+                    <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Einbauküche
+                    </div>
                   </div>
                 </div>
 
@@ -263,10 +329,18 @@ const PropertyDetails = () => {
 
                 {/* Description */}
                 <div>
-                  <h3 className="font-semibold mb-3">Beschreibung</h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <h4 className="font-semibold mb-3">Objektbeschreibung</h4>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
                     {property.description}
                   </p>
+                  <div className="bg-muted p-4 rounded-lg">
+                    <h5 className="font-medium mb-2">Lage</h5>
+                    <p className="text-sm text-muted-foreground">
+                      Die Immobilie befindet sich in einer ruhigen und begehrten Wohnlage von {property.city?.name}. 
+                      Gute Verkehrsanbindung an öffentliche Verkehrsmittel, Einkaufsmöglichkeiten und Schulen 
+                      sind fußläufig erreichbar.
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -340,8 +414,13 @@ const PropertyDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm font-medium mb-2">
                   {property.address}, {property.city?.name}
+                </p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Diese Immobilie befindet sich in einer sehr begehrten Wohnlage mit exzellenter 
+                  Infrastruktur. In unmittelbarer Nähe finden Sie Einkaufsmöglichkeiten, Restaurants, 
+                  Schulen und öffentliche Verkehrsmittel. Die Verkehrsanbindung ist ideal für Pendler.
                 </p>
                 
                 {/* Simple Map Embed */}
