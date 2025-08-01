@@ -23,8 +23,8 @@ export interface Property {
   rooms: string;
   address: string;
   neighborhood: string;
-  city: { name: string };
-  property_type: { name: string };
+  city: { name: string } | null;
+  property_type: { name: string } | null;
   floor: number;
   balcony: boolean;
   elevator: boolean;
@@ -87,11 +87,11 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <Badge variant="secondary" className="text-xs">
-                      {property.property_type.name}
+                      {property.property_type?.name || 'Typ nicht verfügbar'}
                     </Badge>
                     <div className="flex items-center text-muted-foreground text-sm">
                       <MapPin className="h-3 w-3 mr-1" />
-                      {property.city.name}, {property.neighborhood}
+                      {property.city?.name || 'Stadt nicht verfügbar'}, {property.neighborhood}
                     </div>
                   </div>
                   <h3 className="font-semibold text-xl mb-1">
