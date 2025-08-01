@@ -272,9 +272,6 @@ const CitiesManagement = () => {
                   <MapPin className="h-5 w-5 text-primary" />
                   <CardTitle className="text-lg">{city.name}</CardTitle>
                 </div>
-                <Badge variant={city.is_active ? "default" : "secondary"}>
-                  {city.is_active ? "Aktiv" : "Inaktiv"}
-                </Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">

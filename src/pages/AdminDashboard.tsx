@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/AdminSidebar';
 import AdminHeader from '@/components/AdminHeader';
 import PropertiesManagement from '@/components/PropertiesManagement';
@@ -134,8 +134,14 @@ const AdminDashboard = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
         <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} adminUser={adminUser} onLogout={handleLogout} />
-        <div className="flex-1 flex flex-col">
-          <main className="flex-1 p-6 overflow-auto">
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="md:hidden p-4 border-b bg-background">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+              <SidebarTrigger className="p-2 hover:bg-muted rounded-lg" />
+            </div>
+          </div>
+          <main className="flex-1 p-4 md:p-6 overflow-auto">
             {renderContent()}
           </main>
         </div>

@@ -54,7 +54,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, onTabChange, adm
   ];
 
   return (
-    <Sidebar className="w-64 border-r">
+    <Sidebar className="w-64 border-r" collapsible="offcanvas">
       <SidebarContent className="flex flex-col h-full">
         <div className="p-4">
           <h2 className="text-lg font-semibold text-primary mb-2">Admin Dashboard</h2>
