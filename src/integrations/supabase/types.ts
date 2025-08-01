@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          last_login: string | null
+          password_hash: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          password_hash: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          password_hash?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
       cities: {
         Row: {
           created_at: string
@@ -43,6 +70,68 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      contact_requests: {
+        Row: {
+          anrede: string | null
+          created_at: string
+          email: string
+          id: string
+          nachname: string
+          nachricht: string
+          nummer: string | null
+          ort: string | null
+          plz: string | null
+          property_id: string | null
+          status: string | null
+          strasse: string | null
+          telefon: string
+          updated_at: string
+          vorname: string
+        }
+        Insert: {
+          anrede?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          nachname: string
+          nachricht: string
+          nummer?: string | null
+          ort?: string | null
+          plz?: string | null
+          property_id?: string | null
+          status?: string | null
+          strasse?: string | null
+          telefon: string
+          updated_at?: string
+          vorname: string
+        }
+        Update: {
+          anrede?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          nachname?: string
+          nachricht?: string
+          nummer?: string | null
+          ort?: string | null
+          plz?: string | null
+          property_id?: string | null
+          status?: string | null
+          strasse?: string | null
+          telefon?: string
+          updated_at?: string
+          vorname?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       properties: {
         Row: {

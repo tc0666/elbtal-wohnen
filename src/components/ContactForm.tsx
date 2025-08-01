@@ -81,11 +81,14 @@ const ContactForm: React.FC<ContactFormProps> = ({
     setIsSubmitting(true);
     
     try {
-      // TODO: Replace with actual API call later
-      console.log('Contact form submission:', formData);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Submit to contact-submit edge function
+      const { data, error } = await supabase.functions.invoke('contact-submit', {
+        body: formData
+      });
+
+      if (error || data.error) {
+        throw new Error(data.error || 'Submission failed');
+      }
       
       toast({
         title: "Nachricht gesendet!",
