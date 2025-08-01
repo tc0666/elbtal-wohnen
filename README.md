@@ -1,73 +1,108 @@
-# Welcome to your Lovable project
+# Elbtal Property Management
 
-## Project info
+A modern property rental management platform built for property management companies and tenants.
 
-**URL**: https://lovable.dev/projects/4adb35c0-1018-4c60-a1c3-36910d8de6ed
+## Features
 
-## How can I edit this code?
+### Public Website
+- **Property Listings**: Browse available rental properties with advanced search and filtering
+- **Property Search**: Filter by location, price range, room count, area, and amenities
+- **Property Details**: Detailed property pages with image galleries, floor plans, and location maps
+- **Interactive Maps**: Property locations displayed on interactive maps using Leaflet
+- **Contact Forms**: Contact property managers and submit rental inquiries
+- **Responsive Design**: Fully optimized for desktop, tablet, and mobile devices
+- **Company Information**: About us, services overview, and rental process information
+- **Legal Pages**: Privacy policy, terms of service, and imprint pages
 
-There are several ways of editing your application.
+### Admin Dashboard
+- **Property Management**: Add, edit, and manage rental properties
+- **City Management**: Manage supported cities and locations
+- **Contact Requests**: View and manage incoming contact inquiries
+- **User Authentication**: Secure admin login and session management
+- **Mobile Responsive**: Fully responsive admin interface with collapsible sidebar
 
-**Use Lovable**
+### Technical Features
+- **Real-time Updates**: Live property data updates using Supabase
+- **Image Management**: Property image galleries with lazy loading
+- **Form Validation**: Comprehensive form validation using React Hook Form and Zod
+- **Toast Notifications**: User feedback through toast notifications
+- **Database Integration**: PostgreSQL database with Supabase backend
+- **Edge Functions**: Serverless functions for contact forms and admin operations
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4adb35c0-1018-4c60-a1c3-36910d8de6ed) and start prompting.
+## Technology Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+### Frontend
+- **React 18**: Modern React with hooks and functional components
+- **TypeScript**: Type-safe development with full TypeScript support
+- **Vite**: Fast build tool and development server
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **shadcn/ui**: High-quality UI component library
+- **React Router**: Client-side routing and navigation
+- **React Query**: Data fetching and state management
+- **React Hook Form**: Form handling and validation
+- **Zod**: Schema validation
+- **Lucide React**: Modern icon library
 
-**Use your preferred IDE**
+### Backend & Database
+- **Supabase**: Backend-as-a-Service with PostgreSQL database
+- **PostgreSQL**: Relational database for property and user data
+- **Edge Functions**: Serverless functions for API endpoints
+- **Row Level Security**: Database-level security policies
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Maps & Geolocation
+- **Leaflet**: Interactive maps for property locations
+- **OpenStreetMap**: Map tiles and geographic data
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Development Tools
+- **ESLint**: Code linting and quality assurance
+- **Component Tagger**: Development-time component identification
 
-Follow these steps:
+## Getting Started
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Prerequisites
+- Node.js (recommended: install with [nvm](https://github.com/nvm-sh/nvm))
+- npm or yarn package manager
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Installation
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+# Clone the repository
+git clone <repository-url>
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Navigate to project directory
+cd elbtal-property-management
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Environment Setup
+1. Create a Supabase project
+2. Configure environment variables for Supabase connection
+3. Run database migrations
+4. Set up authentication and database policies
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Project Structure
 
-**Use GitHub Codespaces**
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Page components and routes
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+├── types/              # TypeScript type definitions
+├── integrations/       # Third-party service integrations
+└── assets/             # Static assets and images
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Development
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/4adb35c0-1018-4c60-a1c3-36910d8de6ed) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project follows modern React development practices with:
+- Component-based architecture
+- Custom hooks for business logic
+- TypeScript for type safety
+- Responsive design principles
+- Accessibility best practices
