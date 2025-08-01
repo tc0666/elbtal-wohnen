@@ -19,8 +19,10 @@ export const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary">Elbtal</h1>
-            <span className="ml-2 text-sm text-muted-foreground">Immobilien</span>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">Elbtal</h1>
+              <span className="text-xs text-muted-foreground">Immobilienverwaltung seit 1988</span>
+            </div>
           </div>
 
           {/* Desktop Navigation */}
