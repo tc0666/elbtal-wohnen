@@ -69,7 +69,7 @@ export const Footer = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-muted-foreground">
           <div>
-            © 2024 Elbtal Immobilien. Alle Rechte vorbehalten.
+            © 2025 Elbtal Immobilien. Alle Rechte vorbehalten.
           </div>
           <div className="flex space-x-6">
             <a href="#" className="hover:text-primary transition-colors">Impressum</a>

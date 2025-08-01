@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
+import happyClients from "@/assets/happy-clients.jpg";
 
 export const TestimonialsSection = () => {
   const testimonials = [
@@ -32,14 +33,26 @@ export const TestimonialsSection = () => {
   return (
     <section className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Was unsere Kunden sagen
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Überzeugen Sie sich selbst von der Qualität unseres Services. 
-            Hier teilen zufriedene Mieter ihre Erfahrungen mit Elbtal.
-          </p>
+        {/* Header with Happy Clients Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Was unsere Kunden sagen
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Überzeugen Sie sich selbst von der Qualität unseres Services. 
+              Hier teilen zufriedene Mieter ihre Erfahrungen mit Elbtal und 
+              erzählen, wie wir ihnen beim Finden ihres Traumzuhauses geholfen haben.
+            </p>
+          </div>
+          <div className="relative">
+            <img 
+              src={happyClients} 
+              alt="Zufriedene Kunden mit ihren neuen Wohnungsschlüsseln"
+              className="rounded-lg shadow-lg w-full h-80 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-lg"></div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">

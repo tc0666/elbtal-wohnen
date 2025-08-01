@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Award, TrendingUp, Heart, Zap } from "lucide-react";
+import teamConsultation from "@/assets/team-consultation.jpg";
 
 export const WhyChooseUsSection = () => {
   const features = [
@@ -28,14 +29,26 @@ export const WhyChooseUsSection = () => {
   return (
     <section className="py-16 md:py-20 bg-gradient-to-br from-primary/5 to-primary-light/10">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Warum Elbtal wählen?
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Wir sind mehr als nur eine Immobilienagentur. Wir sind Ihr Partner 
-            auf dem Weg zu Ihrem neuen Zuhause.
-          </p>
+        {/* Header Section with Team Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="relative order-2 lg:order-1">
+            <img 
+              src={teamConsultation} 
+              alt="Elbtal Team bei der Kundenberatung"
+              className="rounded-lg shadow-lg w-full h-80 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-lg"></div>
+          </div>
+          <div className="order-1 lg:order-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Warum Elbtal wählen?
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Wir sind mehr als nur eine Immobilienagentur. Wir sind Ihr Partner 
+              auf dem Weg zu Ihrem neuen Zuhause. Unser erfahrenes Team arbeitet 
+              täglich daran, Ihnen den bestmöglichen Service zu bieten.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

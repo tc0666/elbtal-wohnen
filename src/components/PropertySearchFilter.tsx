@@ -27,8 +27,8 @@ export const PropertySearchFilter = () => {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto p-6 bg-background shadow-lg">
-      <div className="space-y-6">
+    <Card className="w-full max-w-5xl mx-auto p-8 bg-white/95 backdrop-blur-sm shadow-2xl border-0">
+      <div className="space-y-8">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-foreground mb-2">
             Finden Sie Ihre Traumwohnung

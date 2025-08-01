@@ -1,5 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, Users, Shield, Clock, Phone, MapPin } from "lucide-react";
+import serviceInterior from "@/assets/service-interior.jpg";
+import teamConsultation from "@/assets/team-consultation.jpg";
 
 export const ServicesSection = () => {
   const services = [
@@ -38,14 +40,26 @@ export const ServicesSection = () => {
   return (
     <section className="py-16 md:py-20 bg-secondary/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Unsere Leistungen
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Wir bieten Ihnen einen Rundumservice für Ihre Immobiliensuche - 
-            professionell, zuverlässig und kundenorientiert.
-          </p>
+        {/* Header with image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Unsere Leistungen
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Wir bieten Ihnen einen Rundumservice für Ihre Immobiliensuche - 
+              professionell, zuverlässig und kundenorientiert. Seit über 15 Jahren 
+              vertrauen uns Kunden in ganz Deutschland.
+            </p>
+          </div>
+          <div className="relative">
+            <img 
+              src={serviceInterior} 
+              alt="Moderne Wohnung Innenausstattung"
+              className="rounded-lg shadow-lg w-full h-80 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-lg"></div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
