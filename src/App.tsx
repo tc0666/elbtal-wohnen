@@ -9,6 +9,7 @@ import PropertyDetails from "./pages/PropertyDetails";
 import Vermietungsablauf from "./pages/Vermietungsablauf";
 import Leistungsübersicht from "./pages/Leistungsübersicht";
 import Contact from "./pages/Contact";
+import Unternehmen from "./pages/Unternehmen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/vermietungsablauf" element={<Vermietungsablauf />} />
           <Route path="/leistungsübersicht" element={<Leistungsübersicht />} />
           <Route path="/kontakt" element={<Contact />} />
+          <Route path="/unternehmen" element={<Unternehmen />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
