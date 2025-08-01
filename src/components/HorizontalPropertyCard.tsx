@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { 
   MapPin, 
   Euro, 
@@ -63,21 +64,23 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
       <CardContent className="p-0">
         <div className="flex flex-col md:flex-row">
           {/* Image */}
-          <div className="relative md:w-80 md:flex-shrink-0">
-            <div className="h-full min-h-[200px] md:min-h-full overflow-hidden">
-              <img
-                src={property.images[0] || '/placeholder.svg'}
-                alt={property.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              {property.is_featured && (
-                <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground">
-                  <Star className="w-3 h-3 mr-1" />
-                  Empfohlen
-                </Badge>
-              )}
+          <Link to={`/immobilie/${property.id}`}>
+            <div className="relative md:w-80 md:flex-shrink-0">
+              <div className="h-full min-h-[200px] md:min-h-full overflow-hidden cursor-pointer">
+                <img
+                  src={property.images[0] || '/placeholder.svg'}
+                  alt={property.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                {property.is_featured && (
+                  <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground">
+                    <Star className="w-3 h-3 mr-1" />
+                    Empfohlen
+                  </Badge>
+                )}
+              </div>
             </div>
-          </div>
+          </Link>
 
           {/* Content */}
           <div className="flex-1 p-6">
@@ -179,9 +182,11 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
                 <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
                   {property.description}
                 </p>
-                <Button variant="outline" className="px-6 flex-shrink-0">
-                  Details ansehen
-                </Button>
+                <Link to={`/immobilie/${property.id}`}>
+                  <Button variant="outline" className="px-6 flex-shrink-0">
+                    Details ansehen
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

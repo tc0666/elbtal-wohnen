@@ -1,6 +1,7 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { 
   MapPin, 
   Euro, 
@@ -59,23 +60,25 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src={property.images[0] || '/placeholder.svg'}
-          alt={property.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+      <Link to={`/immobilie/${property.id}`}>
+        <div className="relative aspect-[4/3] overflow-hidden cursor-pointer">
+          <img
+            src={property.images[0] || '/placeholder.svg'}
+            alt={property.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         {property.is_featured && (
           <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground">
             Empfohlen
           </Badge>
         )}
-        <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm px-2 py-1 rounded-md">
-          <span className="text-sm font-semibold text-foreground">
-            {formatPrice(property.price_monthly)}/Monat
-          </span>
+          <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm px-2 py-1 rounded-md">
+            <span className="text-sm font-semibold text-foreground">
+              {formatPrice(property.price_monthly)}/Monat
+            </span>
+          </div>
         </div>
-      </div>
+      </Link>
 
       <CardContent className="p-4">
         {/* Property Type & Location */}
@@ -150,9 +153,11 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
       </CardContent>
 
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full" variant="outline">
-          Details ansehen
-        </Button>
+        <Link to={`/immobilie/${property.id}`} className="w-full">
+          <Button className="w-full" variant="outline">
+            Details ansehen
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
