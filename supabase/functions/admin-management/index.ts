@@ -170,12 +170,17 @@ serve(async (req) => {
           new Date(request.created_at) >= dateThreshold
         )
         
-        // Calculate monthly trends (simplified - last 6 months)
+        // Calculate monthly trends (last 12 months for better visualization)
         const monthlyInquiries = []
-        for (let i = 5; i >= 0; i--) {
+        for (let i = 11; i >= 0; i--) {
           const month = new Date()
           month.setMonth(month.getMonth() - i)
-          const monthKey = month.toLocaleDateString('de-DE', { month: 'short' })
+          
+          // Get month and year for better labeling
+          const monthYear = month.toLocaleDateString('de-DE', { 
+            month: 'short', 
+            year: i > 5 ? '2-digit' : undefined 
+          })
           
           const monthStart = new Date(month.getFullYear(), month.getMonth(), 1)
           const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0)
@@ -186,7 +191,7 @@ serve(async (req) => {
           }).length
           
           monthlyInquiries.push({
-            month: monthKey,
+            month: monthYear,
             count: monthCount
           })
         }

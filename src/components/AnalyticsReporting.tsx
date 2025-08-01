@@ -232,24 +232,129 @@ const AnalyticsReporting = () => {
         </Card>
       </div>
 
-      {/* Monthly Trend */}
+      {/* Monthly Trend - Enhanced Line Chart */}
       <Card>
         <CardHeader>
           <CardTitle>Anfragen Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-64 flex items-end justify-center gap-2">
-            {analytics?.monthlyInquiries?.map((month, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div 
-                  className="w-8 bg-primary rounded-t-sm"
-                  style={{ height: `${Math.max((month.count / 10) * 100, 8)}px` }}
-                ></div>
-                <span className="text-xs text-muted-foreground mt-2">{month.month}</span>
-                <span className="text-xs font-medium">{month.count}</span>
+          <div className="h-80 w-full relative">
+            {analytics?.monthlyInquiries?.length > 0 ? (
+              <div className="w-full h-full">
+                {/* Chart Container */}
+                <div className="relative h-64 w-full bg-gradient-to-t from-primary/5 to-transparent rounded-lg border border-border/20 overflow-hidden">
+                  {/* Grid Lines */}
+                  <div className="absolute inset-0">
+                    {[...Array(5)].map((_, i) => (
+                      <div 
+                        key={i}
+                        className="absolute w-full border-t border-border/10"
+                        style={{ top: `${(i + 1) * 20}%` }}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Line Chart */}
+                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                        <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
+                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                      </linearGradient>
+                      <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.05" />
+                      </linearGradient>
+                    </defs>
+                    
+                    {(() => {
+                      const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
+                      const points = analytics.monthlyInquiries.map((month, index) => {
+                        const x = (index / (analytics.monthlyInquiries.length - 1)) * 100;
+                        const y = 100 - ((month.count / maxValue) * 80);
+                        return `${x},${y}`;
+                      }).join(' ');
+                      
+                      const areaPoints = `0,100 ${points} 100,100`;
+                      
+                      return (
+                        <>
+                          {/* Area under the line */}
+                          <polygon
+                            points={areaPoints}
+                            fill="url(#areaGradient)"
+                            className="drop-shadow-sm"
+                          />
+                          {/* Main line */}
+                          <polyline
+                            points={points}
+                            fill="none"
+                            stroke="url(#lineGradient)"
+                            strokeWidth="0.5"
+                            className="drop-shadow-sm"
+                          />
+                          {/* Data points */}
+                          {analytics.monthlyInquiries.map((month, index) => {
+                            const x = (index / (analytics.monthlyInquiries.length - 1)) * 100;
+                            const y = 100 - ((month.count / maxValue) * 80);
+                            return (
+                              <circle
+                                key={index}
+                                cx={x}
+                                cy={y}
+                                r="0.8"
+                                fill="hsl(var(--primary))"
+                                className="drop-shadow-sm"
+                              />
+                            );
+                          })}
+                        </>
+                      );
+                    })()}
+                  </svg>
+                  
+                  {/* Value Labels */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    {analytics.monthlyInquiries.map((month, index) => {
+                      const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
+                      const x = (index / (analytics.monthlyInquiries.length - 1)) * 100;
+                      const y = 100 - ((month.count / maxValue) * 80);
+                      
+                      return (
+                        <div
+                          key={index}
+                          className="absolute transform -translate-x-1/2 -translate-y-full"
+                          style={{ 
+                            left: `${x}%`, 
+                            top: `${y}%`,
+                            marginTop: '-8px'
+                          }}
+                        >
+                          <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded shadow-lg">
+                            {month.count}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                
+                {/* X-axis labels */}
+                <div className="flex justify-between mt-4 px-2">
+                  {analytics.monthlyInquiries.map((month, index) => (
+                    <div key={index} className="text-center">
+                      <span className="text-xs font-medium text-muted-foreground">
+                        {month.month}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )) || (
-              <p className="text-muted-foreground">Keine Trend-Daten verfügbar</p>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-muted-foreground">Keine Trend-Daten verfügbar</p>
+              </div>
             )}
           </div>
         </CardContent>
