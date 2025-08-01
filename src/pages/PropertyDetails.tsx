@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -38,6 +39,7 @@ import {
 
 const PropertyDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const [featuredImageIndex, setFeaturedImageIndex] = useState(0);
   
   const { data: property, isLoading, error } = useQuery({
     queryKey: ['property', id],
@@ -138,7 +140,7 @@ const PropertyDetails = () => {
             {/* Featured Image */}
             <div className="relative mb-6">
               <img
-                src={images[0]}
+                src={images[featuredImageIndex]}
                 alt={property.title}
                 className="w-full h-[400px] object-cover rounded-lg"
               />
@@ -157,21 +159,32 @@ const PropertyDetails = () => {
 
             {/* Image Carousel */}
             {images.length > 1 && (
-              <div className="mb-6">
+              <div className="mb-6 relative">
                 <Carousel className="w-full">
-                  <CarouselContent>
+                  <CarouselContent className="-ml-2 md:-ml-4">
                     {images.map((image, index) => (
-                      <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                        <img
-                          src={image}
-                          alt={`${property.title} - Bild ${index + 1}`}
-                          className="w-full h-48 object-cover rounded-lg"
-                        />
+                      <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                        <div className="p-1">
+                          <button
+                            onClick={() => setFeaturedImageIndex(index)}
+                            className={`w-full h-32 rounded-lg overflow-hidden transition-all duration-200 hover:opacity-80 ${
+                              featuredImageIndex === index 
+                                ? 'ring-2 ring-primary ring-offset-2' 
+                                : ''
+                            }`}
+                          >
+                            <img
+                              src={image}
+                              alt={`${property.title} - Bild ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </button>
+                        </div>
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
+                  <CarouselPrevious className="left-2" />
+                  <CarouselNext className="right-2" />
                 </Carousel>
               </div>
             )}
