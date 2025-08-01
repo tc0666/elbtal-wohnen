@@ -9,6 +9,7 @@ import PropertiesManagement from '@/components/PropertiesManagement';
 import ContactRequestsManagement from '@/components/ContactRequestsManagement';
 import CitiesManagement from '@/components/CitiesManagement';
 import AdminOverview from '@/components/AdminOverview';
+import AnalyticsReporting from '@/components/AnalyticsReporting';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -125,6 +126,8 @@ const AdminDashboard = () => {
         return <ContactRequestsManagement />;
       case 'cities':
         return <CitiesManagement />;
+      case 'analytics':
+        return <AnalyticsReporting />;
       default:
         return <AdminOverview />;
     }

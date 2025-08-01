@@ -14,12 +14,11 @@ import {
   Building2, 
   MessageSquare, 
   MapPin,
+  BarChart3,
   User,
-  Settings,
   LogOut
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -50,6 +49,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, onTabChange, adm
       id: 'cities',
       label: 'Städte',
       icon: MapPin,
+    },
+    {
+      id: 'analytics',
+      label: 'Analytics',
+      icon: BarChart3,
     },
   ];
 
@@ -84,36 +88,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, onTabChange, adm
         </SidebarGroup>
 
         <SidebarFooter className="p-4 border-t">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton className="w-full flex items-center gap-3 px-3 py-2 hover:bg-muted rounded-lg">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>
-                    <User className="h-4 w-4" />
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col items-start min-w-0 flex-1">
-                  <span className="text-sm font-medium truncate">{adminUser?.username || 'Admin'}</span>
-                  <span className="text-xs text-muted-foreground">Administrator</span>
-                </div>
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="right" align="end" className="w-56">
-              <DropdownMenuItem>
-                <User className="h-4 w-4 mr-2" />
-                Profil bearbeiten
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="h-4 w-4 mr-2" />
-                Einstellungen
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onLogout} className="text-red-600">
-                <LogOut className="h-4 w-4 mr-2" />
-                Abmelden
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <SidebarMenuButton
+            onClick={onLogout}
+            className="w-full flex items-center gap-3 px-3 py-2 hover:bg-destructive hover:text-destructive-foreground rounded-lg transition-colors"
+          >
+            <Avatar className="h-8 w-8">
+              <AvatarFallback>
+                <User className="h-4 w-4" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-start min-w-0 flex-1">
+              <span className="text-sm font-medium truncate">{adminUser?.username || 'Admin'}</span>
+              <span className="text-xs text-muted-foreground">Administrator</span>
+            </div>
+            <LogOut className="h-4 w-4" />
+          </SidebarMenuButton>
         </SidebarFooter>
       </SidebarContent>
     </Sidebar>
