@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Search, MapPin, Home, Euro } from "lucide-react";
+import { Search, MapPin, Home, Euro, Ruler, Users } from "lucide-react";
 
 export const PropertySearchFilter = () => {
   const [searchData, setSearchData] = useState({
@@ -100,7 +100,8 @@ export const PropertySearchFilter = () => {
 
           {/* Max Price */}
           <div className="space-y-1 md:space-y-2">
-            <Label htmlFor="maxPrice" className="text-xs md:text-sm font-medium">
+            <Label htmlFor="maxPrice" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
+              <Euro className="h-3 w-3 md:h-4 md:w-4 text-primary" />
               Miete bis
             </Label>
             <Input
@@ -115,7 +116,8 @@ export const PropertySearchFilter = () => {
 
           {/* Area */}
           <div className="space-y-1 md:space-y-2">
-            <Label htmlFor="minArea" className="text-xs md:text-sm font-medium">
+            <Label htmlFor="minArea" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
+              <Ruler className="h-3 w-3 md:h-4 md:w-4 text-primary" />
               Fläche ab (m²)
             </Label>
             <Input
@@ -130,7 +132,8 @@ export const PropertySearchFilter = () => {
 
           {/* Rooms */}
           <div className="space-y-1 md:space-y-2">
-            <Label htmlFor="rooms" className="text-xs md:text-sm font-medium">
+            <Label htmlFor="rooms" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
+              <Users className="h-3 w-3 md:h-4 md:w-4 text-primary" />
               Zimmer
             </Label>
             <Select value={searchData.rooms} onValueChange={(value) => setSearchData({ ...searchData, rooms: value })}>
