@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import PropertyImageGallery from '@/components/PropertyImageGallery';
-import ContactForm from '@/components/ContactFormFixed';
+import ContactForm from '@/components/SimpleContactForm';
 import SimpleLocationDisplay from '@/components/SimpleLocationDisplay';
 import { 
   MapPin, 

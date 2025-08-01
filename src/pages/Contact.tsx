@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import ContactForm from '@/components/ContactFormFixed';
+import ContactForm from '@/components/SimpleContactForm';
 import { 
   Phone, 
   Mail, 
