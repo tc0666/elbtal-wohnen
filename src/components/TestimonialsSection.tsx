@@ -78,7 +78,7 @@ export const TestimonialsSection = () => {
         </div>
 
         {/* Testimonials Carousel */}
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative w-full max-w-[1250px] mx-auto">
           {/* Navigation Buttons */}
           <Button
             variant="outline"

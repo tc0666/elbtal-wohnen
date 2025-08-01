@@ -18,6 +18,7 @@ export const PropertySearchFilter = () => {
     propertyType: "",
     minPrice: "",
     maxPrice: "",
+    minArea: "",
     rooms: "",
   });
 
@@ -38,7 +39,7 @@ export const PropertySearchFilter = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
           {/* Location */}
           <div className="space-y-2">
             <Label htmlFor="location" className="text-sm font-medium flex items-center gap-2">
@@ -107,6 +108,20 @@ export const PropertySearchFilter = () => {
               placeholder="z.B. 2000"
               value={searchData.maxPrice}
               onChange={(e) => setSearchData({ ...searchData, maxPrice: e.target.value })}
+            />
+          </div>
+
+          {/* Area */}
+          <div className="space-y-2">
+            <Label htmlFor="minArea" className="text-sm font-medium">
+              Fläche ab (m²)
+            </Label>
+            <Input
+              id="minArea"
+              type="number"
+              placeholder="z.B. 50"
+              value={searchData.minArea}
+              onChange={(e) => setSearchData({ ...searchData, minArea: e.target.value })}
             />
           </div>
 
