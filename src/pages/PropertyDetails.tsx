@@ -270,120 +270,24 @@ const PropertyDetails = () => {
                 {/* Features */}
                 <div className="mb-6">
                   <h4 className="font-semibold mb-3">Ausstattung</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                    {property.balcony && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                        Balkon
-                      </div>
-                    )}
-                    {property.elevator && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <ArrowUp className="h-4 w-4 mr-2" />
-                        Aufzug
-                      </div>
-                    )}
-                    {property.parking && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <Car className="h-4 w-4 mr-2" />
-                        Parkplatz
-                      </div>
-                    )}
-                    {property.pets_allowed && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <PawPrint className="h-4 w-4 mr-2" />
-                        Haustiere erlaubt
-                      </div>
-                    )}
-                    {property.furnished && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <Home className="h-4 w-4 mr-2" />
-                        Möbliert
-                      </div>
-                    )}
-                    {property.kitchen_equipped && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Einbauküche
-                      </div>
-                    )}
-                    {property.dishwasher && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Spülmaschine
-                      </div>
-                    )}
-                    {property.washing_machine && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Waschmaschine
-                      </div>
-                    )}
-                    {property.dryer && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Trockner
-                      </div>
-                    )}
-                    {property.tv && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        TV
-                      </div>
-                    )}
-                    {property.garden && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Garten
-                      </div>
-                    )}
-                    {property.cellar && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Keller
-                      </div>
-                    )}
-                    {property.attic && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Dachboden
-                      </div>
-                    )}
-                    {property.internet_speed && (
-                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Internet: {property.internet_speed}
-                      </div>
-                    )}
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <p className="text-muted-foreground leading-relaxed">
+                      {property.features_description || 'Ausstattungsdetails werden in Kürze ergänzt.'}
+                    </p>
                   </div>
-                  
-                  {/* Features Description */}
-                  {property.features_description && (
-                    <div className="bg-muted/50 p-4 rounded-lg">
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {property.features_description}
-                      </p>
-                    </div>
-                  )}
                 </div>
 
                 <Separator className="my-6" />
 
                 {/* Additional Description */}
-                {property.additional_description && (
-                  <>
-                    <div className="mb-6">
-                      <h4 className="font-semibold mb-3">Weitere Beschreibung</h4>
-                      <div className="bg-muted/50 p-4 rounded-lg">
-                        <p className="text-muted-foreground leading-relaxed">
-                          {property.additional_description}
-                        </p>
-                      </div>
-                    </div>
-
-                    <Separator className="my-6" />
-                  </>
-                )}
+                <div className="mb-6">
+                  <h4 className="font-semibold mb-3">Weitere Beschreibung</h4>
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <p className="text-muted-foreground leading-relaxed">
+                      {property.additional_description || 'Weitere Informationen werden in Kürze ergänzt.'}
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
