@@ -183,7 +183,15 @@ const PropertyDetails = () => {
                               onError={(e) => {
                                 console.error(`Failed to load image ${index + 1}:`, image);
                                 const target = e.target as HTMLImageElement;
-                                target.src = '/placeholder.svg';
+                                // Try reloading once before fallback
+                                if (!target.dataset.retried) {
+                                  target.dataset.retried = 'true';
+                                  setTimeout(() => {
+                                    target.src = image + '&retry=1';
+                                  }, 1000);
+                                } else {
+                                  target.src = '/placeholder.svg';
+                                }
                               }}
                             />
                           </button>
