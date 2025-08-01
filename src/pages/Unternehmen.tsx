@@ -198,17 +198,26 @@ const Unternehmen = () => {
                 </p>
               </div>
             </div>
-            <Card className="p-8 bg-muted/50">
-              <div className="text-center">
-                <Building className="h-16 w-16 text-primary mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-4">Mission</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Wir schaffen Vertrauen im Immobilienmarkt durch transparente, zuverlässige 
-                  und innovative Dienstleistungen. Unser Ziel ist es, für jeden Kunden die 
-                  optimale Lösung zu finden.
-                </p>
+            <div className="space-y-6">
+              <div className="aspect-video rounded-lg overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Team meeting in modern office"
+                  className="w-full h-full object-cover"
+                />
               </div>
-            </Card>
+              <Card className="p-6 bg-muted/50">
+                <div className="text-center">
+                  <Building className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-xl font-bold mb-3">Mission</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Wir schaffen Vertrauen im Immobilienmarkt durch transparente, zuverlässige 
+                    und innovative Dienstleistungen. Unser Ziel ist es, für jeden Kunden die 
+                    optimale Lösung zu finden.
+                  </p>
+                </div>
+              </Card>
+            </div>
           </div>
         </div>
 
@@ -241,6 +250,24 @@ const Unternehmen = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Werte</h2>
           
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
+            <div className="aspect-video rounded-lg overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Innovation and ideas"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="text-center lg:text-left">
+              <h3 className="text-2xl font-bold mb-4">Innovation & Tradition vereint</h3>
+              <p className="text-muted-foreground leading-relaxed mb-6">
+                Seit über 35 Jahren verbinden wir bewährte Traditionen mit innovativen Lösungen. 
+                Unsere Werte sind das Fundament für den vertrauensvollen Umgang mit unseren Kunden 
+                und den nachhaltigen Erfolg unseres Unternehmens.
+              </p>
+            </div>
+          </div>
+          
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
               <Card key={index} className="text-center p-6 h-full">
@@ -256,57 +283,87 @@ const Unternehmen = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unser Führungsteam</h2>
           
-          <div className="grid md:grid-cols-2 gap-8">
-            {team.map((member, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Users className="h-8 w-8 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold">{member.name}</h3>
-                      <p className="text-primary font-medium mb-2">{member.position}</p>
-                      <p className="text-sm text-muted-foreground mb-1">{member.experience}</p>
-                      <p className="text-xs text-muted-foreground">{member.specialization}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
+            <div className="order-2 lg:order-1">
+              <div className="grid md:grid-cols-1 gap-6">
+                {team.map((member, index) => (
+                  <Card key={index}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Users className="h-8 w-8 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold">{member.name}</h3>
+                          <p className="text-primary font-medium mb-2">{member.position}</p>
+                          <p className="text-sm text-muted-foreground mb-1">{member.experience}</p>
+                          <p className="text-xs text-muted-foreground">{member.specialization}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="aspect-square rounded-lg overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Professional team working together"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Services Summary */}
-        <Card className="mb-20 bg-muted/50">
-          <CardContent className="p-12 text-center">
-            <Home className="h-16 w-16 text-primary mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Warum Elbtal Immobilienverwaltung?</h2>
-            <div className="grid md:grid-cols-3 gap-8 mt-8">
-              <div>
-                <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-3" />
-                <h3 className="font-semibold mb-2">Lokale Expertise</h3>
-                <p className="text-sm text-muted-foreground">
-                  Tiefgreifende Marktkenntnis in Dresden und Umgebung seit über 35 Jahren.
-                </p>
-              </div>
-              <div>
-                <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-3" />
-                <h3 className="font-semibold mb-2">Vollservice</h3>
-                <p className="text-sm text-muted-foreground">
-                  Alle Immobiliendienstleistungen aus einer Hand - von der Vermietung bis zur Verwaltung.
-                </p>
-              </div>
-              <div>
-                <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-3" />
-                <h3 className="font-semibold mb-2">Persönlicher Service</h3>
-                <p className="text-sm text-muted-foreground">
-                  Ihr fester Ansprechpartner für alle Anliegen - schnell, zuverlässig, persönlich.
-                </p>
-              </div>
+        <div className="mb-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="aspect-video rounded-lg overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Professional office environment"
+                className="w-full h-full object-cover"
+              />
             </div>
-          </CardContent>
-        </Card>
+            <Card className="bg-muted/50 h-full">
+              <CardContent className="p-8">
+                <Home className="h-12 w-12 text-primary mb-6" />
+                <h2 className="text-2xl font-bold mb-4">Warum Elbtal Immobilienverwaltung?</h2>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold mb-1">Lokale Expertise</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Tiefgreifende Marktkenntnis in Dresden und Umgebung seit über 35 Jahren.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold mb-1">Vollservice</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Alle Immobiliendienstleistungen aus einer Hand - von der Vermietung bis zur Verwaltung.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold mb-1">Persönlicher Service</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Ihr fester Ansprechpartner für alle Anliegen - schnell, zuverlässig, persönlich.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         {/* Contact CTA */}
         <Card className="bg-primary text-primary-foreground">
