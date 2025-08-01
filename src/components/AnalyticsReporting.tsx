@@ -245,8 +245,10 @@ const AnalyticsReporting = () => {
                 <div className="relative h-80 w-full p-4">
                   <div className="flex items-end justify-between h-full gap-2">
                     {analytics.monthlyInquiries.map((month, index) => {
-                      const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
-                      const height = month.count > 0 ? Math.max((month.count / maxValue) * 100, 8) : 2; // Minimum 8% for data, 2% for no data
+                      const actualMax = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
+                      // Auto-scale Y-axis: if max <= 2 show 5, if max <= 5 show 10, if max <= 10 show 15, etc.
+                      const yAxisMax = actualMax <= 2 ? 5 : actualMax <= 5 ? 10 : actualMax <= 10 ? 15 : Math.ceil(actualMax * 1.2);
+                      const height = month.count > 0 ? Math.max((month.count / yAxisMax) * 100, 8) : 2; // Minimum 8% for data, 2% for no data
                       
                       return (
                         <div key={index} className="flex flex-col items-center flex-1 group">
@@ -288,12 +290,13 @@ const AnalyticsReporting = () => {
                   {/* Y-axis labels */}
                   <div className="absolute left-0 top-4 bottom-12 flex flex-col justify-between text-xs text-muted-foreground">
                     {(() => {
-                      const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
+                      const actualMax = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
+                      const yAxisMax = actualMax <= 2 ? 5 : actualMax <= 5 ? 10 : actualMax <= 10 ? 15 : Math.ceil(actualMax * 1.2);
                       const steps = 5;
-                      const stepValue = Math.ceil(maxValue / steps);
+                      const stepValue = yAxisMax / steps;
                       return Array.from({ length: steps + 1 }, (_, i) => (
                         <span key={i} className="select-none">
-                          {stepValue * (steps - i)}
+                          {Math.round(stepValue * (steps - i))}
                         </span>
                       ));
                     })()}
