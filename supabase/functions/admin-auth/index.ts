@@ -119,19 +119,26 @@ serve(async (req) => {
 
       // Simple token verification (in production, use JWT)
       try {
+        console.log('Token to decode:', token)
         const decoded = atob(token)
+        console.log('Decoded token:', decoded)
         const [userId] = decoded.split('-')
+        console.log('Extracted userId:', userId)
         
         const { data: user, error } = await supabase
           .from('admin_users')
           .select('id, username')
           .eq('id', userId)
-          .single()
+          .maybeSingle()
+
+        console.log('User lookup result:', { userFound: !!user, error: error?.message })
 
         if (error || !user) {
+          console.error('Token verification failed:', error?.message || 'User not found')
           throw new Error('Invalid token')
         }
 
+        console.log('Token verification successful for user:', user.username)
         return new Response(
           JSON.stringify({ 
             success: true, 
@@ -139,7 +146,8 @@ serve(async (req) => {
           }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
-      } catch {
+      } catch (error) {
+        console.error('Token verification error:', error.message)
         return new Response(
           JSON.stringify({ error: 'Invalid token' }),
           { 

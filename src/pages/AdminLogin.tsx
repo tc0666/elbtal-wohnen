@@ -22,13 +22,23 @@ const AdminLogin = () => {
       const token = localStorage.getItem('adminToken');
       if (token) {
         try {
-          const { data } = await supabase.functions.invoke('admin-auth', {
+          const { data, error } = await supabase.functions.invoke('admin-auth', {
             body: { action: 'verify', token }
           });
           
-          if (data.success) {
+          console.log('Auth check result:', { data, error });
+          
+          if (error) {
+            console.log('Auth check error:', error);
+            throw new Error('Auth check failed');
+          }
+          
+          if (data?.success) {
             navigate('/admin1244/dashboard');
             return;
+          } else {
+            console.log('Auth check failed - no success flag');
+            throw new Error('Invalid session');
           }
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -46,12 +56,21 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
+      console.log('Attempting login with:', { username });
       const { data, error } = await supabase.functions.invoke('admin-auth', {
         body: { action: 'login', username, password }
       });
 
-      if (error || data.error) {
-        throw new Error(data.error || 'Login failed');
+      console.log('Login response:', { data, error });
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Login request failed');
+      }
+
+      if (data?.error) {
+        console.error('Login error from function:', data.error);
+        throw new Error(data.error);
       }
 
       if (data.success) {

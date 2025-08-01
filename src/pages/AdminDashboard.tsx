@@ -32,20 +32,22 @@ const AdminDashboard = () => {
           body: { action: 'verify', token }
         });
         
-        console.log('Auth verification response:', { data, error });
+        console.log('Dashboard auth verification:', { data, error });
         
         if (error) {
-          console.error('Supabase function error:', error);
-          throw new Error('Authentication failed');
+          console.error('Dashboard auth error:', error);
+          throw new Error('Authentication request failed');
         }
         
         if (!data || !data.success) {
-          throw new Error('Invalid token or auth failed');
+          console.error('Dashboard auth failed:', data);
+          throw new Error('Invalid token or session expired');
         }
 
+        console.log('Dashboard auth successful');
         setAdminUser(JSON.parse(userStr));
       } catch (error) {
-        console.error('Auth check failed:', error);
+        console.error('Dashboard auth check failed:', error);
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         toast({
