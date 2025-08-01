@@ -63,14 +63,56 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   const [cities, setCities] = useState<any[]>([]);
   const [propertyTypes, setPropertyTypes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [imageInput, setImageInput] = useState('');
+  const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(null);
+  const [additionalImageFiles, setAdditionalImageFiles] = useState<File[]>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log('PropertyForm received property:', property);
     if (property) {
+      console.log('Setting form data with property:', property);
       setFormData({
-        ...property,
-        available_from: property.available_from ? new Date(property.available_from).toISOString().split('T')[0] : ''
+        title: property.title || '',
+        description: property.description || '',
+        address: property.address || '',
+        postal_code: property.postal_code || '',
+        neighborhood: property.neighborhood || '',
+        rooms: property.rooms || '',
+        area_sqm: property.area_sqm || 0,
+        price_monthly: property.price_monthly || 0,
+        additional_costs_monthly: property.additional_costs_monthly || 0,
+        property_type_id: property.property_type_id || '',
+        city_id: property.city_id || '',
+        floor: property.floor || 0,
+        total_floors: property.total_floors || 0,
+        year_built: property.year_built || 0,
+        available_from: property.available_from ? new Date(property.available_from).toISOString().split('T')[0] : '',
+        deposit_months: property.deposit_months || 3,
+        kitchen_equipped: property.kitchen_equipped || false,
+        furnished: property.furnished || false,
+        pets_allowed: property.pets_allowed || false,
+        utilities_included: property.utilities_included || false,
+        balcony: property.balcony || false,
+        elevator: property.elevator || false,
+        parking: property.parking || false,
+        garden: property.garden || false,
+        cellar: property.cellar || false,
+        attic: property.attic || false,
+        dishwasher: property.dishwasher || false,
+        washing_machine: property.washing_machine || false,
+        dryer: property.dryer || false,
+        tv: property.tv || false,
+        energy_certificate_type: property.energy_certificate_type || '',
+        energy_certificate_value: property.energy_certificate_value || '',
+        heating_type: property.heating_type || '',
+        heating_energy_source: property.heating_energy_source || '',
+        internet_speed: property.internet_speed || '',
+        features_description: property.features_description || '',
+        additional_description: property.additional_description || '',
+        is_featured: property.is_featured || false,
+        is_active: property.is_active !== undefined ? property.is_active : true,
+        images: property.images || []
       });
     }
     fetchCitiesAndTypes();
@@ -96,22 +138,75 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     }
   };
 
+  const uploadImages = async () => {
+    const uploadedUrls: string[] = [];
+    
+    try {
+      // Upload featured image if exists
+      if (featuredImageFile) {
+        const featuredFileName = `featured-${Date.now()}-${featuredImageFile.name}`;
+        const { data: featuredUpload } = await supabase.storage
+          .from('featured-images')
+          .upload(featuredFileName, featuredImageFile);
+        
+        if (featuredUpload) {
+          const { data: { publicUrl } } = supabase.storage
+            .from('featured-images')
+            .getPublicUrl(featuredUpload.path);
+          uploadedUrls.push(publicUrl);
+        }
+      }
+
+      // Upload additional images
+      for (const file of additionalImageFiles) {
+        const fileName = `property-${Date.now()}-${Math.random()}-${file.name}`;
+        const { data: upload } = await supabase.storage
+          .from('property-images')
+          .upload(fileName, file);
+        
+        if (upload) {
+          const { data: { publicUrl } } = supabase.storage
+            .from('property-images')
+            .getPublicUrl(upload.path);
+          uploadedUrls.push(publicUrl);
+        }
+      }
+
+      return uploadedUrls;
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      throw error;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setUploadingImages(true);
 
     try {
       const token = localStorage.getItem('adminToken');
+      
+      // Upload new images if any
+      let newImageUrls: string[] = [];
+      if (featuredImageFile || additionalImageFiles.length > 0) {
+        newImageUrls = await uploadImages();
+      }
+
+      // Combine existing images with new ones
+      const allImages = [...formData.images, ...newImageUrls];
+      
       const action = property ? 'update_property' : 'create_property';
       
       const propertyData = {
         ...formData,
+        images: allImages,
         available_from: formData.available_from || null
       };
 
       const requestBody = property 
-        ? { action, token, id: property.id, property: propertyData }
-        : { action, token, property: propertyData };
+        ? { action, token, propertyId: property.id, propertyData }
+        : { action, token, propertyData };
 
       const { data } = await supabase.functions.invoke('admin-management', {
         body: requestBody
@@ -133,20 +228,27 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       });
     } finally {
       setIsLoading(false);
+      setUploadingImages(false);
     }
   };
 
-  const addImage = () => {
-    if (imageInput.trim()) {
-      setFormData({
-        ...formData,
-        images: [...formData.images, imageInput.trim()]
-      });
-      setImageInput('');
+  const handleFeaturedImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFeaturedImageFile(file);
     }
   };
 
-  const removeImage = (index: number) => {
+  const handleAdditionalImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setAdditionalImageFiles(prev => [...prev, ...files]);
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    setAdditionalImageFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (index: number) => {
     setFormData({
       ...formData,
       images: formData.images.filter((_, i) => i !== index)
@@ -404,32 +506,85 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardHeader>
             <CardTitle>Bilder</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Bild-URL eingeben"
-                value={imageInput}
-                onChange={(e) => setImageInput(e.target.value)}
-              />
-              <Button type="button" onClick={addImage}>
-                <Plus className="h-4 w-4" />
-              </Button>
-            </div>
+          <CardContent className="space-y-6">
+            {/* Featured Image Upload */}
             <div className="space-y-2">
-              {formData.images.map((image, index) => (
-                <div key={index} className="flex items-center justify-between p-2 border rounded">
-                  <span className="truncate">{image}</span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => removeImage(index)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+              <Label htmlFor="featured-image">Hauptbild</Label>
+              <Input
+                id="featured-image"
+                type="file"
+                accept="image/*"
+                onChange={handleFeaturedImageChange}
+                className="cursor-pointer"
+              />
+              {featuredImageFile && (
+                <p className="text-sm text-muted-foreground">
+                  Ausgewählt: {featuredImageFile.name}
+                </p>
+              )}
             </div>
+
+            {/* Additional Images Upload */}
+            <div className="space-y-2">
+              <Label htmlFor="additional-images">Weitere Bilder</Label>
+              <Input
+                id="additional-images"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleAdditionalImagesChange}
+                className="cursor-pointer"
+              />
+              {additionalImageFiles.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    {additionalImageFiles.length} neue Bilder ausgewählt:
+                  </p>
+                  {additionalImageFiles.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 border rounded">
+                      <span className="text-sm truncate">{file.name}</span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeAdditionalImage(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Existing Images */}
+            {formData.images.length > 0 && (
+              <div className="space-y-2">
+                <Label>Vorhandene Bilder</Label>
+                <div className="space-y-2">
+                  {formData.images.map((image, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 border rounded">
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={image} 
+                          alt={`Bild ${index + 1}`}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                        <span className="text-sm truncate">{image}</span>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeExistingImage(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -458,9 +613,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         </Card>
 
         <div className="flex gap-4">
-          <Button type="submit" disabled={isLoading} className="flex items-center gap-2">
+          <Button type="submit" disabled={isLoading || uploadingImages} className="flex items-center gap-2">
             <Save className="h-4 w-4" />
-            {isLoading ? 'Speichere...' : (property ? 'Aktualisieren' : 'Erstellen')}
+            {uploadingImages ? 'Bilder werden hochgeladen...' : isLoading ? 'Speichere...' : (property ? 'Aktualisieren' : 'Erstellen')}
           </Button>
           <Button type="button" variant="outline" onClick={onClose}>
             Abbrechen
