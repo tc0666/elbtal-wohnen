@@ -3,15 +3,6 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Building, 
-  Mail, 
-  Phone, 
-  MapPin,
-  FileText,
-  Shield,
-  User
-} from 'lucide-react';
 
 const Impressum = () => {
   return (
@@ -37,8 +28,7 @@ const Impressum = () => {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building className="h-6 w-6 text-primary" />
+                <CardTitle>
                   Unternehmensdaten
                 </CardTitle>
               </CardHeader>
@@ -76,8 +66,7 @@ const Impressum = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="h-6 w-6 text-primary" />
+                <CardTitle>
                   Anschrift
                 </CardTitle>
               </CardHeader>
@@ -96,34 +85,26 @@ const Impressum = () => {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="h-6 w-6 text-primary" />
+                <CardTitle>
                   Kontaktdaten
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">Telefon</p>
-                    <p className="text-muted-foreground">+49 351 123 456 789</p>
-                  </div>
+                <div>
+                  <p className="font-medium">Telefon</p>
+                  <p className="text-muted-foreground">+49 351 123 456 789</p>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-primary" />
-                  <div>
-                    <p className="font-medium">E-Mail</p>
-                    <p className="text-muted-foreground">info@elbtal-immobilien.de</p>
-                  </div>
+                <div>
+                  <p className="font-medium">E-Mail</p>
+                  <p className="text-muted-foreground">info@elbtal-immobilien.de</p>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-6 w-6 text-primary" />
+                <CardTitle>
                   Verantwortlicher i.S.d. § 55 Abs. 2 RStV
                 </CardTitle>
               </CardHeader>
@@ -138,8 +119,7 @@ const Impressum = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-6 w-6 text-primary" />
+                <CardTitle>
                   Berufsaufsichtsbehörde
                 </CardTitle>
               </CardHeader>
@@ -160,10 +140,9 @@ const Impressum = () => {
         <div className="mt-12">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-6 w-6 text-primary" />
-                Haftungsausschluss
-              </CardTitle>
+                <CardTitle>
+                  Haftungsausschluss
+                </CardTitle>
             </CardHeader>
             <CardContent className="prose prose-gray max-w-none">
               <div className="space-y-6 text-muted-foreground">

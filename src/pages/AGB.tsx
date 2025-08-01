@@ -3,16 +3,6 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  FileText, 
-  Users, 
-  Home, 
-  CreditCard,
-  Shield,
-  AlertTriangle,
-  CheckCircle,
-  Scale
-} from 'lucide-react';
 
 const AGB = () => {
   return (
@@ -37,8 +27,7 @@ const AGB = () => {
           {/* Scope */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 1 Geltungsbereich
               </CardTitle>
             </CardHeader>
@@ -61,8 +50,7 @@ const AGB = () => {
           {/* Services */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Home className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 2 Leistungsumfang
               </CardTitle>
             </CardHeader>
@@ -74,40 +62,32 @@ const AGB = () => {
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Technische Hausverwaltung</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Kaufmännische Verwaltung</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Mieterverwaltung</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Nebenkostenabrechnung</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Objektbetreuung</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Instandhaltungsmanagement</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Vermietungsservice</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">Rechtliche Betreuung</span>
-                    </div>
+                     <div>
+                       <span className="text-sm">• Technische Hausverwaltung</span>
+                     </div>
+                     <div>
+                       <span className="text-sm">• Kaufmännische Verwaltung</span>
+                     </div>
+                     <div>
+                       <span className="text-sm">• Mieterverwaltung</span>
+                     </div>
+                     <div>
+                       <span className="text-sm">• Nebenkostenabrechnung</span>
+                     </div>
+                   </div>
+                   <div className="space-y-3">
+                     <div>
+                       <span className="text-sm">• Objektbetreuung</span>
+                     </div>
+                     <div>
+                       <span className="text-sm">• Instandhaltungsmanagement</span>
+                     </div>
+                     <div>
+                       <span className="text-sm">• Vermietungsservice</span>
+                     </div>
+                     <div>
+                       <span className="text-sm">• Rechtliche Betreuung</span>
+                     </div>
                   </div>
                 </div>
               </div>
@@ -117,8 +97,7 @@ const AGB = () => {
           {/* Contract Terms */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 3 Vertragsschluss und Laufzeit
               </CardTitle>
             </CardHeader>
@@ -148,8 +127,7 @@ const AGB = () => {
           {/* Payment Terms */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 4 Vergütung und Zahlungsbedingungen
               </CardTitle>
             </CardHeader>
@@ -187,8 +165,7 @@ const AGB = () => {
           {/* Liability */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 5 Haftung und Haftungsbeschränkung
               </CardTitle>
             </CardHeader>
@@ -199,18 +176,15 @@ const AGB = () => {
                   Bei leichter Fahrlässigkeit haftet der Auftragnehmer nur bei Verletzung 
                   wesentlicher Vertragspflichten (Kardinalspflichten).
                 </p>
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-                  <div className="flex items-start gap-3">
-                    <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-yellow-800 mb-2">Haftungsausschluss:</h4>
-                      <p className="text-yellow-700 text-sm">
-                        Die Haftung für mittelbare Schäden, Folgeschäden und entgangenen Gewinn 
-                        ist ausgeschlossen, soweit gesetzlich zulässig.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                 <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                   <div>
+                     <h4 className="font-semibold text-yellow-800 mb-2">Haftungsausschluss:</h4>
+                     <p className="text-yellow-700 text-sm">
+                       Die Haftung für mittelbare Schäden, Folgeschäden und entgangenen Gewinn 
+                       ist ausgeschlossen, soweit gesetzlich zulässig.
+                     </p>
+                   </div>
+                 </div>
                 <p>
                   Der Auftragnehmer ist berechtigt und verpflichtet, eine Berufshaftpflichtversicherung 
                   in angemessener Höhe zu unterhalten.
@@ -222,8 +196,7 @@ const AGB = () => {
           {/* Data Protection */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 6 Datenschutz und Vertraulichkeit
               </CardTitle>
             </CardHeader>
@@ -255,8 +228,7 @@ const AGB = () => {
           {/* Final Provisions */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Scale className="h-6 w-6 text-primary" />
+              <CardTitle>
                 § 7 Schlussbestimmungen
               </CardTitle>
             </CardHeader>

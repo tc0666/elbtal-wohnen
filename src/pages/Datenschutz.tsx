@@ -3,16 +3,6 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Shield, 
-  Eye, 
-  Cookie, 
-  FileText,
-  Lock,
-  UserCheck,
-  Database,
-  Mail
-} from 'lucide-react';
 
 const Datenschutz = () => {
   return (
@@ -37,8 +27,7 @@ const Datenschutz = () => {
           {/* General Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-6 w-6 text-primary" />
+              <CardTitle>
                 1. Verantwortlicher
               </CardTitle>
             </CardHeader>
@@ -58,8 +47,7 @@ const Datenschutz = () => {
           {/* Data Processing */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Database className="h-6 w-6 text-primary" />
+              <CardTitle>
                 2. Art und Zweck der Datenverarbeitung
               </CardTitle>
             </CardHeader>
@@ -103,8 +91,7 @@ const Datenschutz = () => {
           {/* Legal Basis */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-6 w-6 text-primary" />
+              <CardTitle>
                 3. Rechtsgrundlage
               </CardTitle>
             </CardHeader>
@@ -144,8 +131,7 @@ const Datenschutz = () => {
           {/* Data Storage */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="h-6 w-6 text-primary" />
+              <CardTitle>
                 4. Speicherdauer
               </CardTitle>
             </CardHeader>
@@ -171,8 +157,7 @@ const Datenschutz = () => {
           {/* User Rights */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <UserCheck className="h-6 w-6 text-primary" />
+              <CardTitle>
                 5. Ihre Rechte
               </CardTitle>
             </CardHeader>
@@ -182,30 +167,24 @@ const Datenschutz = () => {
               </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Eye className="h-4 w-4 text-primary" />
+                  <div>
                     <span className="font-medium">Recht auf Auskunft</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-primary" />
+                  <div>
                     <span className="font-medium">Recht auf Berichtigung</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-primary" />
+                  <div>
                     <span className="font-medium">Recht auf Löschung</span>
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Lock className="h-4 w-4 text-primary" />
+                  <div>
                     <span className="font-medium">Recht auf Einschränkung</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Database className="h-4 w-4 text-primary" />
+                  <div>
                     <span className="font-medium">Recht auf Datenübertragbarkeit</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <UserCheck className="h-4 w-4 text-primary" />
+                  <div>
                     <span className="font-medium">Widerspruchsrecht</span>
                   </div>
                 </div>
@@ -216,8 +195,7 @@ const Datenschutz = () => {
           {/* Cookies */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Cookie className="h-6 w-6 text-primary" />
+              <CardTitle>
                 6. Cookies
               </CardTitle>
             </CardHeader>
@@ -241,8 +219,7 @@ const Datenschutz = () => {
           {/* Contact */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Mail className="h-6 w-6 text-primary" />
+              <CardTitle>
                 7. Kontakt bei Datenschutzfragen
               </CardTitle>
             </CardHeader>
