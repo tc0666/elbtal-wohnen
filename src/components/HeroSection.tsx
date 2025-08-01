@@ -1,7 +1,32 @@
 import { PropertySearchFilter } from "./PropertySearchFilter";
 import heroPropertyBg from "@/assets/hero-property-bg.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const HeroSection = () => {
+  // Fetch cities count
+  const { data: citiesCount = 0 } = useQuery({
+    queryKey: ['cities-count'],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from('cities')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
+      return count || 0;
+    }
+  });
+
+  // Fetch properties count
+  const { data: propertiesCount = 0 } = useQuery({
+    queryKey: ['properties-count'],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from('properties')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
+      return count || 0;
+    }
+  });
   return (
     <section 
       className="relative py-20 md:py-28 bg-cover bg-center bg-no-repeat"
@@ -26,15 +51,15 @@ export const HeroSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-2xl mx-auto text-center">
           <div className="space-y-2">
-            <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">500+</div>
+            <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">{propertiesCount}+</div>
             <div className="text-sm text-white/80">Immobilien</div>
           </div>
           <div className="space-y-2">
-            <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">5</div>
+            <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">{citiesCount}</div>
             <div className="text-sm text-white/80">Städte</div>
           </div>
           <div className="space-y-2">
-            <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">15+</div>
+            <div className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">35+</div>
             <div className="text-sm text-white/80">Jahre Erfahrung</div>
           </div>
           <div className="space-y-2">
