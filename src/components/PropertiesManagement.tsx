@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2 } from 'lucide-react';
-import SimplePropertyForm from '@/components/SimplePropertyForm';
+import BasicPopup from '@/components/BasicPopup';
 import { PropertyWithRelations } from '@/types/property';
 
 const PropertiesManagement = () => {
@@ -124,10 +124,7 @@ const PropertiesManagement = () => {
   return (
     <div className="space-y-4">
       {showForm && (
-        <SimplePropertyForm 
-          property={editingProperty}
-          onClose={handleFormClose}
-        />
+        <BasicPopup onClose={handleFormClose} />
       )}
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
