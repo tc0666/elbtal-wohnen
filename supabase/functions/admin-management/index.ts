@@ -98,6 +98,21 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'get_property_inquiries':
+        const { propertyId } = data
+        const { data: inquiries, error: inquiriesError } = await supabase
+          .from('contact_requests')
+          .select('*')
+          .eq('property_id', propertyId)
+          .order('created_at', { ascending: false })
+
+        if (inquiriesError) throw inquiriesError
+
+        return new Response(
+          JSON.stringify({ inquiries }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+
       case 'get_property_types':
         const { data: types, error: typesError } = await supabase
           .from('property_types')

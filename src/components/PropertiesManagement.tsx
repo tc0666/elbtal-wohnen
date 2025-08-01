@@ -33,6 +33,9 @@ interface PropertyInquiries {
 
 const PropertiesManagement = () => {
   const [properties, setProperties] = useState<PropertyWithRelations[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<PropertyWithRelations[]>([]);
+  const [cities, setCities] = useState<{id: string; name: string}[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProperty, setEditingProperty] = useState<PropertyWithRelations | null>(null);
@@ -71,9 +74,11 @@ const PropertiesManagement = () => {
       if (data?.properties) {
         console.log('Properties loaded:', data.properties.length);
         setProperties(data.properties);
+        setFilteredProperties(data.properties);
       } else {
         console.warn('No properties data received');
         setProperties([]);
+        setFilteredProperties([]);
       }
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -83,8 +88,24 @@ const PropertiesManagement = () => {
         variant: "destructive"
       });
       setProperties([]);
+      setFilteredProperties([]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchCities = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const { data } = await supabase.functions.invoke('admin-management', {
+        body: { action: 'get_cities', token }
+      });
+
+      if (data?.cities) {
+        setCities(data.cities);
+      }
+    } catch (error) {
+      console.error('Error fetching cities:', error);
     }
   };
 
@@ -148,7 +169,16 @@ const PropertiesManagement = () => {
 
   useEffect(() => {
     fetchProperties();
+    fetchCities();
   }, []);
+
+  useEffect(() => {
+    if (selectedCity === 'all') {
+      setFilteredProperties(properties);
+    } else {
+      setFilteredProperties(properties.filter(property => property.city_id === selectedCity));
+    }
+  }, [selectedCity, properties]);
 
   const handleDelete = async (propertyId: string) => {
     if (!confirm('Sind Sie sicher, dass Sie diese Immobilie löschen möchten?')) {
@@ -253,7 +283,31 @@ const PropertiesManagement = () => {
         </Button>
       </div>
 
-      {properties.length === 0 ? (
+      {/* Filter Section */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <Label htmlFor="city-filter" className="text-sm font-medium">Nach Stadt filtern:</Label>
+        <Select value={selectedCity} onValueChange={setSelectedCity}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Stadt auswählen" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Alle Städte ({properties.length})</SelectItem>
+            {cities.map((city) => {
+              const cityCount = properties.filter(p => p.city_id === city.id).length;
+              return (
+                <SelectItem key={city.id} value={city.id}>
+                  {city.name} ({cityCount})
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+        <div className="text-sm text-muted-foreground">
+          {filteredProperties.length} von {properties.length} Immobilien
+        </div>
+      </div>
+
+      {filteredProperties.length === 0 ? (
         <Card>
           <CardContent className="text-center py-8">
             <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -269,7 +323,7 @@ const PropertiesManagement = () => {
         </Card>
       ) : (
         <div className="space-y-4">
-          {properties.map((property) => (
+          {filteredProperties.map((property) => (
             <Card key={property.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex flex-col lg:flex-row gap-4">
