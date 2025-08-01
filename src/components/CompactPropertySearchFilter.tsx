@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,9 +22,10 @@ export interface FilterData {
 
 interface CompactPropertySearchFilterProps {
   onFilterChange?: (filters: FilterData) => void;
+  initialFilters?: FilterData;
 }
 
-export const CompactPropertySearchFilter = ({ onFilterChange }: CompactPropertySearchFilterProps) => {
+export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: CompactPropertySearchFilterProps) => {
   const [searchData, setSearchData] = useState<FilterData>({
     location: "",
     propertyType: "",
@@ -33,6 +34,13 @@ export const CompactPropertySearchFilter = ({ onFilterChange }: CompactPropertyS
     minArea: "",
     rooms: "",
   });
+
+  // Update form when initial filters change (from URL params)
+  useEffect(() => {
+    if (initialFilters) {
+      setSearchData(initialFilters);
+    }
+  }, [initialFilters]);
 
   const handleSearch = () => {
     onFilterChange?.(searchData);

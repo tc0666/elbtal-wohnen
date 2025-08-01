@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ import { Card } from "@/components/ui/card";
 import { Search, MapPin, Home, Euro, Ruler, Users } from "lucide-react";
 
 export const PropertySearchFilter = () => {
+  const navigate = useNavigate();
   const [searchData, setSearchData] = useState({
     location: "",
     propertyType: "",
@@ -23,8 +25,18 @@ export const PropertySearchFilter = () => {
   });
 
   const handleSearch = () => {
-    console.log("Search data:", searchData);
-    // This will be connected to actual search functionality later
+    // Create URL search params to pass the filters
+    const params = new URLSearchParams();
+    
+    if (searchData.location) params.append('location', searchData.location);
+    if (searchData.propertyType) params.append('propertyType', searchData.propertyType);
+    if (searchData.minPrice) params.append('minPrice', searchData.minPrice);
+    if (searchData.maxPrice) params.append('maxPrice', searchData.maxPrice);
+    if (searchData.minArea) params.append('minArea', searchData.minArea);
+    if (searchData.rooms) params.append('rooms', searchData.rooms);
+
+    // Navigate to Mietangebote page with search parameters
+    navigate(`/mietangebote?${params.toString()}`);
   };
 
   return (
@@ -51,6 +63,7 @@ export const PropertySearchFilter = () => {
                 <SelectValue placeholder="Stadt wählen" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">Alle Städte</SelectItem>
                 <SelectItem value="berlin">Berlin</SelectItem>
                 <SelectItem value="hamburg">Hamburg</SelectItem>
                 <SelectItem value="muenchen">München</SelectItem>
@@ -73,6 +86,7 @@ export const PropertySearchFilter = () => {
                 <SelectValue placeholder="Typ wählen" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">Alle Typen</SelectItem>
                 <SelectItem value="wohnung">Wohnung</SelectItem>
                 <SelectItem value="haus">Haus</SelectItem>
                 <SelectItem value="studio">Studio</SelectItem>
@@ -141,6 +155,7 @@ export const PropertySearchFilter = () => {
                 <SelectValue placeholder="Anzahl" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">Alle Zimmer</SelectItem>
                 <SelectItem value="1">1 Zimmer</SelectItem>
                 <SelectItem value="2">2 Zimmer</SelectItem>
                 <SelectItem value="3">3 Zimmer</SelectItem>

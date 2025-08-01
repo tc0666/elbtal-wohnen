@@ -20,15 +20,22 @@ export const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <div>
+            <Link to="/" className="block">
               <h1 className="text-2xl font-bold text-primary">Elbtal</h1>
               <span className="text-xs text-muted-foreground">Immobilienverwaltung seit 1988</span>
-            </div>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/">
+                  <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                    Home
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="text-foreground hover:text-primary">
                   Wohnen & Service
@@ -108,6 +115,9 @@ export const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden border-t border-border">
             <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link to="/" className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md">
+                Home
+              </Link>
               <div className="space-y-1">
                 <button className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md">
                   Wohnen & Service
