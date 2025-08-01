@@ -270,7 +270,7 @@ const PropertyDetails = () => {
                 {/* Features */}
                 <div className="mb-6">
                   <h4 className="font-semibold mb-3">Ausstattung</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
                     {property.balcony && (
                       <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
@@ -356,7 +356,34 @@ const PropertyDetails = () => {
                       </div>
                     )}
                   </div>
+                  
+                  {/* Features Description */}
+                  {property.features_description && (
+                    <div className="bg-muted/50 p-4 rounded-lg">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {property.features_description}
+                      </p>
+                    </div>
+                  )}
                 </div>
+
+                <Separator className="my-6" />
+
+                {/* Additional Description */}
+                {property.additional_description && (
+                  <>
+                    <div className="mb-6">
+                      <h4 className="font-semibold mb-3">Weitere Beschreibung</h4>
+                      <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="text-muted-foreground leading-relaxed">
+                          {property.additional_description}
+                        </p>
+                      </div>
+                    </div>
+
+                    <Separator className="my-6" />
+                  </>
+                )}
               </CardContent>
             </Card>
           </div>

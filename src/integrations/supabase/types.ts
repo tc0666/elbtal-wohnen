@@ -47,6 +47,7 @@ export type Database = {
       properties: {
         Row: {
           additional_costs_monthly: number | null
+          additional_description: string | null
           address: string
           area_sqm: number
           attic: boolean | null
@@ -64,6 +65,7 @@ export type Database = {
           energy_certificate_type: string | null
           energy_certificate_value: string | null
           features: string[] | null
+          features_description: string | null
           floor: number | null
           furnished: boolean | null
           garden: boolean | null
@@ -92,6 +94,7 @@ export type Database = {
         }
         Insert: {
           additional_costs_monthly?: number | null
+          additional_description?: string | null
           address: string
           area_sqm: number
           attic?: boolean | null
@@ -109,6 +112,7 @@ export type Database = {
           energy_certificate_type?: string | null
           energy_certificate_value?: string | null
           features?: string[] | null
+          features_description?: string | null
           floor?: number | null
           furnished?: boolean | null
           garden?: boolean | null
@@ -137,6 +141,7 @@ export type Database = {
         }
         Update: {
           additional_costs_monthly?: number | null
+          additional_description?: string | null
           address?: string
           area_sqm?: number
           attic?: boolean | null
@@ -154,6 +159,7 @@ export type Database = {
           energy_certificate_type?: string | null
           energy_certificate_value?: string | null
           features?: string[] | null
+          features_description?: string | null
           floor?: number | null
           furnished?: boolean | null
           garden?: boolean | null
