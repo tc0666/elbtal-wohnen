@@ -68,13 +68,13 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, onTabChange, adm
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     onClick={() => onTabChange(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 font-medium ${
+                    className={`w-full flex items-center gap-4 px-6 py-4 rounded-lg transition-all duration-200 font-medium ${
                       activeTab === item.id 
                         ? 'bg-primary text-primary-foreground shadow-md' 
                         : 'hover:bg-muted hover:shadow-sm'
                     }`}
                   >
-                    <item.icon className="h-5 w-5" />
+                    <item.icon className="h-6 w-6" />
                     <span className="text-sm">{item.label}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
