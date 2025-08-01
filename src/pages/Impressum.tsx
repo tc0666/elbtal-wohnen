@@ -1,0 +1,222 @@
+import React from 'react';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { 
+  Building, 
+  Mail, 
+  Phone, 
+  MapPin,
+  FileText,
+  Shield,
+  User
+} from 'lucide-react';
+
+const Impressum = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      <div className="container mx-auto px-4 py-16">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <Badge className="mb-4 bg-primary/10 text-primary">
+            Rechtliches
+          </Badge>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Impressum
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Angaben gemäß § 5 TMG (Telemediengesetz)
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Company Information */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Building className="h-6 w-6 text-primary" />
+                  Unternehmensdaten
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h3 className="font-semibold mb-2">Firmenname</h3>
+                  <p className="text-muted-foreground">
+                    Elbtal Immobilienverwaltung GmbH
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold mb-2">Geschäftsführer</h3>
+                  <p className="text-muted-foreground">
+                    Dr. Michael Schmidt
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-2">Handelsregister</h3>
+                  <p className="text-muted-foreground">
+                    Amtsgericht Dresden<br />
+                    HRB 12345
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-2">Umsatzsteuer-ID</h3>
+                  <p className="text-muted-foreground">
+                    DE123456789
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-6 w-6 text-primary" />
+                  Anschrift
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <p className="font-medium">Elbtal Immobilienverwaltung GmbH</p>
+                  <p className="text-muted-foreground">Hauptstraße 123</p>
+                  <p className="text-muted-foreground">01069 Dresden</p>
+                  <p className="text-muted-foreground">Deutschland</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Contact Information */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Phone className="h-6 w-6 text-primary" />
+                  Kontaktdaten
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Phone className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="font-medium">Telefon</p>
+                    <p className="text-muted-foreground">+49 351 123 456 789</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Mail className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="font-medium">E-Mail</p>
+                    <p className="text-muted-foreground">info@elbtal-immobilien.de</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="h-6 w-6 text-primary" />
+                  Verantwortlicher i.S.d. § 55 Abs. 2 RStV
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <p className="font-medium">Dr. Michael Schmidt</p>
+                  <p className="text-muted-foreground">Hauptstraße 123</p>
+                  <p className="text-muted-foreground">01069 Dresden</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-6 w-6 text-primary" />
+                  Berufsaufsichtsbehörde
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <p className="text-muted-foreground">
+                    Industrie- und Handelskammer Dresden<br />
+                    Langer Weg 4<br />
+                    01239 Dresden
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Legal Information */}
+        <div className="mt-12">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-6 w-6 text-primary" />
+                Haftungsausschluss
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="prose prose-gray max-w-none">
+              <div className="space-y-6 text-muted-foreground">
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Haftung für Inhalte</h3>
+                  <p>
+                    Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den 
+                    allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht 
+                    unter der Verpflichtung, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach 
+                    Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Haftung für Links</h3>
+                  <p>
+                    Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. 
+                    Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten 
+                    Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Urheberrecht</h3>
+                  <p>
+                    Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen 
+                    Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der 
+                    Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-3">Online-Streitbeilegung (OS)</h3>
+                  <p>
+                    Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
+                    <a href="https://ec.europa.eu/consumers/odr/" className="text-primary hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+                      https://ec.europa.eu/consumers/odr/
+                    </a>
+                  </p>
+                  <p className="mt-2">
+                    Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 
+                    Verbraucherschlichtungsstelle teilzunehmen.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default Impressum;

@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 export const Footer = () => {
   return <footer className="bg-secondary/20 border-t border-border">
@@ -20,10 +21,10 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-foreground">Services</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Mietangebote</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Vermietungsablauf</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Leistungsübersicht</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Kundenservice</a></li>
+              <li><Link to="/mietangebote" className="hover:text-primary transition-colors">Mietangebote</Link></li>
+              <li><Link to="/vermietungsablauf" className="hover:text-primary transition-colors">Vermietungsablauf</Link></li>
+              <li><Link to="/leistungsübersicht" className="hover:text-primary transition-colors">Leistungsübersicht</Link></li>
+              <li><Link to="/kontakt" className="hover:text-primary transition-colors">Kundenservice</Link></li>
             </ul>
           </div>
 
@@ -70,9 +71,9 @@ export const Footer = () => {
             © 2025 Elbtal Immobilien. Alle Rechte vorbehalten.
           </div>
           <div className="flex space-x-6">
-            <a href="#" className="hover:text-primary transition-colors">Impressum</a>
-            <a href="#" className="hover:text-primary transition-colors">Datenschutz</a>
-            <a href="#" className="hover:text-primary transition-colors">AGB</a>
+            <Link to="/impressum" className="hover:text-primary transition-colors">Impressum</Link>
+            <Link to="/datenschutz" className="hover:text-primary transition-colors">Datenschutz</Link>
+            <Link to="/agb" className="hover:text-primary transition-colors">AGB</Link>
           </div>
         </div>
       </div>
