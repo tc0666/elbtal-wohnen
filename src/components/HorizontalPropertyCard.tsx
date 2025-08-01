@@ -174,14 +174,12 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
                 )}
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-1">
-                {property.description}
-              </p>
-
-              {/* Action Button */}
-              <div className="flex justify-end">
-                <Button variant="outline" className="px-6">
+              {/* Description and Button */}
+              <div className="flex items-start justify-between gap-4">
+                <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
+                  {property.description}
+                </p>
+                <Button variant="outline" className="px-6 flex-shrink-0">
                   Details ansehen
                 </Button>
               </div>
