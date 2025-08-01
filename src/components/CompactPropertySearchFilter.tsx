@@ -27,41 +27,20 @@ interface CompactPropertySearchFilterProps {
 
 export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: CompactPropertySearchFilterProps) => {
   const [searchData, setSearchData] = useState<FilterData>({
-    location: "all",
-    propertyType: "all",
+    location: "",
+    propertyType: "",
     minPrice: "",
     maxPrice: "",
     minArea: "",
-    rooms: "all",
+    rooms: "",
   });
 
   // Update form when initial filters change (from URL params)
   useEffect(() => {
     if (initialFilters) {
-      const updatedFilters = {
-        location: initialFilters.location || "all",
-        propertyType: initialFilters.propertyType || "all",
-        minPrice: initialFilters.minPrice || "",
-        maxPrice: initialFilters.maxPrice || "",
-        minArea: initialFilters.minArea || "",
-        rooms: initialFilters.rooms || "all",
-      };
-      setSearchData(updatedFilters);
+      setSearchData(initialFilters);
     }
   }, [initialFilters]);
-
-  // Trigger initial search only once when component mounts
-  useEffect(() => {
-    const defaultFilters = {
-      location: "all",
-      propertyType: "all",
-      minPrice: "",
-      maxPrice: "",
-      minArea: "",
-      rooms: "all",
-    };
-    onFilterChange?.(defaultFilters);
-  }, []); // Empty dependency array to run only once
 
   const handleSearch = () => {
     onFilterChange?.(searchData);
