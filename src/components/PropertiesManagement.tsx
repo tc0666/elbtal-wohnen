@@ -2,17 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2 } from 'lucide-react';
+import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2, Eye, Calendar, Phone, Mail, MessageSquare, User, Clock } from 'lucide-react';
 import PropertyForm from '@/components/PropertyForm';
 import { PropertyWithRelations } from '@/types/property';
+
+interface ContactRequest {
+  id: string;
+  anrede: string;
+  vorname: string;
+  nachname: string;
+  email: string;
+  telefon: string;
+  nachricht: string;
+  status: string;
+  created_at: string;
+}
+
+interface PropertyInquiries {
+  property: PropertyWithRelations;
+  inquiries: ContactRequest[];
+  inquiryCount: number;
+}
 
 const PropertiesManagement = () => {
   const [properties, setProperties] = useState<PropertyWithRelations[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProperty, setEditingProperty] = useState<PropertyWithRelations | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<PropertyInquiries | null>(null);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [appointmentDialogOpen, setAppointmentDialogOpen] = useState(false);
+  const [appointmentData, setAppointmentData] = useState({
+    date: '',
+    time: '',
+    notes: '',
+    contactId: ''
+  });
   const { toast } = useToast();
 
   const fetchProperties = async () => {
@@ -53,6 +85,64 @@ const PropertiesManagement = () => {
       setProperties([]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchPropertyInquiries = async (propertyId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const { data } = await supabase.functions.invoke('admin-management', {
+        body: { action: 'get_property_inquiries', token, propertyId }
+      });
+
+      if (data?.inquiries) {
+        const property = properties.find(p => p.id === propertyId);
+        if (property) {
+          setSelectedProperty({
+            property,
+            inquiries: data.inquiries,
+            inquiryCount: data.inquiries.length
+          });
+          setViewDialogOpen(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching property inquiries:', error);
+      toast({
+        title: "Fehler",
+        description: "Anfragen konnten nicht geladen werden.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const scheduleAppointment = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const { data } = await supabase.functions.invoke('admin-management', {
+        body: { 
+          action: 'schedule_appointment', 
+          token,
+          ...appointmentData,
+          propertyId: selectedProperty?.property.id
+        }
+      });
+
+      if (data?.success) {
+        toast({
+          title: "Termin geplant",
+          description: "Der Besichtigungstermin wurde erfolgreich geplant.",
+        });
+        setAppointmentDialogOpen(false);
+        setAppointmentData({ date: '', time: '', notes: '', contactId: '' });
+      }
+    } catch (error) {
+      console.error('Error scheduling appointment:', error);
+      toast({
+        title: "Fehler",
+        description: "Termin konnte nicht geplant werden.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -105,6 +195,26 @@ const PropertiesManagement = () => {
       currency: 'EUR',
       minimumFractionDigits: 0,
     }).format(price);
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'new': return 'Neu';
+      case 'in_progress': return 'In Bearbeitung';
+      case 'completed': return 'Abgeschlossen';
+      case 'archived': return 'Archiviert';
+      default: return status;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'new': return 'destructive';
+      case 'in_progress': return 'default';
+      case 'completed': return 'secondary';
+      case 'archived': return 'outline';
+      default: return 'outline';
+    }
   };
 
   if (isLoading) {
@@ -188,7 +298,16 @@ const PropertiesManagement = () => {
                           {property.address}, {property.city?.name}
                         </div>
                       </div>
-                      <div className="flex flex-row sm:flex-col gap-2 sm:gap-1">
+                      <div className="flex flex-row gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => fetchPropertyInquiries(property.id)}
+                          className="flex items-center gap-1"
+                        >
+                          <Eye className="h-3 w-3" />
+                          <span className="hidden sm:inline">Anzeigen</span>
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"
@@ -252,6 +371,189 @@ const PropertiesManagement = () => {
           ))}
         </div>
       )}
+
+      {/* Property Inquiries Dialog */}
+      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Anfragen für {selectedProperty?.property.title}</DialogTitle>
+            <DialogDescription>
+              {selectedProperty?.inquiryCount} Anfrage{selectedProperty?.inquiryCount !== 1 ? 'n' : ''} für diese Immobilie
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedProperty && (
+            <div className="space-y-6">
+              {/* Property Summary */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+                    <Building2 className="h-8 w-8 text-primary" />
+                    <div>
+                      <h3 className="font-semibold">{selectedProperty.property.title}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedProperty.property.address}, {selectedProperty.property.city?.name}
+                      </p>
+                      <p className="text-sm font-medium text-primary">
+                        {formatPrice(selectedProperty.property.price_monthly)}/Monat
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Inquiries List */}
+              {selectedProperty.inquiries.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-lg font-semibold">Kontaktanfragen</h4>
+                    <Button 
+                      onClick={() => setAppointmentDialogOpen(true)}
+                      size="sm"
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Besichtigungstermin planen
+                    </Button>
+                  </div>
+                  
+                  {selectedProperty.inquiries.map((inquiry) => (
+                    <Card key={inquiry.id}>
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-3">
+                              <User className="h-8 w-8 bg-primary/10 text-primary p-2 rounded-full" />
+                              <div>
+                                <p className="font-medium">
+                                  {inquiry.anrede && `${inquiry.anrede === 'herr' ? 'Hr.' : inquiry.anrede === 'frau' ? 'Fr.' : 'Divers'} `}
+                                  {inquiry.vorname} {inquiry.nachname}
+                                </p>
+                                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                  <div className="flex items-center gap-1">
+                                    <Mail className="h-3 w-3" />
+                                    <a href={`mailto:${inquiry.email}`} className="hover:underline">
+                                      {inquiry.email}
+                                    </a>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <Phone className="h-3 w-3" />
+                                    <a href={`tel:${inquiry.telefon}`} className="hover:underline">
+                                      {inquiry.telefon}
+                                    </a>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    {new Date(inquiry.created_at).toLocaleDateString('de-DE')}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <Badge variant={getStatusColor(inquiry.status)}>
+                              {getStatusLabel(inquiry.status)}
+                            </Badge>
+                          </div>
+                          
+                          <div className="bg-muted/50 p-3 rounded-lg">
+                            <p className="text-sm leading-relaxed">{inquiry.nachricht}</p>
+                          </div>
+                          
+                          <div className="flex gap-2">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => {
+                                setAppointmentData({...appointmentData, contactId: inquiry.id});
+                                setAppointmentDialogOpen(true);
+                              }}
+                            >
+                              <Calendar className="h-3 w-3 mr-1" />
+                              Termin vereinbaren
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => {
+                                window.location.href = `mailto:${inquiry.email}?subject=Re: Ihre Anfrage zu ${selectedProperty.property.title}&body=Hallo ${inquiry.vorname} ${inquiry.nachname},%0D%0A%0D%0AVielen Dank für Ihr Interesse an unserer Immobilie...`;
+                              }}
+                            >
+                              <Mail className="h-3 w-3 mr-1" />
+                              E-Mail senden
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card>
+                  <CardContent className="text-center py-8">
+                    <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">Keine Anfragen</h3>
+                    <p className="text-muted-foreground">
+                      Für diese Immobilie sind noch keine Anfragen eingegangen.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Appointment Scheduling Dialog */}
+      <Dialog open={appointmentDialogOpen} onOpenChange={setAppointmentDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Besichtigungstermin planen</DialogTitle>
+            <DialogDescription>
+              Planen Sie einen Besichtigungstermin für {selectedProperty?.property.title}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="appointment-date">Datum</Label>
+              <Input
+                id="appointment-date"
+                type="date"
+                value={appointmentData.date}
+                onChange={(e) => setAppointmentData({...appointmentData, date: e.target.value})}
+                min={new Date().toISOString().split('T')[0]}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="appointment-time">Uhrzeit</Label>
+              <Input
+                id="appointment-time"
+                type="time"
+                value={appointmentData.time}
+                onChange={(e) => setAppointmentData({...appointmentData, time: e.target.value})}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="appointment-notes">Notizen (optional)</Label>
+              <Textarea
+                id="appointment-notes"
+                placeholder="Besondere Wünsche oder Anmerkungen..."
+                value={appointmentData.notes}
+                onChange={(e) => setAppointmentData({...appointmentData, notes: e.target.value})}
+              />
+            </div>
+            
+            <div className="flex gap-2 pt-4">
+              <Button variant="outline" onClick={() => setAppointmentDialogOpen(false)} className="flex-1">
+                Abbrechen
+              </Button>
+              <Button onClick={scheduleAppointment} className="flex-1">
+                Termin planen
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

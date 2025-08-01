@@ -3,6 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { Building2, MessageSquare, MapPin, TrendingUp } from 'lucide-react';
 
+interface AdminOverviewProps {
+  onTabChange: (tab: string) => void;
+}
+
 interface OverviewStats {
   totalProperties: number;
   activeProperties: number;
@@ -11,7 +15,7 @@ interface OverviewStats {
   totalCities: number;
 }
 
-const AdminOverview = () => {
+const AdminOverview: React.FC<AdminOverviewProps> = ({ onTabChange }) => {
   const [stats, setStats] = useState<OverviewStats>({
     totalProperties: 0,
     activeProperties: 0,
@@ -153,14 +157,20 @@ const AdminOverview = () => {
             <CardTitle>Schnellzugriff</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+            <div 
+              className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+              onClick={() => onTabChange('properties')}
+            >
               <div className="flex items-center gap-3">
                 <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 shrink-0" />
                 <span className="text-sm sm:text-base">Neue Immobilie hinzufügen</span>
               </div>
               <span className="text-xs text-muted-foreground hidden sm:block">Strg+N</span>
             </div>
-            <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+            <div 
+              className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+              onClick={() => onTabChange('contacts')}
+            >
               <div className="flex items-center gap-3">
                 <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 shrink-0" />
                 <span className="text-sm sm:text-base">Neue Anfragen prüfen</span>

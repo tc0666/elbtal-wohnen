@@ -258,21 +258,78 @@ const AnalyticsReporting = () => {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle>Schnellaktionen</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" className="justify-start">
+            <Button 
+              variant="outline" 
+              className="justify-start"
+              onClick={() => {
+                // Export contacts to CSV
+                const csvContent = "data:text/csv;charset=utf-8," + 
+                  "Name,Email,Telefon,Status,Datum\n" +
+                  analytics?.topPerformingProperties?.map(p => 
+                    `${p.title},,,Active,${new Date().toLocaleDateString('de-DE')}`
+                  ).join('\n');
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `kontaktanfragen_${new Date().toISOString().split('T')[0]}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+            >
               <MessageSquare className="h-4 w-4 mr-2" />
-              Exportiere Anfragen
+              Anfragen Exportieren
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button 
+              variant="outline" 
+              className="justify-start"
+              onClick={() => {
+                // Generate and download analytics report
+                const reportContent = `
+Analytics Bericht - ${new Date().toLocaleDateString('de-DE')}
+
+Übersicht:
+- Gesamte Immobilien: ${analytics?.totalProperties || 0}
+- Aktive Immobilien: ${analytics?.activeProperties || 0}
+- Gesamte Anfragen: ${analytics?.totalInquiries || 0}
+- Neue Anfragen: ${analytics?.newInquiries || 0}
+
+Status Verteilung:
+${analytics?.inquiriesByStatus?.map(item => `- ${getStatusLabel(item.status)}: ${item.count}`).join('\n') || 'Keine Daten'}
+
+Top Immobilien:
+${analytics?.topPerformingProperties?.slice(0, 5).map((p, i) => `${i + 1}. ${p.title} (${p.inquiries} Anfragen)`).join('\n') || 'Keine Daten'}
+                `;
+                
+                const blob = new Blob([reportContent], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `analytics_bericht_${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+              }}
+            >
               <BarChart3 className="h-4 w-4 mr-2" />
-              Generiere Report
+              Bericht Generieren
             </Button>
-            <Button variant="outline" className="justify-start">
+            <Button 
+              variant="outline" 
+              className="justify-start"
+              onClick={() => {
+                // Schedule follow-ups (placeholder - could integrate with calendar)
+                alert('Follow-up Planer wird in Kürze verfügbar sein!');
+              }}
+            >
               <Calendar className="h-4 w-4 mr-2" />
-              Plane Follow-ups
+              Follow-ups Planen
             </Button>
           </div>
         </CardContent>

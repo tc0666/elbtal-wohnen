@@ -119,7 +119,7 @@ const AdminDashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return <AdminOverview />;
+        return <AdminOverview onTabChange={setActiveTab} />;
       case 'properties':
         return <PropertiesManagement />;
       case 'contacts':
@@ -129,7 +129,7 @@ const AdminDashboard = () => {
       case 'analytics':
         return <AnalyticsReporting />;
       default:
-        return <AdminOverview />;
+        return <AdminOverview onTabChange={setActiveTab} />;
     }
   };
 
