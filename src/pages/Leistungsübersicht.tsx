@@ -240,7 +240,7 @@ const Leistungsübersicht = () => {
           <div className="grid md:grid-cols-4 gap-8">
             {processSteps.map((step, index) => (
               <div key={step.number} className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl font-bold">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl font-bold shadow-lg">
                   {step.number}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
@@ -282,19 +282,21 @@ const Leistungsübersicht = () => {
         </Card>
 
         {/* Contact CTA */}
-        <Card className="bg-primary text-primary-foreground">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="text-center p-12">
-            <HeartHandshake className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Lassen Sie uns über Ihre Immobilie sprechen</h2>
-            <p className="text-xl mb-8 opacity-90">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <HeartHandshake className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4 text-foreground">Lassen Sie uns über Ihre Immobilie sprechen</h2>
+            <p className="text-xl mb-8 text-muted-foreground">
               Kontaktieren Sie uns für eine kostenlose und unverbindliche Beratung zu unseren Services.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="default">
                 <Phone className="h-5 w-5 mr-2" />
                 +49 351 123 456 789
               </Button>
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="outline">
                 <Mail className="h-5 w-5 mr-2" />
                 info@elbtal-immobilien.de
               </Button>

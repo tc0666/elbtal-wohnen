@@ -132,14 +132,16 @@ const Contact = () => {
             </Card>
 
             {/* CTA Card */}
-            <Card className="bg-primary text-primary-foreground">
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
               <CardContent className="p-6 text-center">
-                <HeartHandshake className="h-12 w-12 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Persönliche Beratung</h3>
-                <p className="mb-4 opacity-90">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <HeartHandshake className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-foreground">Persönliche Beratung</h3>
+                <p className="mb-4 text-muted-foreground">
                   Vereinbaren Sie einen Termin für eine kostenlose Beratung vor Ort.
                 </p>
-                <Button variant="secondary" size="sm">
+                <Button variant="default" size="sm">
                   <Phone className="h-4 w-4 mr-2" />
                   Termin vereinbaren
                 </Button>

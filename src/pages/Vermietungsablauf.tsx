@@ -142,7 +142,7 @@ const Vermietungsablauf = () => {
                     {/* Step Number Circle and Title */}
                     <div className="flex items-center gap-4">
                       <div className="flex-shrink-0">
-                        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
                           {step.number}
                         </div>
                       </div>
@@ -248,19 +248,21 @@ const Vermietungsablauf = () => {
         </div>
 
         {/* Contact CTA */}
-        <Card className="bg-primary text-primary-foreground">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="text-center p-12">
-            <HeartHandshake className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Bereit für Ihre neue Wohnung?</h2>
-            <p className="text-xl mb-8 opacity-90">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <HeartHandshake className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4 text-foreground">Bereit für Ihre neue Wohnung?</h2>
+            <p className="text-xl mb-8 text-muted-foreground">
               Kontaktieren Sie uns noch heute und starten Sie Ihren Weg zur Traumwohnung.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="default">
                 <Phone className="h-5 w-5 mr-2" />
                 +49 351 123 456 789
               </Button>
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="outline">
                 <Mail className="h-5 w-5 mr-2" />
                 info@elbtal-immobilien.de
               </Button>

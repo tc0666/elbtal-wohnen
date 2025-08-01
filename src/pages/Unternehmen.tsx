@@ -233,7 +233,7 @@ const Unternehmen = () => {
                 <div key={index} className="relative flex items-start gap-8">
                   {/* Timeline dot */}
                   <div className="relative z-10 flex-shrink-0">
-                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg border-4 border-background">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg border-4 border-background">
                       {milestone.year}
                     </div>
                   </div>
@@ -356,25 +356,27 @@ const Unternehmen = () => {
         </Card>
 
         {/* Contact CTA */}
-        <Card className="bg-primary text-primary-foreground">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="text-center p-12">
-            <HeartHandshake className="h-16 w-16 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Lernen Sie uns kennen</h2>
-            <p className="text-xl mb-8 opacity-90">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <HeartHandshake className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4 text-foreground">Lernen Sie uns kennen</h2>
+            <p className="text-xl mb-8 text-muted-foreground">
               Besuchen Sie uns in unserem Büro in Dresden oder vereinbaren Sie einen persönlichen Beratungstermin.
             </p>
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" variant="secondary">
+                <Button size="lg" variant="default">
                   <Phone className="h-5 w-5 mr-2" />
                   +49 351 123 456 789
                 </Button>
-                <Button size="lg" variant="secondary">
+                <Button size="lg" variant="outline">
                   <Mail className="h-5 w-5 mr-2" />
                   info@elbtal-immobilien.de
                 </Button>
               </div>
-              <div className="flex items-center justify-center gap-2 text-sm opacity-90">
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
                 <span>Hauptstraße 123, 01069 Dresden</span>
               </div>
