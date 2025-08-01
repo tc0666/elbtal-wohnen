@@ -62,11 +62,11 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow duration-300 group">
       <CardContent className="p-0">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row h-full">
           {/* Image */}
-          <Link to={`/immobilie/${property.id}`}>
-            <div className="relative md:w-80 md:flex-shrink-0 h-64 md:h-auto">
-              <div className="h-full overflow-hidden cursor-pointer">
+          <Link to={`/immobilie/${property.id}`} className="block">
+            <div className="relative md:w-80 md:flex-shrink-0">
+              <div className="h-64 md:h-full overflow-hidden cursor-pointer">
                 <img
                   src={property.images[0] || '/placeholder.svg'}
                   alt={property.title}
