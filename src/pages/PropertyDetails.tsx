@@ -174,9 +174,15 @@ const PropertyDetails = () => {
             {/* Property Details */}
             <Card className="mb-6">
               <CardHeader>
-                <CardTitle>Immobiliendetails</CardTitle>
+                <CardTitle>Objektbeschreibung</CardTitle>
               </CardHeader>
               <CardContent>
+                <p className="text-muted-foreground leading-relaxed mb-6">
+                  {property.description}
+                </p>
+
+                <Separator className="my-6" />
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
                     <h4 className="font-semibold mb-3">Grunddaten</h4>
@@ -351,16 +357,6 @@ const PropertyDetails = () => {
                     )}
                   </div>
                 </div>
-
-                <Separator className="my-6" />
-
-                {/* Description */}
-                <div>
-                  <h4 className="font-semibold mb-3">Objektbeschreibung</h4>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    {property.description}
-                  </p>
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -432,14 +428,13 @@ const PropertyDetails = () => {
                   Lage
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                {/* Simple Location Display */}
+              <CardContent className="p-0">
                 <SimpleLocationDisplay 
                   address={property.address}
                   city={property.city?.name || ''}
                   postalCode={property.postal_code || undefined}
                   neighborhood={property.neighborhood || undefined}
-                  className="w-full"
+                  className="w-full p-6"
                 />
               </CardContent>
             </Card>

@@ -118,14 +118,14 @@ const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({
 
       {/* Thumbnail Strip */}
       {validImages.length > 1 && (
-        <div className="mt-4 flex space-x-2 overflow-x-auto pb-2">
+        <div className="mt-4 flex space-x-3 overflow-x-auto pb-2">
           {validImages.map((image, index) => {
             const originalIndex = images.findIndex(img => img === image);
             return (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                className={`flex-shrink-0 w-24 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                   index === currentValidIndex
                     ? 'border-primary ring-2 ring-primary/20'
                     : 'border-border hover:border-muted-foreground'
