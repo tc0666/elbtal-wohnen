@@ -320,7 +320,7 @@ const PropertyDetails = () => {
                   <div className="flex items-center">
                     <Phone className="h-5 w-5 mr-3 text-primary" />
                     <div>
-                      <div className="font-medium">+49 123 456 789</div>
+                      <div className="font-medium">+49 351 123 456 789</div>
                       <div className="text-sm text-muted-foreground">Telefon</div>
                     </div>
                   </div>
