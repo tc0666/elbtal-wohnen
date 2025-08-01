@@ -47,21 +47,21 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
         rooms: initialFilters.rooms || "all",
       };
       setSearchData(updatedFilters);
-      // Trigger initial search with filters
-      onFilterChange?.(updatedFilters);
-    } else {
-      // Trigger initial search with default "all" values
-      const defaultFilters = {
-        location: "all",
-        propertyType: "all",
-        minPrice: "",
-        maxPrice: "",
-        minArea: "",
-        rooms: "all",
-      };
-      onFilterChange?.(defaultFilters);
     }
-  }, [initialFilters, onFilterChange]);
+  }, [initialFilters]);
+
+  // Trigger initial search only once when component mounts
+  useEffect(() => {
+    const defaultFilters = {
+      location: "all",
+      propertyType: "all",
+      minPrice: "",
+      maxPrice: "",
+      minArea: "",
+      rooms: "all",
+    };
+    onFilterChange?.(defaultFilters);
+  }, []); // Empty dependency array to run only once
 
   const handleSearch = () => {
     onFilterChange?.(searchData);

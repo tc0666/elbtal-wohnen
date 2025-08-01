@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -27,9 +27,9 @@ const Mietangebote = () => {
     }
   }, [searchParams]);
 
-  const handleFilterChange = (newFilters: FilterData) => {
+  const handleFilterChange = useCallback((newFilters: FilterData) => {
     setFilters(newFilters);
-  };
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       <Header />
