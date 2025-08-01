@@ -6,82 +6,101 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Helper function to generate random token
+function generateSessionToken(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 32; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    console.log('Starting admin auth function...')
+    console.log('=== ADMIN AUTH FUNCTION START ===')
     
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Read request body once and store it
     const requestBody = await req.json()
     const { action, username, password, token } = requestBody
 
-    console.log('Admin auth request:', { 
+    console.log('Request:', { 
       action, 
-      username: username ? 'provided' : 'missing',
-      hasToken: !!token,
-      supabaseUrl: Deno.env.get('SUPABASE_URL') ? 'set' : 'missing',
-      serviceKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ? 'set' : 'missing'
+      username: username || 'none',
+      hasPassword: !!password,
+      hasToken: !!token 
     })
 
     if (action === 'login') {
-      console.log('Processing login for username:', username)
+      console.log('=== LOGIN PROCESS ===')
       
-      // Simple password hashing for demo (in production, use proper bcrypt)
-      const passwordHash = btoa(password)
-      console.log('Generated password hash:', passwordHash)
-      
-      // First, check if we need to update the temp password
-      const { data: tempUser, error: tempError } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('username', 'admin65415')
-        .eq('password_hash', 'temp_password_to_be_hashed')
-        .maybeSingle()
-
-      console.log('Temp user check:', { tempUser: !!tempUser, tempError })
-
-      if (tempUser) {
-        console.log('Updating temp password...')
-        // Update with properly hashed password
-        const correctHash = btoa('EO,A4q^8y2_£4h')
-        const { error: updateError } = await supabase
-          .from('admin_users')
-          .update({ password_hash: correctHash })
-          .eq('id', tempUser.id)
-        
-        console.log('Password update result:', { updateError })
+      if (!username || !password) {
+        console.log('Missing credentials')
+        return new Response(
+          JSON.stringify({ error: 'Username and password required' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        )
       }
 
-      // Verify login credentials
-      console.log('Verifying credentials for:', username)
-      const { data: user, error } = await supabase
+      // Hash password
+      const passwordHash = btoa(password)
+      console.log('Password hash:', passwordHash)
+
+      // Clean up expired sessions first
+      await supabase
+        .from('admin_sessions')
+        .delete()
+        .lt('expires_at', new Date().toISOString())
+
+      // Find user with matching credentials
+      const { data: user, error: userError } = await supabase
         .from('admin_users')
-        .select('*')
+        .select('id, username')
         .eq('username', username)
         .eq('password_hash', passwordHash)
+        .eq('is_active', true)
         .maybeSingle()
 
-      console.log('User verification result:', { 
-        userFound: !!user, 
-        error: error?.message,
-        expectedHash: passwordHash 
-      })
+      console.log('User lookup:', { found: !!user, error: userError?.message })
 
-      if (error || !user) {
+      if (userError || !user) {
+        console.log('Invalid credentials')
         return new Response(
           JSON.stringify({ error: 'Invalid credentials' }),
-          { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-            status: 401 
-          }
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+        )
+      }
+
+      // Generate session token
+      const sessionToken = generateSessionToken()
+      console.log('Generated token:', sessionToken)
+
+      // Create session in database
+      const { data: session, error: sessionError } = await supabase
+        .from('admin_sessions')
+        .insert([{
+          token: sessionToken,
+          user_id: user.id,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+        }])
+        .select()
+        .single()
+
+      console.log('Session creation:', { success: !!session, error: sessionError?.message })
+
+      if (sessionError || !session) {
+        console.log('Failed to create session')
+        return new Response(
+          JSON.stringify({ error: 'Login failed' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
         )
       }
 
@@ -91,9 +110,7 @@ serve(async (req) => {
         .update({ last_login: new Date().toISOString() })
         .eq('id', user.id)
 
-      // Generate a simple session token (in production, use JWT)
-      const sessionToken = btoa(`${user.id}-${Date.now()}`)
-
+      console.log('Login successful for:', user.username)
       return new Response(
         JSON.stringify({ 
           success: true, 
@@ -105,75 +122,85 @@ serve(async (req) => {
     }
 
     if (action === 'verify') {
-      console.log('Verifying token:', token ? 'provided' : 'missing')
+      console.log('=== TOKEN VERIFICATION ===')
       
       if (!token) {
+        console.log('No token provided')
         return new Response(
           JSON.stringify({ error: 'No token provided' }),
-          { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-            status: 401 
-          }
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
         )
       }
 
-      // Simple token verification (in production, use JWT)
-      try {
-        console.log('Token to decode:', token)
-        const decoded = atob(token)
-        console.log('Decoded token:', decoded)
-        const [userId] = decoded.split('-')
-        console.log('Extracted userId:', userId)
-        
-        const { data: user, error } = await supabase
-          .from('admin_users')
-          .select('id, username')
-          .eq('id', userId)
-          .maybeSingle()
+      console.log('Verifying token:', token)
 
-        console.log('User lookup result:', { userFound: !!user, error: error?.message })
+      // Look up session and user
+      const { data: session, error: sessionError } = await supabase
+        .from('admin_sessions')
+        .select(`
+          id,
+          token,
+          expires_at,
+          is_active,
+          user:admin_users(id, username)
+        `)
+        .eq('token', token)
+        .eq('is_active', true)
+        .gt('expires_at', new Date().toISOString())
+        .maybeSingle()
 
-        if (error || !user) {
-          console.error('Token verification failed:', error?.message || 'User not found')
-          throw new Error('Invalid token')
-        }
+      console.log('Session lookup:', { 
+        found: !!session, 
+        error: sessionError?.message,
+        expired: session ? new Date(session.expires_at) < new Date() : 'N/A'
+      })
 
-        console.log('Token verification successful for user:', user.username)
+      if (sessionError || !session || !session.user) {
+        console.log('Invalid or expired token')
         return new Response(
-          JSON.stringify({ 
-            success: true, 
-            user: { id: user.id, username: user.username }
-          }),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
-      } catch (error) {
-        console.error('Token verification error:', error.message)
-        return new Response(
-          JSON.stringify({ error: 'Invalid token' }),
-          { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-            status: 401 
-          }
+          JSON.stringify({ error: 'Invalid or expired token' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
         )
       }
+
+      console.log('Token verification successful for:', session.user.username)
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          user: { id: session.user.id, username: session.user.username }
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
 
+    if (action === 'logout') {
+      console.log('=== LOGOUT PROCESS ===')
+      
+      if (token) {
+        await supabase
+          .from('admin_sessions')
+          .update({ is_active: false })
+          .eq('token', token)
+        console.log('Session deactivated')
+      }
+
+      return new Response(
+        JSON.stringify({ success: true }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    console.log('Invalid action:', action)
     return new Response(
       JSON.stringify({ error: 'Invalid action' }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-        status: 400 
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
     )
 
   } catch (error) {
-    console.error('Error:', error)
+    console.error('FATAL ERROR:', error)
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-        status: 500 
-      }
+      JSON.stringify({ error: 'Internal server error', details: error.message }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
     )
   }
 })

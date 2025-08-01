@@ -19,42 +19,53 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      console.log('=== DASHBOARD AUTH CHECK ===');
+      
       const token = localStorage.getItem('adminToken');
       const userStr = localStorage.getItem('adminUser');
       
+      console.log('Stored data:', { hasToken: !!token, hasUser: !!userStr });
+      
       if (!token || !userStr) {
+        console.log('No stored session, redirecting to login');
         navigate('/admin1244');
         return;
       }
 
       try {
+        console.log('Verifying token with server...');
         const { data, error } = await supabase.functions.invoke('admin-auth', {
           body: { action: 'verify', token }
         });
         
-        console.log('Dashboard auth verification:', { data, error });
+        console.log('Verification response:', { data, error });
         
         if (error) {
-          console.error('Dashboard auth error:', error);
-          throw new Error('Authentication request failed');
+          console.error('Verification request failed:', error);
+          throw new Error('Verification request failed');
         }
         
-        if (!data || !data.success) {
-          console.error('Dashboard auth failed:', data);
-          throw new Error('Invalid token or session expired');
+        if (!data?.success) {
+          console.error('Token verification failed:', data);
+          throw new Error('Invalid session');
         }
 
-        console.log('Dashboard auth successful');
+        console.log('Auth verification successful');
         setAdminUser(JSON.parse(userStr));
+        
       } catch (error) {
-        console.error('Dashboard auth check failed:', error);
+        console.error('Auth check failed:', error);
+        
+        // Clear invalid session
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
+        
         toast({
           title: "Sitzung abgelaufen",
           description: "Bitte melden Sie sich erneut an.",
           variant: "destructive"
         });
+        
         navigate('/admin1244');
       } finally {
         setIsLoading(false);
@@ -64,13 +75,32 @@ const AdminDashboard = () => {
     checkAuth();
   }, [navigate, toast]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    console.log('=== LOGOUT PROCESS ===');
+    
+    const token = localStorage.getItem('adminToken');
+    
+    // Logout on server
+    if (token) {
+      try {
+        await supabase.functions.invoke('admin-auth', {
+          body: { action: 'logout', token }
+        });
+        console.log('Server logout successful');
+      } catch (error) {
+        console.error('Server logout failed:', error);
+      }
+    }
+    
+    // Clear local storage
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
+    
     toast({
       title: "Abgemeldet",
       description: "Sie wurden erfolgreich abgemeldet.",
     });
+    
     navigate('/admin1244');
   };
 

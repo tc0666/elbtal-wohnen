@@ -56,7 +56,9 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
-      console.log('Attempting login with:', { username });
+      console.log('=== LOGIN ATTEMPT ===');
+      console.log('Username:', username);
+      
       const { data, error } = await supabase.functions.invoke('admin-auth', {
         body: { action: 'login', username, password }
       });
@@ -65,30 +67,38 @@ const AdminLogin = () => {
 
       if (error) {
         console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Login request failed');
+        throw new Error('Login request failed');
       }
 
       if (data?.error) {
-        console.error('Login error from function:', data.error);
+        console.error('Login error:', data.error);
         throw new Error(data.error);
       }
 
-      if (data.success) {
-        localStorage.setItem('adminToken', data.token);
-        localStorage.setItem('adminUser', JSON.stringify(data.user));
-        
-        toast({
-          title: "Login erfolgreich",
-          description: `Willkommen zurück, ${data.user.username}!`,
-        });
-
-        navigate('/admin1244/dashboard');
+      if (!data?.success || !data?.token) {
+        console.error('Invalid response:', data);
+        throw new Error('Invalid response from server');
       }
+
+      console.log('Login successful! Token:', data.token);
+      
+      // Store session data
+      localStorage.setItem('adminToken', data.token);
+      localStorage.setItem('adminUser', JSON.stringify(data.user));
+      
+      toast({
+        title: "Login erfolgreich",
+        description: `Willkommen zurück, ${data.user.username}!`,
+      });
+
+      console.log('Redirecting to dashboard...');
+      navigate('/admin1244/dashboard');
+      
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login failed:', error);
       toast({
         title: "Login fehlgeschlagen",
-        description: "Benutzername oder Passwort ist falsch.",
+        description: error instanceof Error ? error.message : "Unbekannter Fehler",
         variant: "destructive"
       });
     } finally {
