@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Mietangebote from "./pages/Mietangebote";
 import PropertyDetails from "./pages/PropertyDetails";
+import Vermietungsablauf from "./pages/Vermietungsablauf";
+import Leistungsübersicht from "./pages/Leistungsübersicht";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +22,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/mietangebote" element={<Mietangebote />} />
           <Route path="/immobilie/:id" element={<PropertyDetails />} />
+          <Route path="/vermietungsablauf" element={<Vermietungsablauf />} />
+          <Route path="/leistungsübersicht" element={<Leistungsübersicht />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
