@@ -11,8 +11,21 @@ import {
 import { Card } from "@/components/ui/card";
 import { Search, MapPin, Home, Euro, Ruler, Users } from "lucide-react";
 
-export const CompactPropertySearchFilter = () => {
-  const [searchData, setSearchData] = useState({
+export interface FilterData {
+  location: string;
+  propertyType: string;
+  minPrice: string;
+  maxPrice: string;
+  minArea: string;
+  rooms: string;
+}
+
+interface CompactPropertySearchFilterProps {
+  onFilterChange?: (filters: FilterData) => void;
+}
+
+export const CompactPropertySearchFilter = ({ onFilterChange }: CompactPropertySearchFilterProps) => {
+  const [searchData, setSearchData] = useState<FilterData>({
     location: "",
     propertyType: "",
     minPrice: "",
@@ -22,8 +35,7 @@ export const CompactPropertySearchFilter = () => {
   });
 
   const handleSearch = () => {
-    console.log("Search data:", searchData);
-    // This will be connected to actual search functionality later
+    onFilterChange?.(searchData);
   };
 
   return (

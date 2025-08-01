@@ -5,8 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FilterData } from "@/components/CompactPropertySearchFilter";
 
-export const PropertyListings = () => {
+interface PropertyListingsProps {
+  filters?: FilterData;
+}
+
+export const PropertyListings = ({ filters }: PropertyListingsProps) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,22 +22,20 @@ export const PropertyListings = () => {
 
   useEffect(() => {
     fetchProperties();
-  }, [sortBy, currentPage]);
+  }, [sortBy, currentPage, filters]);
 
   const fetchProperties = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // First get the total count
-      const { count } = await supabase
-        .from('properties')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
+      // Reset to page 1 when filters change
+      if (currentPage > 1 && filters) {
+        setCurrentPage(1);
+        return;
+      }
 
-      setTotalCount(count || 0);
-
-      // Then get the paginated data
+      // Build the main query with joins and filters
       const from = (currentPage - 1) * itemsPerPage;
       const to = from + itemsPerPage - 1;
 
@@ -40,13 +43,38 @@ export const PropertyListings = () => {
         .from('properties')
         .select(`
           *,
-          city:cities(name),
-          property_type:property_types(name)
-        `)
-        .eq('is_active', true)
-        .range(from, to);
+          city:cities(name, slug),
+          property_type:property_types(name, slug)
+        `, { count: 'exact' })
+        .eq('is_active', true);
 
-      // Apply sorting
+      // Apply filters
+      if (filters?.location) {
+        // For location filter, we need to filter by city.slug
+        query = query.eq('cities.slug', filters.location);
+      }
+      if (filters?.propertyType) {
+        // For property type filter, we need to filter by property_types.slug
+        query = query.eq('property_types.slug', filters.propertyType);
+      }
+      if (filters?.minPrice) {
+        query = query.gte('price_monthly', parseInt(filters.minPrice));
+      }
+      if (filters?.maxPrice) {
+        query = query.lte('price_monthly', parseInt(filters.maxPrice));
+      }
+      if (filters?.minArea) {
+        query = query.gte('area_sqm', parseInt(filters.minArea));
+      }
+      if (filters?.rooms) {
+        if (filters.rooms === '5+') {
+          query = query.gte('rooms', '5');
+        } else {
+          query = query.eq('rooms', filters.rooms);
+        }
+      }
+
+      // Apply sorting before pagination
       switch (sortBy) {
         case 'price_low':
           query = query.order('price_monthly', { ascending: true });
@@ -63,13 +91,17 @@ export const PropertyListings = () => {
           break;
       }
 
-      const { data, error: fetchError } = await query;
+      // Apply pagination
+      query = query.range(from, to);
+
+      const { data, count, error: fetchError } = await query;
 
       if (fetchError) {
         throw fetchError;
       }
 
       setProperties(data || []);
+      setTotalCount(count || 0);
     } catch (err) {
       console.error('Error fetching properties:', err);
       setError('Fehler beim Laden der Immobilien. Bitte versuchen Sie es später erneut.');
