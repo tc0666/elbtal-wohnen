@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,6 +37,36 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
     rooms: "",
   });
 
+  // Fetch cities dynamically
+  const { data: cities = [] } = useQuery({
+    queryKey: ['cities'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('cities')
+        .select('id, name, slug')
+        .eq('is_active', true)
+        .order('display_order');
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
+  // Fetch property types dynamically
+  const { data: propertyTypes = [] } = useQuery({
+    queryKey: ['property-types'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('property_types')
+        .select('id, name, slug')
+        .eq('is_active', true)
+        .order('display_order');
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
   // Update form when initial filters change (from URL params)
   useEffect(() => {
     if (initialFilters) {
@@ -58,13 +90,11 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Alle Städte</SelectItem>
-                <SelectItem value="berlin">Berlin</SelectItem>
-                <SelectItem value="hamburg">Hamburg</SelectItem>
-                <SelectItem value="muenchen">München</SelectItem>
-                <SelectItem value="frankfurt">Frankfurt</SelectItem>
-                <SelectItem value="duesseldorf">Düsseldorf</SelectItem>
-                <SelectItem value="koeln">Köln</SelectItem>
-                <SelectItem value="stuttgart">Stuttgart</SelectItem>
+                {cities.map((city) => (
+                  <SelectItem key={city.id} value={city.slug}>
+                    {city.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -77,11 +107,11 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Alle Typen</SelectItem>
-                <SelectItem value="wohnung">Wohnung</SelectItem>
-                <SelectItem value="haus">Haus</SelectItem>
-                <SelectItem value="studio">Studio</SelectItem>
-                <SelectItem value="maisonette">Maisonette</SelectItem>
-                <SelectItem value="penthouse">Penthouse</SelectItem>
+                {propertyTypes.map((type) => (
+                  <SelectItem key={type.id} value={type.slug}>
+                    {type.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
