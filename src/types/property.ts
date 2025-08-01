@@ -10,6 +10,7 @@ export interface PropertyBase {
   rooms: string;
   area_sqm: number;
   price_monthly: number;
+  warmmiete_monthly: number;
   additional_costs_monthly: number;
   property_type_id: string;
   city_id: string;
@@ -56,6 +57,7 @@ export interface PropertyFormData extends Partial<PropertyBase> {
   rooms: string;
   area_sqm: number;
   price_monthly: number;
+  warmmiete_monthly?: number;
   city_id: string;
   property_type_id: string;
   address: string;

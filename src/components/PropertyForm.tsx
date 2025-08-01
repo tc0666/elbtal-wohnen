@@ -25,6 +25,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     rooms: '',
     area_sqm: 0,
     price_monthly: 0,
+    warmmiete_monthly: 0,
     additional_costs_monthly: 0,
     property_type_id: '',
     city_id: '',
@@ -33,20 +34,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     year_built: 0,
     available_from: '',
     deposit_months: 3,
-    kitchen_equipped: false,
-    furnished: false,
-    pets_allowed: false,
-    utilities_included: false,
-    balcony: false,
-    elevator: false,
-    parking: false,
-    garden: false,
-    cellar: false,
-    attic: false,
-    dishwasher: false,
-    washing_machine: false,
-    dryer: false,
-    tv: false,
     energy_certificate_type: '',
     energy_certificate_value: '',
     heating_type: '',
@@ -88,6 +75,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         rooms: property.rooms || '',
         area_sqm: property.area_sqm || 0,
         price_monthly: property.price_monthly || 0,
+        warmmiete_monthly: property.warmmiete_monthly || 0,
         additional_costs_monthly: property.additional_costs_monthly || 0,
         property_type_id: property.property_type_id || '',
         city_id: property.city_id || '',
@@ -96,20 +84,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         year_built: property.year_built || 0,
         available_from: property.available_from ? new Date(property.available_from).toISOString().split('T')[0] : '',
         deposit_months: property.deposit_months || 3,
-        kitchen_equipped: property.kitchen_equipped || false,
-        furnished: property.furnished || false,
-        pets_allowed: property.pets_allowed || false,
-        utilities_included: property.utilities_included || false,
-        balcony: property.balcony || false,
-        elevator: property.elevator || false,
-        parking: property.parking || false,
-        garden: property.garden || false,
-        cellar: property.cellar || false,
-        attic: property.attic || false,
-        dishwasher: property.dishwasher || false,
-        washing_machine: property.washing_machine || false,
-        dryer: property.dryer || false,
-        tv: property.tv || false,
         energy_certificate_type: property.energy_certificate_type || '',
         energy_certificate_value: property.energy_certificate_value || '',
         heating_type: property.heating_type || '',
@@ -391,21 +365,30 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               </div>
               <div className="space-y-2">
                 <Input
+                  placeholder="Warmmiete (€)"
+                  type="number"
+                  value={formData.warmmiete_monthly || ''}
+                  onChange={(e) => setFormData({ ...formData, warmmiete_monthly: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
                   placeholder="Nebenkosten (€)"
                   type="number"
                   value={formData.additional_costs_monthly || ''}
                   onChange={(e) => setFormData({ ...formData, additional_costs_monthly: parseInt(e.target.value) || 0 })}
                 />
               </div>
-              <div className="space-y-2">
-                <Input
-                  placeholder="Wohnfläche (m²) *"
-                  type="number"
-                  value={formData.area_sqm || ''}
-                  onChange={(e) => setFormData({ ...formData, area_sqm: parseInt(e.target.value) || 0 })}
-                  required
-                />
-              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Input
+                placeholder="Wohnfläche (m²) *"
+                type="number"
+                value={formData.area_sqm || ''}
+                onChange={(e) => setFormData({ ...formData, area_sqm: parseInt(e.target.value) || 0 })}
+                required
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -503,43 +486,11 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardHeader>
             <CardTitle>Ausstattung</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { key: 'kitchen_equipped', label: 'Einbauküche' },
-                { key: 'furnished', label: 'Möbliert' },
-                { key: 'pets_allowed', label: 'Haustiere erlaubt' },
-                { key: 'utilities_included', label: 'NK inklusive' },
-                { key: 'balcony', label: 'Balkon' },
-                { key: 'elevator', label: 'Aufzug' },
-                { key: 'parking', label: 'Parkplatz' },
-                { key: 'garden', label: 'Garten' },
-                { key: 'cellar', label: 'Keller' },
-                { key: 'attic', label: 'Dachboden' },
-                { key: 'dishwasher', label: 'Spülmaschine' },
-                { key: 'washing_machine', label: 'Waschmaschine' },
-                { key: 'dryer', label: 'Trockner' },
-                { key: 'tv', label: 'TV' },
-              ].map((item) => (
-                <div key={item.key} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={item.key}
-                    checked={formData[item.key as keyof PropertyFormData] as boolean}
-                    onCheckedChange={(checked) => 
-                      setFormData({ ...formData, [item.key]: checked })
-                    }
-                  />
-                  <label htmlFor={item.key} className="text-sm cursor-pointer">
-                    {item.label}
-                  </label>
-                </div>
-              ))}
-            </div>
-            
+          <CardContent className="space-y-4">            
             <div className="space-y-2">
               <Textarea
-                placeholder="Detaillierte Ausstattungsbeschreibung (z.B. Luxuriöse 4-Zimmer Wohnung mit exklusiver Ausstattung...)"
-                value={formData.features_description}
+                placeholder="Detaillierte Ausstattungsbeschreibung (z.B. Luxuriöse 4-Zimmer Wohnung mit exklusiver Ausstattung. Marmorbäder, Einbauschränke, Klimaanlage und Alarmanlage. Tiefgaragenstellplatz inklusive.)"
+                value={formData.features_description || ''}
                 onChange={(e) => setFormData({ ...formData, features_description: e.target.value })}
                 rows={4}
               />
@@ -554,8 +505,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Textarea
-                placeholder="Weitere Beschreibung (z.B. Exklusives Wohnen in bester Lage. Das Gebäude verfügt über...)"
-                value={formData.additional_description}
+                placeholder="Weitere Beschreibung (z.B. Exklusives Wohnen in bester Lage. Das Gebäude verfügt über einen Concierge-Service und gepflegte Grünanlagen. Fitnessraum und Gemeinschaftsräume stehen den Bewohnern zur Verfügung.)"
+                value={formData.additional_description || ''}
                 onChange={(e) => setFormData({ ...formData, additional_description: e.target.value })}
                 rows={4}
               />
