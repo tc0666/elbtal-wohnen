@@ -5,8 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2 } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import PropertyFormNew from '@/components/PropertyFormNew';
+import SimplePropertyForm from '@/components/SimplePropertyForm';
 import { PropertyWithRelations } from '@/types/property';
 
 const PropertiesManagement = () => {
@@ -124,19 +123,12 @@ const PropertiesManagement = () => {
 
   return (
     <div className="space-y-4">
-      <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {editingProperty ? 'Immobilie bearbeiten' : 'Neue Immobilie'}
-            </DialogTitle>
-          </DialogHeader>
-          <PropertyFormNew 
-            property={editingProperty}
-            onClose={handleFormClose}
-          />
-        </DialogContent>
-      </Dialog>
+      {showForm && (
+        <SimplePropertyForm 
+          property={editingProperty}
+          onClose={handleFormClose}
+        />
+      )}
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold">Immobilien Verwaltung</h1>
