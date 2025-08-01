@@ -1,7 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { MapPin } from 'lucide-react';
+
+// Fix for default markers in Leaflet
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
 interface PropertyMapProps {
   address: string;
@@ -9,19 +17,23 @@ interface PropertyMapProps {
   className?: string;
 }
 
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = '' }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
+  const map = useRef<L.Map | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
-  // Geocoding function to get coordinates from address
-  const geocodeAddress = async (fullAddress: string, token: string): Promise<[number, number] | null> => {
+  // Free geocoding using Nominatim (OpenStreetMap)
+  const geocodeAddress = async (fullAddress: string): Promise<Coordinates | null> => {
     try {
       const encodedAddress = encodeURIComponent(fullAddress);
       const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedAddress}.json?access_token=${token}&country=DE&limit=1`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&countrycodes=de&limit=1&addressdetails=1`
       );
       
       if (!response.ok) {
@@ -30,9 +42,11 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       
       const data = await response.json();
       
-      if (data.features && data.features.length > 0) {
-        const [lng, lat] = data.features[0].center;
-        return [lng, lat];
+      if (data && data.length > 0) {
+        return {
+          lat: parseFloat(data[0].lat),
+          lng: parseFloat(data[0].lon)
+        };
       }
       
       return null;
@@ -40,33 +54,6 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       console.error('Geocoding error:', error);
       return null;
     }
-  };
-
-  // Get Mapbox token from Supabase secrets
-  const getMapboxToken = async () => {
-    try {
-      // Try to get token from Supabase Edge Function secrets
-      const response = await fetch('/api/mapbox-token');
-      if (response.ok) {
-        const data = await response.json();
-        return data.token;
-      }
-    } catch (error) {
-      console.log('Could not fetch token from secrets');
-    }
-    
-    // Fallback: prompt user for token
-    const userToken = prompt(
-      'Please enter your Mapbox public token. You can get one from https://mapbox.com/ in your dashboard under Tokens section.'
-    );
-    
-    if (userToken) {
-      localStorage.setItem('mapbox_token', userToken);
-      return userToken;
-    }
-    
-    // Try to get from localStorage
-    return localStorage.getItem('mapbox_token');
   };
 
   useEffect(() => {
@@ -77,21 +64,9 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
         setLoading(true);
         setError('');
 
-        // Get Mapbox token
-        const token = await getMapboxToken();
-        
-        if (!token) {
-          setError('Mapbox token is required. Please get one from https://mapbox.com/');
-          setLoading(false);
-          return;
-        }
-
-        setMapboxToken(token);
-        mapboxgl.accessToken = token;
-
-        // Geocode the address
+        // Geocode the address using free Nominatim service
         const fullAddress = `${address}, ${city}, Germany`;
-        const coordinates = await geocodeAddress(fullAddress, token);
+        const coordinates = await geocodeAddress(fullAddress);
 
         if (!coordinates) {
           setError('Could not find location for this address');
@@ -99,36 +74,25 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
           return;
         }
 
-        // Initialize map
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/light-v11',
-          center: coordinates,
-          zoom: 15,
-          pitch: 0,
-        });
+        // Initialize map with OpenStreetMap tiles (completely free)
+        map.current = L.map(mapContainer.current).setView([coordinates.lat, coordinates.lng], 15);
+
+        // Add OpenStreetMap tile layer (free)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 19,
+        }).addTo(map.current);
 
         // Add marker for the property
-        new mapboxgl.Marker({
-          color: '#3b82f6',
-          scale: 1.2,
-        })
-          .setLngLat(coordinates)
-          .setPopup(
-            new mapboxgl.Popup({ offset: 25 }).setHTML(
-              `<div class="p-2">
-                <h3 class="font-semibold">${address}</h3>
-                <p class="text-sm text-gray-600">${city}</p>
-              </div>`
-            )
-          )
-          .addTo(map.current);
-
-        // Add navigation controls
-        map.current.addControl(
-          new mapboxgl.NavigationControl(),
-          'top-right'
-        );
+        const marker = L.marker([coordinates.lat, coordinates.lng]).addTo(map.current);
+        
+        // Add popup to marker
+        marker.bindPopup(`
+          <div style="font-family: system-ui, sans-serif;">
+            <h3 style="margin: 0 0 8px 0; font-weight: 600; font-size: 14px;">${address}</h3>
+            <p style="margin: 0; color: #666; font-size: 12px;">${city}</p>
+          </div>
+        `).openPopup();
 
         setLoading(false);
       } catch (err) {
@@ -142,7 +106,10 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
 
     // Cleanup
     return () => {
-      map.current?.remove();
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
     };
   }, [address, city]);
 
@@ -178,6 +145,9 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
   return (
     <div className={`relative overflow-hidden rounded-lg ${className}`}>
       <div ref={mapContainer} className="w-full h-full" />
+      <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-xs px-2 py-1 rounded shadow-sm">
+        OpenStreetMap
+      </div>
     </div>
   );
 };
