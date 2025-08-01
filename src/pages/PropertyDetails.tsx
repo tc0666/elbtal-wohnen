@@ -159,15 +159,15 @@ const PropertyDetails = () => {
 
             {/* Image Carousel */}
             {images.length > 1 && (
-              <div className="mb-6 relative">
+              <div className="mb-6">
                 <Carousel className="w-full">
-                  <CarouselContent className="-ml-2 md:-ml-4">
+                  <CarouselContent className="-ml-1">
                     {images.map((image, index) => (
-                      <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                      <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
                         <div className="p-1">
                           <button
                             onClick={() => setFeaturedImageIndex(index)}
-                            className={`w-full h-32 rounded-lg overflow-hidden transition-all duration-200 hover:opacity-80 ${
+                            className={`relative w-full h-32 rounded-lg overflow-hidden transition-all duration-200 hover:opacity-80 block ${
                               featuredImageIndex === index 
                                 ? 'ring-2 ring-primary ring-offset-2' 
                                 : ''
@@ -177,14 +177,20 @@ const PropertyDetails = () => {
                               src={image}
                               alt={`${property.title} - Bild ${index + 1}`}
                               className="w-full h-full object-cover"
+                              loading="lazy"
+                              onError={(e) => {
+                                console.error(`Failed to load image: ${image}`);
+                                const target = e.target as HTMLImageElement;
+                                target.src = '/placeholder.svg';
+                              }}
                             />
                           </button>
                         </div>
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious className="left-2" />
-                  <CarouselNext className="right-2" />
+                  <CarouselPrevious className="left-4" />
+                  <CarouselNext className="right-4" />
                 </Carousel>
               </div>
             )}

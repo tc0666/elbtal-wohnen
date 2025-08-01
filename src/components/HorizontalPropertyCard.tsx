@@ -65,8 +65,8 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
         <div className="flex flex-col md:flex-row">
           {/* Image */}
           <Link to={`/immobilie/${property.id}`}>
-            <div className="relative md:w-80 md:flex-shrink-0">
-              <div className="h-full min-h-[200px] md:min-h-full overflow-hidden cursor-pointer">
+            <div className="relative md:w-80 md:flex-shrink-0 h-64 md:h-auto">
+              <div className="h-full overflow-hidden cursor-pointer">
                 <img
                   src={property.images[0] || '/placeholder.svg'}
                   alt={property.title}
@@ -83,8 +83,8 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
           </Link>
 
           {/* Content */}
-          <div className="flex-1 p-6">
-            <div className="flex flex-col h-full">
+          <div className="flex-1 p-6 flex flex-col justify-between">
+            <div className="flex flex-col h-full justify-between">
               {/* Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
