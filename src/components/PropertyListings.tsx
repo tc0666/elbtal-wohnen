@@ -39,7 +39,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
       let cityId: string | null = null;
       let propertyTypeId: string | null = null;
 
-      if (filters?.location) {
+      if (filters?.location && filters.location !== "") {
         const { data: cityData } = await supabase
           .from('cities')
           .select('id')
@@ -48,7 +48,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
         cityId = cityData?.id || null;
       }
 
-      if (filters?.propertyType) {
+      if (filters?.propertyType && filters.propertyType !== "") {
         const { data: propertyTypeData } = await supabase
           .from('property_types')
           .select('id')
@@ -77,16 +77,16 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
       if (propertyTypeId) {
         query = query.eq('property_type_id', propertyTypeId);
       }
-      if (filters?.minPrice) {
+      if (filters?.minPrice && filters.minPrice !== "") {
         query = query.gte('price_monthly', parseInt(filters.minPrice));
       }
-      if (filters?.maxPrice) {
+      if (filters?.maxPrice && filters.maxPrice !== "") {
         query = query.lte('price_monthly', parseInt(filters.maxPrice));
       }
-      if (filters?.minArea) {
+      if (filters?.minArea && filters.minArea !== "") {
         query = query.gte('area_sqm', parseInt(filters.minArea));
       }
-      if (filters?.rooms) {
+      if (filters?.rooms && filters.rooms !== "") {
         if (filters.rooms === '5+') {
           query = query.gte('rooms', '5');
         } else {

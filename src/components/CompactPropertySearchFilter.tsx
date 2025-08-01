@@ -49,6 +49,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange }: CompactPropertyS
                 <SelectValue placeholder="Stadt" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="">Alle Städte</SelectItem>
                 <SelectItem value="berlin">Berlin</SelectItem>
                 <SelectItem value="hamburg">Hamburg</SelectItem>
                 <SelectItem value="muenchen">München</SelectItem>
@@ -67,6 +68,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange }: CompactPropertyS
                 <SelectValue placeholder="Typ" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="">Alle Typen</SelectItem>
                 <SelectItem value="wohnung">Wohnung</SelectItem>
                 <SelectItem value="haus">Haus</SelectItem>
                 <SelectItem value="studio">Studio</SelectItem>
@@ -116,6 +118,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange }: CompactPropertyS
                 <SelectValue placeholder="Zimmer" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="">Alle Zimmer</SelectItem>
                 <SelectItem value="1">1</SelectItem>
                 <SelectItem value="2">2</SelectItem>
                 <SelectItem value="3">3</SelectItem>
