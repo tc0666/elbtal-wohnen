@@ -239,10 +239,29 @@ const PropertyDetails = () => {
 
                 <Separator className="my-6" />
 
+                {/* Address Section */}
+                <div className="mb-6">
+                  <h4 className="font-semibold mb-3">Adresse</h4>
+                  <div className="space-y-2">
+                    <div className="text-lg font-medium">{property.address}</div>
+                    <div className="text-muted-foreground">
+                      {property.postal_code && `${property.postal_code} `}
+                      <span className="font-medium">{property.city?.name}</span>
+                      {property.neighborhood && (
+                        <>
+                          <span className="mx-1">•</span>
+                          <span>{property.neighborhood}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <Separator className="my-6" />
+
                 {/* Energy Information */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center">
-                    <Zap className="h-5 w-5 mr-2" />
+                  <h4 className="font-semibold mb-3">
                     Energie & Heizung
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -270,11 +289,9 @@ const PropertyDetails = () => {
                 {/* Features */}
                 <div className="mb-6">
                   <h4 className="font-semibold mb-3">Ausstattung</h4>
-                  <div className="bg-muted/50 p-4 rounded-lg">
-                    <p className="text-muted-foreground leading-relaxed">
-                      {property.features_description || 'Ausstattungsdetails werden in Kürze ergänzt.'}
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {property.features_description || 'Ausstattungsdetails werden in Kürze ergänzt.'}
+                  </p>
                 </div>
 
                 <Separator className="my-6" />
@@ -282,11 +299,9 @@ const PropertyDetails = () => {
                 {/* Additional Description */}
                 <div className="mb-6">
                   <h4 className="font-semibold mb-3">Weitere Beschreibung</h4>
-                  <div className="bg-muted/50 p-4 rounded-lg">
-                    <p className="text-muted-foreground leading-relaxed">
-                      {property.additional_description || 'Weitere Informationen werden in Kürze ergänzt.'}
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {property.additional_description || 'Weitere Informationen werden in Kürze ergänzt.'}
+                  </p>
                 </div>
               </CardContent>
             </Card>
