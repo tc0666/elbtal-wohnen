@@ -39,7 +39,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
       let cityId: string | null = null;
       let propertyTypeId: string | null = null;
 
-      if (filters?.location && filters.location !== "") {
+      if (filters?.location && filters.location !== "" && filters.location !== "all") {
         const { data: cityData } = await supabase
           .from('cities')
           .select('id')
@@ -48,7 +48,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
         cityId = cityData?.id || null;
       }
 
-      if (filters?.propertyType && filters.propertyType !== "") {
+      if (filters?.propertyType && filters.propertyType !== "" && filters.propertyType !== "all") {
         const { data: propertyTypeData } = await supabase
           .from('property_types')
           .select('id')
@@ -86,7 +86,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
       if (filters?.minArea && filters.minArea !== "") {
         query = query.gte('area_sqm', parseInt(filters.minArea));
       }
-      if (filters?.rooms && filters.rooms !== "") {
+      if (filters?.rooms && filters.rooms !== "" && filters.rooms !== "all") {
         if (filters.rooms === '5+') {
           query = query.gte('rooms', '5');
         } else {
