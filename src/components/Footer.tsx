@@ -32,11 +32,11 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-foreground">Standorte</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/mietangebote?location=Berlin" className="hover:text-primary transition-colors">Berlin</Link></li>
-              <li><Link to="/mietangebote?location=Hamburg" className="hover:text-primary transition-colors">Hamburg</Link></li>
-              <li><Link to="/mietangebote?location=München" className="hover:text-primary transition-colors">München</Link></li>
-              <li><Link to="/mietangebote?location=Frankfurt" className="hover:text-primary transition-colors">Frankfurt</Link></li>
-              <li><Link to="/mietangebote?location=Düsseldorf" className="hover:text-primary transition-colors">Düsseldorf</Link></li>
+              <li><Link to="/mietangebote?location=berlin" className="hover:text-primary transition-colors">Berlin</Link></li>
+              <li><Link to="/mietangebote?location=hamburg" className="hover:text-primary transition-colors">Hamburg</Link></li>
+              <li><Link to="/mietangebote?location=muenchen" className="hover:text-primary transition-colors">München</Link></li>
+              <li><Link to="/mietangebote?location=frankfurt" className="hover:text-primary transition-colors">Frankfurt</Link></li>
+              <li><Link to="/mietangebote?location=duesseldorf" className="hover:text-primary transition-colors">Düsseldorf</Link></li>
             </ul>
           </div>
 

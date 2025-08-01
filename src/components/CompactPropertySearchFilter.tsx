@@ -27,20 +27,41 @@ interface CompactPropertySearchFilterProps {
 
 export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: CompactPropertySearchFilterProps) => {
   const [searchData, setSearchData] = useState<FilterData>({
-    location: "",
-    propertyType: "",
+    location: "all",
+    propertyType: "all",
     minPrice: "",
     maxPrice: "",
     minArea: "",
-    rooms: "",
+    rooms: "all",
   });
 
   // Update form when initial filters change (from URL params)
   useEffect(() => {
     if (initialFilters) {
-      setSearchData(initialFilters);
+      const updatedFilters = {
+        location: initialFilters.location || "all",
+        propertyType: initialFilters.propertyType || "all",
+        minPrice: initialFilters.minPrice || "",
+        maxPrice: initialFilters.maxPrice || "",
+        minArea: initialFilters.minArea || "",
+        rooms: initialFilters.rooms || "all",
+      };
+      setSearchData(updatedFilters);
+      // Trigger initial search with filters
+      onFilterChange?.(updatedFilters);
+    } else {
+      // Trigger initial search with default "all" values
+      const defaultFilters = {
+        location: "all",
+        propertyType: "all",
+        minPrice: "",
+        maxPrice: "",
+        minArea: "",
+        rooms: "all",
+      };
+      onFilterChange?.(defaultFilters);
     }
-  }, [initialFilters]);
+  }, [initialFilters, onFilterChange]);
 
   const handleSearch = () => {
     onFilterChange?.(searchData);
