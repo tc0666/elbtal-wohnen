@@ -131,83 +131,19 @@ const PropertiesManagement = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Immobilien Verwaltung</h1>
-        <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Immobilien Verwaltung</h1>
+        <Button 
+          onClick={() => setShowForm(true)} 
+          className="w-full sm:w-auto flex items-center gap-2"
+        >
           <Plus className="h-4 w-4" />
           Neue Immobilie
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.map((property) => (
-          <Card key={property.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <CardTitle className="text-lg line-clamp-2">
-                    {property.title}
-                  </CardTitle>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={property.is_active ? "default" : "secondary"}>
-                      {property.is_active ? "Aktiv" : "Inaktiv"}
-                    </Badge>
-                    {property.is_featured && (
-                      <Badge variant="outline">Empfohlen</Badge>
-                    )}
-                  </div>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(property)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(property.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 mr-1" />
-                {property.address}, {property.city?.name}
-              </div>
-              
-              <div className="flex items-center text-sm">
-                <Badge variant="secondary">
-                  {property.property_type?.name}
-                </Badge>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 text-sm">
-                <div className="flex items-center">
-                  <Euro className="h-4 w-4 mr-1 text-primary" />
-                  <span>{formatPrice(property.price_monthly)}</span>
-                </div>
-                <div className="flex items-center">
-                  <Ruler className="h-4 w-4 mr-1 text-primary" />
-                  <span>{property.area_sqm} m²</span>
-                </div>
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 mr-1 text-primary" />
-                  <span>{property.rooms}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {properties.length === 0 && (
+      {properties.length === 0 ? (
         <Card>
           <CardContent className="text-center py-8">
             <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
@@ -221,6 +157,100 @@ const PropertiesManagement = () => {
             </Button>
           </CardContent>
         </Card>
+      ) : (
+        <div className="space-y-4">
+          {properties.map((property) => (
+            <Card key={property.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  {/* Property Image */}
+                  <div className="flex-shrink-0">
+                    {property.images && property.images.length > 0 ? (
+                      <img
+                        src={property.images[0]}
+                        alt={property.title}
+                        className="w-full lg:w-48 h-32 lg:h-24 object-cover rounded-md"
+                      />
+                    ) : (
+                      <div className="w-full lg:w-48 h-32 lg:h-24 bg-muted rounded-md flex items-center justify-center">
+                        <Building2 className="h-8 w-8 text-muted-foreground" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Property Details */}
+                  <div className="flex-grow space-y-2">
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-lg font-semibold leading-tight">{property.title}</h3>
+                        <div className="flex items-center text-sm text-muted-foreground mt-1">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          {property.address}, {property.city?.name}
+                        </div>
+                      </div>
+                      <div className="flex flex-row sm:flex-col gap-2 sm:gap-1">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEdit(property)}
+                          className="flex items-center gap-1"
+                        >
+                          <Edit className="h-3 w-3" />
+                          <span className="hidden sm:inline">Bearbeiten</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(property.id)}
+                          className="flex items-center gap-1 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                          <span className="hidden sm:inline">Löschen</span>
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant={property.is_active ? "default" : "secondary"}>
+                        {property.is_active ? "Aktiv" : "Inaktiv"}
+                      </Badge>
+                      {property.is_featured && (
+                        <Badge variant="outline">Empfohlen</Badge>
+                      )}
+                      {property.property_type?.name && (
+                        <Badge variant="secondary">{property.property_type.name}</Badge>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 text-sm">
+                      <div className="flex items-center gap-1">
+                        <Euro className="h-4 w-4 text-primary shrink-0" />
+                        <span className="font-semibold">{formatPrice(property.price_monthly)}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Ruler className="h-4 w-4 text-primary shrink-0" />
+                        <span>{property.area_sqm} m²</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Users className="h-4 w-4 text-primary shrink-0" />
+                        <span>{property.rooms} Zimmer</span>
+                      </div>
+                      <div className="hidden sm:flex items-center text-xs text-muted-foreground">
+                        <span>ID: {property.id.slice(0, 8)}...</span>
+                      </div>
+                    </div>
+
+                    {property.description && (
+                      <p className="text-sm text-muted-foreground line-clamp-2 pt-1">
+                        {property.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );

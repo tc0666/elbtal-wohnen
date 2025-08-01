@@ -90,7 +90,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       ]);
 
       if (citiesResponse.data?.cities) setCities(citiesResponse.data.cities);
-      if (typesResponse.data?.types) setPropertyTypes(typesResponse.data.types);
+      if (typesResponse.data?.property_types) setPropertyTypes(typesResponse.data.property_types);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
