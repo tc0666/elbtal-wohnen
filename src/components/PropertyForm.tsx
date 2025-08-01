@@ -24,16 +24,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     neighborhood: '',
     rooms: '',
     area_sqm: 0,
-    price_monthly: 0,
-    warmmiete_monthly: 0,
-    additional_costs_monthly: 0,
+    price_monthly: null,
+    warmmiete_monthly: null,
+    additional_costs_monthly: null,
     property_type_id: '',
     city_id: '',
-    floor: 0,
-    total_floors: 0,
-    year_built: 0,
+    floor: null,
+    total_floors: null,
+    year_built: null,
     available_from: '',
-    deposit_months: 3,
+    deposit_months: null,
     energy_certificate_type: '',
     energy_certificate_value: '',
     heating_type: '',
@@ -41,6 +41,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     internet_speed: '',
     features_description: '',
     additional_description: '',
+    neighborhood_description: '',
     is_featured: false,
     is_active: true,
     images: []
@@ -74,16 +75,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         neighborhood: property.neighborhood || '',
         rooms: property.rooms || '',
         area_sqm: property.area_sqm || 0,
-        price_monthly: property.price_monthly || 0,
-        warmmiete_monthly: property.warmmiete_monthly || 0,
-        additional_costs_monthly: property.additional_costs_monthly || 0,
+        price_monthly: property.price_monthly || null,
+        warmmiete_monthly: property.warmmiete_monthly || null,
+        additional_costs_monthly: property.additional_costs_monthly || null,
         property_type_id: property.property_type_id || '',
         city_id: property.city_id || '',
-        floor: property.floor || 0,
-        total_floors: property.total_floors || 0,
-        year_built: property.year_built || 0,
+        floor: property.floor || null,
+        total_floors: property.total_floors || null,
+        year_built: property.year_built || null,
         available_from: property.available_from ? new Date(property.available_from).toISOString().split('T')[0] : '',
-        deposit_months: property.deposit_months || 3,
+        deposit_months: property.deposit_months || null,
         energy_certificate_type: property.energy_certificate_type || '',
         energy_certificate_value: property.energy_certificate_value || '',
         heating_type: property.heating_type || '',
@@ -91,6 +92,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         internet_speed: property.internet_speed || '',
         features_description: property.features_description || '',
         additional_description: property.additional_description || '',
+        neighborhood_description: property.neighborhood_description || '',
         is_featured: property.is_featured || false,
         is_active: property.is_active !== undefined ? property.is_active : true,
         images: property.images || []
@@ -356,8 +358,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Kaltmiete (€) *"
                   type="number"
-                  value={formData.price_monthly || ''}
-                  onChange={(e) => setFormData({ ...formData, price_monthly: parseInt(e.target.value) || 0 })}
+                  value={formData.price_monthly !== null ? formData.price_monthly : ''}
+                  onChange={(e) => setFormData({ ...formData, price_monthly: e.target.value ? parseInt(e.target.value) : null })}
                   required
                 />
               </div>
@@ -365,24 +367,24 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Nebenkosten (€)"
                   type="number"
-                  value={formData.additional_costs_monthly || ''}
-                  onChange={(e) => setFormData({ ...formData, additional_costs_monthly: parseInt(e.target.value) || 0 })}
+                  value={formData.additional_costs_monthly !== null ? formData.additional_costs_monthly : ''}
+                  onChange={(e) => setFormData({ ...formData, additional_costs_monthly: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Warmmiete (€)"
                   type="number"
-                  value={formData.warmmiete_monthly || ''}
-                  onChange={(e) => setFormData({ ...formData, warmmiete_monthly: parseInt(e.target.value) || 0 })}
+                  value={formData.warmmiete_monthly !== null ? formData.warmmiete_monthly : ''}
+                  onChange={(e) => setFormData({ ...formData, warmmiete_monthly: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Kaution (Monate)"
                   type="number"
-                  value={formData.deposit_months || ''}
-                  onChange={(e) => setFormData({ ...formData, deposit_months: parseInt(e.target.value) || 3 })}
+                  value={formData.deposit_months !== null ? formData.deposit_months : ''}
+                  onChange={(e) => setFormData({ ...formData, deposit_months: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
             </div>
@@ -400,7 +402,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Wohnfläche (m²) *"
                   type="number"
                   value={formData.area_sqm || ''}
-                  onChange={(e) => setFormData({ ...formData, area_sqm: parseInt(e.target.value) || 0 })}
+                  onChange={(e) => setFormData({ ...formData, area_sqm: e.target.value ? parseInt(e.target.value) : 0 })}
                   required
                 />
               </div>
@@ -416,16 +418,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Etage"
                   type="number"
-                  value={formData.floor || ''}
-                  onChange={(e) => setFormData({ ...formData, floor: parseInt(e.target.value) || 0 })}
+                  value={formData.floor !== null ? formData.floor : ''}
+                  onChange={(e) => setFormData({ ...formData, floor: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Baujahr"
                   type="number"
-                  value={formData.year_built || ''}
-                  onChange={(e) => setFormData({ ...formData, year_built: parseInt(e.target.value) || 0 })}
+                  value={formData.year_built !== null ? formData.year_built : ''}
+                  onChange={(e) => setFormData({ ...formData, year_built: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
             </div>
@@ -450,8 +452,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Input
                 placeholder="Etagen gesamt"
                 type="number"
-                value={formData.total_floors || ''}
-                onChange={(e) => setFormData({ ...formData, total_floors: parseInt(e.target.value) || 0 })}
+                value={formData.total_floors !== null ? formData.total_floors : ''}
+                onChange={(e) => setFormData({ ...formData, total_floors: e.target.value ? parseInt(e.target.value) : null })}
               />
             </div>
           </CardContent>
@@ -520,7 +522,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Weitere Beschreibung & Lage</CardTitle>
+            <CardTitle>Weitere Beschreibung</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -528,6 +530,22 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 placeholder="Weitere Beschreibung (z.B. Exklusives Wohnen in bester Lage. Das Gebäude verfügt über einen Concierge-Service und gepflegte Grünanlagen. Fitnessraum und Gemeinschaftsräume stehen den Bewohnern zur Verfügung.)"
                 value={formData.additional_description || ''}
                 onChange={(e) => setFormData({ ...formData, additional_description: e.target.value })}
+                rows={4}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Lage</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Lage & Umgebung (z.B. Ruhige Lage in beliebtem Stadtteil. Nahe zu öffentlichen Verkehrsmitteln, Einkaufsmöglichkeiten und Parks. Gute Infrastruktur mit Schulen und Kindergärten in der Nähe.)"
+                value={formData.neighborhood_description || ''}
+                onChange={(e) => setFormData({ ...formData, neighborhood_description: e.target.value })}
                 rows={4}
               />
             </div>

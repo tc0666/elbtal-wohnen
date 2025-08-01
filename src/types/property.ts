@@ -40,6 +40,7 @@ export interface PropertyBase {
   internet_speed: string;
   features_description: string;
   additional_description: string;
+  neighborhood_description: string;
   is_featured: boolean;
   is_active: boolean;
   images: string[];
