@@ -16,16 +16,32 @@ const PropertiesManagement = () => {
   const { toast } = useToast();
 
   const fetchProperties = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      if (!token) return;
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
 
-      const { data } = await supabase.functions.invoke('admin-management', {
+      console.log('Fetching properties with token...');
+      const { data, error } = await supabase.functions.invoke('admin-management', {
         body: { action: 'get_properties', token }
       });
 
+      console.log('Properties response:', { data, error });
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error('Failed to fetch properties');
+      }
+
       if (data?.properties) {
+        console.log('Properties loaded:', data.properties.length);
         setProperties(data.properties);
+      } else {
+        console.warn('No properties data received');
+        setProperties([]);
       }
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -34,6 +50,7 @@ const PropertiesManagement = () => {
         description: "Immobilien konnten nicht geladen werden.",
         variant: "destructive"
       });
+      setProperties([]);
     } finally {
       setIsLoading(false);
     }

@@ -30,16 +30,32 @@ const CitiesManagement = () => {
   const { toast } = useToast();
 
   const fetchCities = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      if (!token) return;
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
 
-      const { data } = await supabase.functions.invoke('admin-management', {
+      console.log('Fetching cities with token...');
+      const { data, error } = await supabase.functions.invoke('admin-management', {
         body: { action: 'get_cities', token }
       });
 
+      console.log('Cities response:', { data, error });
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error('Failed to fetch cities');
+      }
+
       if (data?.cities) {
+        console.log('Cities loaded:', data.cities.length);
         setCities(data.cities);
+      } else {
+        console.warn('No cities data received');
+        setCities([]);
       }
     } catch (error) {
       console.error('Error fetching cities:', error);
@@ -48,6 +64,7 @@ const CitiesManagement = () => {
         description: "Städte konnten nicht geladen werden.",
         variant: "destructive"
       });
+      setCities([]);
     } finally {
       setIsLoading(false);
     }

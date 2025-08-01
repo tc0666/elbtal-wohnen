@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { LogOut, User } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { LogOut, User, Settings, ChevronDown } from 'lucide-react';
 
 interface AdminHeaderProps {
   adminUser: any;
@@ -19,24 +20,37 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ adminUser, onLogout }) => {
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback>
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-medium">{adminUser?.username}</span>
-          </div>
-          
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={onLogout}
-            className="flex items-center gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Abmelden
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center gap-3 hover:bg-muted">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>
+                    <User className="h-4 w-4" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col items-start">
+                  <span className="text-sm font-medium">{adminUser?.username}</span>
+                  <span className="text-xs text-muted-foreground">Administrator</span>
+                </div>
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem>
+                <User className="h-4 w-4 mr-2" />
+                Profil bearbeiten
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="h-4 w-4 mr-2" />
+                Einstellungen
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onLogout} className="text-red-600">
+                <LogOut className="h-4 w-4 mr-2" />
+                Abmelden
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
