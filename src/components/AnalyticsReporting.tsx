@@ -238,13 +238,13 @@ const AnalyticsReporting = () => {
           <CardTitle>Anfragen Trend</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-80 w-full relative">
+          <div className="w-full">
             {analytics?.monthlyInquiries?.length > 0 ? (
-              <div className="w-full h-full">
+              <div className="space-y-4">
                 {/* Chart Container */}
-                <div className="relative h-64 w-full bg-gradient-to-t from-primary/5 to-transparent rounded-lg border border-border/20 overflow-hidden">
+                <div className="relative h-80 w-full bg-gradient-to-t from-primary/5 to-transparent rounded-lg border border-border/20 p-4">
                   {/* Grid Lines */}
-                  <div className="absolute inset-0">
+                  <div className="absolute inset-4">
                     {[...Array(5)].map((_, i) => (
                       <div 
                         key={i}
@@ -255,7 +255,7 @@ const AnalyticsReporting = () => {
                   </div>
                   
                   {/* Line Chart */}
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <svg className="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)]" viewBox="0 0 100 100" preserveAspectRatio="none">
                     <defs>
                       <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
@@ -270,13 +270,16 @@ const AnalyticsReporting = () => {
                     
                     {(() => {
                       const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
+                      const padding = 5; // 5% padding on each side
+                      const chartWidth = 100 - (padding * 2);
+                      
                       const points = analytics.monthlyInquiries.map((month, index) => {
-                        const x = (index / (analytics.monthlyInquiries.length - 1)) * 100;
-                        const y = 100 - ((month.count / maxValue) * 80);
+                        const x = padding + (index / Math.max(analytics.monthlyInquiries.length - 1, 1)) * chartWidth;
+                        const y = 95 - ((month.count / maxValue) * 75); // Leave more space at top and bottom
                         return `${x},${y}`;
                       }).join(' ');
                       
-                      const areaPoints = `0,100 ${points} 100,100`;
+                      const areaPoints = `${padding},95 ${points} ${padding + chartWidth},95`;
                       
                       return (
                         <>
@@ -291,19 +294,19 @@ const AnalyticsReporting = () => {
                             points={points}
                             fill="none"
                             stroke="url(#lineGradient)"
-                            strokeWidth="0.5"
+                            strokeWidth="0.8"
                             className="drop-shadow-sm"
                           />
                           {/* Data points */}
                           {analytics.monthlyInquiries.map((month, index) => {
-                            const x = (index / (analytics.monthlyInquiries.length - 1)) * 100;
-                            const y = 100 - ((month.count / maxValue) * 80);
+                            const x = padding + (index / Math.max(analytics.monthlyInquiries.length - 1, 1)) * chartWidth;
+                            const y = 95 - ((month.count / maxValue) * 75);
                             return (
                               <circle
                                 key={index}
                                 cx={x}
                                 cy={y}
-                                r="0.8"
+                                r="1.2"
                                 fill="hsl(var(--primary))"
                                 className="drop-shadow-sm"
                               />
@@ -315,11 +318,13 @@ const AnalyticsReporting = () => {
                   </svg>
                   
                   {/* Value Labels */}
-                  <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute inset-4 pointer-events-none">
                     {analytics.monthlyInquiries.map((month, index) => {
                       const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
-                      const x = (index / (analytics.monthlyInquiries.length - 1)) * 100;
-                      const y = 100 - ((month.count / maxValue) * 80);
+                      const padding = 5;
+                      const chartWidth = 100 - (padding * 2);
+                      const x = padding + (index / Math.max(analytics.monthlyInquiries.length - 1, 1)) * chartWidth;
+                      const y = 95 - ((month.count / maxValue) * 75);
                       
                       return (
                         <div
@@ -328,10 +333,10 @@ const AnalyticsReporting = () => {
                           style={{ 
                             left: `${x}%`, 
                             top: `${y}%`,
-                            marginTop: '-8px'
+                            marginTop: '-12px'
                           }}
                         >
-                          <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded shadow-lg">
+                          <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
                             {month.count}
                           </div>
                         </div>
@@ -341,7 +346,7 @@ const AnalyticsReporting = () => {
                 </div>
                 
                 {/* X-axis labels */}
-                <div className="flex justify-between mt-4 px-2">
+                <div className="grid grid-cols-12 gap-1 px-4">
                   {analytics.monthlyInquiries.map((month, index) => (
                     <div key={index} className="text-center">
                       <span className="text-xs font-medium text-muted-foreground">
@@ -352,7 +357,7 @@ const AnalyticsReporting = () => {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex items-center justify-center h-80">
                 <p className="text-muted-foreground">Keine Trend-Daten verfügbar</p>
               </div>
             )}
