@@ -246,12 +246,12 @@ const AnalyticsReporting = () => {
                   <div className="flex items-end justify-between h-full gap-2">
                     {analytics.monthlyInquiries.map((month, index) => {
                       const maxValue = Math.max(...analytics.monthlyInquiries.map(m => m.count), 1);
-                      const height = Math.max((month.count / maxValue) * 100, 2); // Minimum 2% height for visibility
+                      const height = month.count > 0 ? Math.max((month.count / maxValue) * 100, 8) : 2; // Minimum 8% for data, 2% for no data
                       
                       return (
                         <div key={index} className="flex flex-col items-center flex-1 group">
-                          {/* Value Label */}
-                          <div className="mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          {/* Value Label - Always show */}
+                          <div className="mb-2 transition-opacity duration-200">
                             <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap">
                               {month.count}
                             </div>
@@ -260,17 +260,23 @@ const AnalyticsReporting = () => {
                           {/* Bar */}
                           <div className="relative w-full max-w-16 flex flex-col justify-end h-full">
                             <div 
-                              className="w-full bg-gradient-to-t from-primary to-primary/80 rounded-t-md shadow-sm hover:shadow-md transition-all duration-300 hover:from-primary/90 hover:to-primary/70 cursor-pointer group-hover:scale-105"
+                              className={`w-full rounded-t-md shadow-sm transition-all duration-300 cursor-pointer ${
+                                month.count > 0 
+                                  ? 'bg-gradient-to-t from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70' 
+                                  : 'bg-gray-200/50'
+                              }`}
                               style={{ height: `${height}%` }}
                             >
-                              {/* Subtle highlight on top */}
-                              <div className="w-full h-1 bg-white/20 rounded-t-md"></div>
+                              {/* Subtle highlight on top - only for data bars */}
+                              {month.count > 0 && (
+                                <div className="w-full h-1 bg-white/20 rounded-t-md"></div>
+                              )}
                             </div>
                           </div>
                           
                           {/* Month Label */}
                           <div className="mt-3 text-center">
-                            <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                            <span className="text-xs font-medium text-muted-foreground transition-colors">
                               {month.month}
                             </span>
                           </div>
