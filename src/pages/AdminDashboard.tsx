@@ -133,9 +133,8 @@ const AdminDashboard = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
-        <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} adminUser={adminUser} onLogout={handleLogout} />
         <div className="flex-1 flex flex-col">
-          <AdminHeader adminUser={adminUser} onLogout={handleLogout} />
           <main className="flex-1 p-6 overflow-auto">
             {renderContent()}
           </main>
