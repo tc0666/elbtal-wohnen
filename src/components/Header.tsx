@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
@@ -34,12 +35,14 @@ export const Header = () => {
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid gap-3 p-6 w-[400px]">
-                    <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                      <div className="text-sm font-medium leading-none">Mietangebote</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        Entdecken Sie unsere aktuellen Mietangebote
-                      </p>
-                    </NavigationMenuLink>
+                    <Link to="/mietangebote">
+                      <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                        <div className="text-sm font-medium leading-none">Mietangebote</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          Entdecken Sie unsere aktuellen Mietangebote
+                        </p>
+                      </NavigationMenuLink>
+                    </Link>
                     <NavigationMenuLink className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
                       <div className="text-sm font-medium leading-none">Vermietungsablauf</div>
                       <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
@@ -57,9 +60,11 @@ export const Header = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
-                  Mietangebote
-                </NavigationMenuLink>
+                <Link to="/mietangebote">
+                  <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+                    Mietangebote
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
@@ -109,9 +114,9 @@ export const Header = () => {
                   <ChevronDown className="h-4 w-4" />
                 </button>
                 <div className="pl-4 space-y-1">
-                  <a href="#" className="block px-3 py-2 text-sm text-muted-foreground hover:text-primary">
+                  <Link to="/mietangebote" className="block px-3 py-2 text-sm text-muted-foreground hover:text-primary">
                     Mietangebote
-                  </a>
+                  </Link>
                   <a href="#" className="block px-3 py-2 text-sm text-muted-foreground hover:text-primary">
                     Vermietungsablauf
                   </a>
@@ -120,9 +125,9 @@ export const Header = () => {
                   </a>
                 </div>
               </div>
-              <a href="#" className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md">
+              <Link to="/mietangebote" className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md">
                 Mietangebote
-              </a>
+              </Link>
               <a href="#" className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-accent rounded-md">
                 Kontakt
               </a>
