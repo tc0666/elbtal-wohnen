@@ -205,11 +205,13 @@ const Unternehmen = () => {
             </div>
           </div>
           
-          <Card className="bg-primary text-primary-foreground">
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
             <CardContent className="p-8 text-center">
-              <Building className="h-16 w-16 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold mb-4">Unsere Mission</h3>
-              <p className="text-lg leading-relaxed opacity-90">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Building className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-foreground">Unsere Mission</h3>
+              <p className="text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto">
                 Wir schaffen Vertrauen im Immobilienmarkt durch transparente, zuverlässige 
                 und innovative Dienstleistungen. Unser Ziel ist es, für jeden Kunden die 
                 optimale Lösung zu finden.
