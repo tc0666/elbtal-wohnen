@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -53,6 +54,29 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(null);
   const [additionalImageFiles, setAdditionalImageFiles] = useState<File[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
+  
+  // Features state
+  const [features, setFeatures] = useState<string[]>([]);
+  const [customTag, setCustomTag] = useState('');
+  
+  // Feature checkboxes
+  const [featureCheckboxes, setFeatureCheckboxes] = useState({
+    balcony: false,
+    elevator: false,
+    parking: false,
+    pets_allowed: false,
+    furnished: false,
+    kitchen_equipped: false,
+    dishwasher: false,
+    washing_machine: false,
+    dryer: false,
+    tv: false,
+    garden: false,
+    cellar: false,
+    attic: false,
+    utilities_included: false,
+  });
+  
   const { toast } = useToast();
 
   useEffect(() => {
@@ -96,6 +120,27 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         is_featured: property.is_featured || false,
         is_active: property.is_active !== undefined ? property.is_active : true,
         images: property.images || []
+      });
+      
+      // Set features
+      setFeatures(property.features || []);
+      
+      // Set feature checkboxes
+      setFeatureCheckboxes({
+        balcony: property.balcony || false,
+        elevator: property.elevator || false,
+        parking: property.parking || false,
+        pets_allowed: property.pets_allowed || false,
+        furnished: property.furnished || false,
+        kitchen_equipped: property.kitchen_equipped || false,
+        dishwasher: property.dishwasher || false,
+        washing_machine: property.washing_machine || false,
+        dryer: property.dryer || false,
+        tv: property.tv || false,
+        garden: property.garden || false,
+        cellar: property.cellar || false,
+        attic: property.attic || false,
+        utilities_included: property.utilities_included || false,
       });
       
       console.log('Form data set with city_id:', property.city_id, 'and property_type_id:', property.property_type_id);
@@ -185,7 +230,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       const propertyData = {
         ...formData,
         images: allImages,
-        available_from: formData.available_from || null
+        available_from: formData.available_from || null,
+        features: features,
+        ...featureCheckboxes
       };
 
       const requestBody = property 
@@ -237,6 +284,24 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       ...formData,
       images: formData.images.filter((_, i) => i !== index)
     });
+  };
+
+  const addCustomTag = () => {
+    if (customTag.trim() && !features.includes(customTag.trim())) {
+      setFeatures([...features, customTag.trim()]);
+      setCustomTag('');
+    }
+  };
+
+  const removeTag = (index: number) => {
+    setFeatures(features.filter((_, i) => i !== index));
+  };
+
+  const handleFeatureCheckboxChange = (feature: string, checked: boolean) => {
+    setFeatureCheckboxes(prev => ({
+      ...prev,
+      [feature]: checked
+    }));
   };
 
   return (
@@ -516,6 +581,174 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 onChange={(e) => setFormData({ ...formData, features_description: e.target.value })}
                 rows={4}
               />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Eigenschaften & Tags</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Feature Checkboxes */}
+            <div>
+              <h4 className="font-medium mb-3">Ausstattungsmerkmale</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="balcony"
+                    checked={featureCheckboxes.balcony}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('balcony', checked as boolean)}
+                  />
+                  <label htmlFor="balcony" className="cursor-pointer text-sm">Balkon</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="elevator"
+                    checked={featureCheckboxes.elevator}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('elevator', checked as boolean)}
+                  />
+                  <label htmlFor="elevator" className="cursor-pointer text-sm">Aufzug</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="parking"
+                    checked={featureCheckboxes.parking}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('parking', checked as boolean)}
+                  />
+                  <label htmlFor="parking" className="cursor-pointer text-sm">Parkplatz</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="pets_allowed"
+                    checked={featureCheckboxes.pets_allowed}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('pets_allowed', checked as boolean)}
+                  />
+                  <label htmlFor="pets_allowed" className="cursor-pointer text-sm">Haustiere erlaubt</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="furnished"
+                    checked={featureCheckboxes.furnished}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('furnished', checked as boolean)}
+                  />
+                  <label htmlFor="furnished" className="cursor-pointer text-sm">Möbliert</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="kitchen_equipped"
+                    checked={featureCheckboxes.kitchen_equipped}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('kitchen_equipped', checked as boolean)}
+                  />
+                  <label htmlFor="kitchen_equipped" className="cursor-pointer text-sm">Küche ausgestattet</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="dishwasher"
+                    checked={featureCheckboxes.dishwasher}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('dishwasher', checked as boolean)}
+                  />
+                  <label htmlFor="dishwasher" className="cursor-pointer text-sm">Spülmaschine</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="washing_machine"
+                    checked={featureCheckboxes.washing_machine}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('washing_machine', checked as boolean)}
+                  />
+                  <label htmlFor="washing_machine" className="cursor-pointer text-sm">Waschmaschine</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="dryer"
+                    checked={featureCheckboxes.dryer}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('dryer', checked as boolean)}
+                  />
+                  <label htmlFor="dryer" className="cursor-pointer text-sm">Trockner</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="tv"
+                    checked={featureCheckboxes.tv}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('tv', checked as boolean)}
+                  />
+                  <label htmlFor="tv" className="cursor-pointer text-sm">TV</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="garden"
+                    checked={featureCheckboxes.garden}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('garden', checked as boolean)}
+                  />
+                  <label htmlFor="garden" className="cursor-pointer text-sm">Garten</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="cellar"
+                    checked={featureCheckboxes.cellar}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('cellar', checked as boolean)}
+                  />
+                  <label htmlFor="cellar" className="cursor-pointer text-sm">Keller</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="attic"
+                    checked={featureCheckboxes.attic}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('attic', checked as boolean)}
+                  />
+                  <label htmlFor="attic" className="cursor-pointer text-sm">Dachboden</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="utilities_included"
+                    checked={featureCheckboxes.utilities_included}
+                    onCheckedChange={(checked) => handleFeatureCheckboxChange('utilities_included', checked as boolean)}
+                  />
+                  <label htmlFor="utilities_included" className="cursor-pointer text-sm">Nebenkosten inklusive</label>
+                </div>
+              </div>
+            </div>
+
+            {/* Custom Tags */}
+            <div>
+              <h4 className="font-medium mb-3">Benutzerdefinierte Tags</h4>
+              <div className="flex gap-2 mb-3">
+                <Input
+                  placeholder="Tag hinzufügen (z.B. Klimaanlage, Sauna, etc.)"
+                  value={customTag}
+                  onChange={(e) => setCustomTag(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addCustomTag();
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  onClick={addCustomTag}
+                  variant="outline"
+                  size="sm"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+              {features.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {features.map((feature, index) => (
+                    <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                      {feature}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(index)}
+                        className="ml-1 hover:bg-destructive hover:text-destructive-foreground rounded-full p-0.5"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

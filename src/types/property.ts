@@ -44,6 +44,7 @@ export interface PropertyBase {
   is_featured: boolean;
   is_active: boolean;
   images: string[];
+  features: string[];
 }
 
 // Property with populated relations (for display)
