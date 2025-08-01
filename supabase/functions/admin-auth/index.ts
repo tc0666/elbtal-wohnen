@@ -12,6 +12,8 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Starting admin auth function...')
+    
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -21,36 +23,57 @@ serve(async (req) => {
     const requestBody = await req.json()
     const { action, username, password, token } = requestBody
 
-    console.log('Admin auth request:', { action, username: username ? 'provided' : 'missing' })
+    console.log('Admin auth request:', { 
+      action, 
+      username: username ? 'provided' : 'missing',
+      hasToken: !!token,
+      supabaseUrl: Deno.env.get('SUPABASE_URL') ? 'set' : 'missing',
+      serviceKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ? 'set' : 'missing'
+    })
 
     if (action === 'login') {
+      console.log('Processing login for username:', username)
+      
       // Simple password hashing for demo (in production, use proper bcrypt)
       const passwordHash = btoa(password)
+      console.log('Generated password hash:', passwordHash)
       
-      // First, hash the stored temp password if it hasn't been hashed yet
-      const { data: tempUser } = await supabase
+      // First, check if we need to update the temp password
+      const { data: tempUser, error: tempError } = await supabase
         .from('admin_users')
         .select('*')
         .eq('username', 'admin65415')
         .eq('password_hash', 'temp_password_to_be_hashed')
-        .single()
+        .maybeSingle()
+
+      console.log('Temp user check:', { tempUser: !!tempUser, tempError })
 
       if (tempUser) {
+        console.log('Updating temp password...')
         // Update with properly hashed password
         const correctHash = btoa('EO,A4q^8y2_£4h')
-        await supabase
+        const { error: updateError } = await supabase
           .from('admin_users')
           .update({ password_hash: correctHash })
           .eq('id', tempUser.id)
+        
+        console.log('Password update result:', { updateError })
       }
 
       // Verify login credentials
+      console.log('Verifying credentials for:', username)
       const { data: user, error } = await supabase
         .from('admin_users')
         .select('*')
         .eq('username', username)
         .eq('password_hash', passwordHash)
-        .single()
+        .maybeSingle()
+
+      console.log('User verification result:', { 
+        userFound: !!user, 
+        error: error?.message,
+        expectedHash: passwordHash 
+      })
 
       if (error || !user) {
         return new Response(
