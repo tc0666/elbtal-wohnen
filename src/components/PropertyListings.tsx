@@ -140,7 +140,7 @@ export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => 
           </div>
           <div className="space-y-6">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden bg-white">
+              <div key={i} className="overflow-hidden bg-white rounded-lg border shadow-sm">
                 <div className="flex h-72">
                   <Skeleton className="w-80 h-full rounded-none flex-shrink-0" />
                   <div className="flex-1 p-6 space-y-4">
@@ -164,7 +164,7 @@ export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => 
                     </div>
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
