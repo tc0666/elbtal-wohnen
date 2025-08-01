@@ -333,14 +333,6 @@ const PropertyDetails = () => {
                   <p className="text-muted-foreground leading-relaxed mb-4">
                     {property.description}
                   </p>
-                  <div className="bg-muted p-4 rounded-lg">
-                    <h5 className="font-medium mb-2">Lage</h5>
-                    <p className="text-sm text-muted-foreground">
-                      Die Immobilie befindet sich in einer ruhigen und begehrten Wohnlage von {property.city?.name}. 
-                      Gute Verkehrsanbindung an öffentliche Verkehrsmittel, Einkaufsmöglichkeiten und Schulen 
-                      sind fußläufig erreichbar.
-                    </p>
-                  </div>
                 </div>
               </CardContent>
             </Card>
