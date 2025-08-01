@@ -128,14 +128,16 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       // Step 2: Load Leaflet CSS
       await loadLeafletCSS();
 
-      // Step 3: Wait for container to be ready
+      // Step 3: Wait for container to be ready with better checking
+      let attempts = 0;
+      while (!mapContainer.current && attempts < 10) {
+        console.log(`🗺️ [INIT] Waiting for container... attempt ${attempts + 1}`);
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+      
       if (!mapContainer.current) {
-        console.log('🗺️ [INIT] Waiting for container...');
-        await new Promise(resolve => setTimeout(resolve, 200));
-        
-        if (!mapContainer.current) {
-          throw new Error('Map container not available');
-        }
+        throw new Error('Map container not available after waiting');
       }
 
       console.log('🗺️ [INIT] Container ready, loading Leaflet...');
@@ -226,11 +228,19 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       return;
     }
 
-    // Add delay to ensure component is mounted
-    const timer = setTimeout(() => {
-      console.log('🗺️ [EFFECT] Starting initialization after delay');
-      initializeMap();
-    }, 100);
+    // Wait for the container to be mounted and visible
+    const checkAndInit = () => {
+      if (mapContainer.current) {
+        console.log('🗺️ [EFFECT] Container found, starting initialization');
+        initializeMap();
+      } else {
+        console.log('🗺️ [EFFECT] Container not ready, waiting longer...');
+        setTimeout(checkAndInit, 200);
+      }
+    };
+
+    // Initial delay to let React finish rendering
+    const timer = setTimeout(checkAndInit, 300);
 
     return () => {
       clearTimeout(timer);
