@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, MapPin, Edit, Save, X } from 'lucide-react';
+import { Plus, MapPin, Edit, Save, X, Trash2 } from 'lucide-react';
 
 interface City {
   id: string;
@@ -96,24 +96,67 @@ const CitiesManagement = () => {
         slug: formData.slug || generateSlug(formData.name)
       };
 
+      const action = editingCity ? 'update_city' : 'create_city';
+      const requestBody = editingCity 
+        ? { action, token, cityId: editingCity, city: cityData }
+        : { action, token, city: cityData };
+
       const { data } = await supabase.functions.invoke('admin-management', {
-        body: { action: 'create_city', token, city: cityData }
+        body: requestBody
       });
 
-      if (data?.city) {
+      if (data?.city || data?.success) {
         toast({
           title: "Erfolgreich",
-          description: "Stadt wurde hinzugefügt.",
+          description: editingCity ? "Stadt wurde aktualisiert." : "Stadt wurde hinzugefügt.",
         });
-        setShowForm(false);
-        setFormData({ name: '', slug: '', display_order: 0, is_active: true });
+        resetForm();
         fetchCities();
       }
     } catch (error) {
-      console.error('Error creating city:', error);
+      console.error('Error saving city:', error);
       toast({
         title: "Fehler",
-        description: "Stadt konnte nicht erstellt werden.",
+        description: editingCity ? "Stadt konnte nicht aktualisiert werden." : "Stadt konnte nicht erstellt werden.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleEdit = (city: City) => {
+    setFormData({
+      name: city.name,
+      slug: city.slug,
+      display_order: city.display_order,
+      is_active: city.is_active
+    });
+    setEditingCity(city.id);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (cityId: string, cityName: string) => {
+    if (!confirm(`Sind Sie sicher, dass Sie die Stadt "${cityName}" löschen möchten?`)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const { data } = await supabase.functions.invoke('admin-management', {
+        body: { action: 'delete_city', token, cityId }
+      });
+
+      if (data?.success) {
+        toast({
+          title: "Erfolgreich",
+          description: "Stadt wurde gelöscht.",
+        });
+        fetchCities();
+      }
+    } catch (error) {
+      console.error('Error deleting city:', error);
+      toast({
+        title: "Fehler",
+        description: "Stadt konnte nicht gelöscht werden.",
         variant: "destructive"
       });
     }
@@ -156,7 +199,7 @@ const CitiesManagement = () => {
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>Neue Stadt hinzufügen</CardTitle>
+            <CardTitle>{editingCity ? 'Stadt bearbeiten' : 'Neue Stadt hinzufügen'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -203,7 +246,7 @@ const CitiesManagement = () => {
               <div className="flex items-center gap-4">
                 <Button type="submit" className="flex items-center gap-2">
                   <Save className="h-4 w-4" />
-                  Stadt speichern
+                  {editingCity ? 'Änderungen speichern' : 'Stadt speichern'}
                 </Button>
                 <Button 
                   type="button" 
@@ -234,12 +277,32 @@ const CitiesManagement = () => {
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-3">
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium">Slug:</span> {city.slug}
               </div>
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium">Reihenfolge:</span> {city.display_order}
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleEdit(city)}
+                  className="flex items-center gap-1"
+                >
+                  <Edit className="h-3 w-3" />
+                  Bearbeiten
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => handleDelete(city.id, city.name)}
+                  className="flex items-center gap-1"
+                >
+                  <Trash2 className="h-3 w-3" />
+                  Löschen
+                </Button>
               </div>
             </CardContent>
           </Card>

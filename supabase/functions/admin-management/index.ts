@@ -182,6 +182,60 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'update_city':
+        const { cityId, city: cityUpdateData } = data
+        
+        const { data: updatedCity, error: updateCityError } = await supabase
+          .from('cities')
+          .update({
+            name: cityUpdateData.name,
+            slug: cityUpdateData.slug,
+            display_order: cityUpdateData.display_order,
+            is_active: cityUpdateData.is_active,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', cityId)
+          .select()
+          .single()
+        
+        if (updateCityError) {
+          return new Response(
+            JSON.stringify({ error: 'Failed to update city', details: updateCityError.message }),
+            { 
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+              status: 400 
+            }
+          )
+        }
+        
+        return new Response(
+          JSON.stringify({ city: updatedCity }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+
+      case 'delete_city':
+        const { cityId: deleteId } = data
+        
+        const { error: deleteCityError } = await supabase
+          .from('cities')
+          .delete()
+          .eq('id', deleteId)
+        
+        if (deleteCityError) {
+          return new Response(
+            JSON.stringify({ error: 'Failed to delete city', details: deleteCityError.message }),
+            { 
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+              status: 400 
+            }
+          )
+        }
+        
+        return new Response(
+          JSON.stringify({ success: true }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+
       default:
         return new Response(
           JSON.stringify({ error: 'Invalid action' }),
