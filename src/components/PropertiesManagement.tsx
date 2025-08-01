@@ -6,7 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import PropertyForm from '@/components/PropertyForm';
+import PropertyFormNew from '@/components/PropertyFormNew';
 import { PropertyWithRelations } from '@/types/property';
 
 const PropertiesManagement = () => {
@@ -131,7 +131,7 @@ const PropertiesManagement = () => {
               {editingProperty ? 'Immobilie bearbeiten' : 'Neue Immobilie'}
             </DialogTitle>
           </DialogHeader>
-          <PropertyForm 
+          <PropertyFormNew 
             property={editingProperty}
             onClose={handleFormClose}
           />
