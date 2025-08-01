@@ -4,6 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import PropertyMap from "@/components/PropertyMap";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -488,18 +489,12 @@ const PropertyDetails = () => {
                   Schulen und öffentliche Verkehrsmittel. Die Verkehrsanbindung ist ideal für Pendler.
                 </p>
                 
-                {/* Simple Map Embed */}
-                <div className="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">
-                      Karte wird geladen...
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {property.address}
-                    </p>
-                  </div>
-                </div>
+                {/* Interactive Map */}
+                <PropertyMap 
+                  address={property.address}
+                  city={property.city?.name || ''}
+                  className="w-full h-64"
+                />
               </CardContent>
             </Card>
           </div>
