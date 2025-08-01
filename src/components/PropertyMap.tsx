@@ -18,6 +18,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+  const [containerReady, setContainerReady] = useState(false);
 
   // Free geocoding using Nominatim (OpenStreetMap)
   const geocodeAddress = async (fullAddress: string): Promise<Coordinates | null> => {
@@ -128,19 +129,12 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       // Step 2: Load Leaflet CSS
       await loadLeafletCSS();
 
-      // Step 3: Wait for container to be ready with better checking
-      let attempts = 0;
-      while (!mapContainer.current && attempts < 10) {
-        console.log(`🗺️ [INIT] Waiting for container... attempt ${attempts + 1}`);
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
-      
+      // Step 3: Container should be ready now (we have containerReady=true)
       if (!mapContainer.current) {
-        throw new Error('Map container not available after waiting');
+        throw new Error('Map container lost during initialization');
       }
 
-      console.log('🗺️ [INIT] Container ready, loading Leaflet...');
+      console.log('🗺️ [INIT] Container confirmed, loading Leaflet...');
 
       // Step 4: Dynamic import of Leaflet
       const L = await import('leaflet');
@@ -219,34 +213,38 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
     }
   };
 
+  // Check for container readiness
+  useEffect(() => {
+    const checkContainer = () => {
+      if (mapContainer.current) {
+        console.log('🗺️ [CONTAINER] Found and ready!');
+        setContainerReady(true);
+      } else {
+        console.log('🗺️ [CONTAINER] Still not ready, rechecking...');
+        setTimeout(checkContainer, 100);
+      }
+    };
+    
+    checkContainer();
+  }, []);
+
   useEffect(() => {
     console.log('🗺️ [EFFECT] useEffect triggered');
     console.log('🗺️ [EFFECT] Address:', address, 'City:', city);
+    console.log('🗺️ [EFFECT] Container ready:', containerReady);
     
-    if (!address || !city) {
-      console.log('🗺️ [EFFECT] Missing address or city');
+    if (!address || !city || !containerReady) {
+      console.log('🗺️ [EFFECT] Not ready - Address:', !!address, 'City:', !!city, 'Container:', containerReady);
       return;
     }
 
-    // Wait for the container to be mounted and visible
-    const checkAndInit = () => {
-      if (mapContainer.current) {
-        console.log('🗺️ [EFFECT] Container found, starting initialization');
-        initializeMap();
-      } else {
-        console.log('🗺️ [EFFECT] Container not ready, waiting longer...');
-        setTimeout(checkAndInit, 200);
-      }
-    };
-
-    // Initial delay to let React finish rendering
-    const timer = setTimeout(checkAndInit, 300);
+    console.log('🗺️ [EFFECT] All ready, starting initialization');
+    initializeMap();
 
     return () => {
-      clearTimeout(timer);
       cleanup();
     };
-  }, [address, city]);
+  }, [address, city, containerReady]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -297,6 +295,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
         ref={mapContainer} 
         className="w-full h-full min-h-[300px]"
         style={{ minHeight: '300px' }}
+        data-testid="map-container"
       />
       {coordinates && (
         <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-xs px-2 py-1 rounded shadow-sm">
