@@ -6,26 +6,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2 } from 'lucide-react';
 import PropertyForm from '@/components/PropertyForm';
-
-interface Property {
-  id: string;
-  title: string;
-  address: string;
-  price_monthly: number;
-  area_sqm: number;
-  rooms: string;
-  is_active: boolean;
-  is_featured: boolean;
-  city: { name: string };
-  property_type: { name: string };
-  [key: string]: any; // Allow additional properties
-}
+import { PropertyWithRelations } from '@/types/property';
 
 const PropertiesManagement = () => {
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<PropertyWithRelations[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
+  const [editingProperty, setEditingProperty] = useState<PropertyWithRelations | null>(null);
   const { toast } = useToast();
 
   const fetchProperties = async () => {
@@ -84,7 +71,7 @@ const PropertiesManagement = () => {
     }
   };
 
-  const handleEdit = (property: Property) => {
+  const handleEdit = (property: PropertyWithRelations) => {
     setEditingProperty(property);
     setShowForm(true);
   };

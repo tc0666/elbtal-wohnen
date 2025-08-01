@@ -9,58 +9,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Save, Plus, X } from 'lucide-react';
-
-interface Property {
-  id?: string;
-  title: string;
-  description: string;
-  address: string;
-  postal_code: string;
-  neighborhood: string;
-  rooms: string;
-  area_sqm: number;
-  price_monthly: number;
-  additional_costs_monthly: number;
-  property_type_id: string;
-  city_id: string;
-  floor: number;
-  total_floors: number;
-  year_built: number;
-  available_from: string;
-  deposit_months: number;
-  kitchen_equipped: boolean;
-  furnished: boolean;
-  pets_allowed: boolean;
-  utilities_included: boolean;
-  balcony: boolean;
-  elevator: boolean;
-  parking: boolean;
-  garden: boolean;
-  cellar: boolean;
-  attic: boolean;
-  dishwasher: boolean;
-  washing_machine: boolean;
-  dryer: boolean;
-  tv: boolean;
-  energy_certificate_type: string;
-  energy_certificate_value: string;
-  heating_type: string;
-  heating_energy_source: string;
-  internet_speed: string;
-  features_description: string;
-  additional_description: string;
-  is_featured: boolean;
-  is_active: boolean;
-  images: string[];
-}
+import { PropertyBase, PropertyFormData } from '@/types/property';
 
 interface PropertyFormProps {
-  property?: Property | null;
+  property?: PropertyBase | null;
   onClose: () => void;
 }
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
-  const [formData, setFormData] = useState<Property>({
+  const [formData, setFormData] = useState<PropertyFormData>({
     title: '',
     description: '',
     address: '',
@@ -429,7 +386,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <div key={item.key} className="flex items-center space-x-2">
                   <Checkbox
                     id={item.key}
-                    checked={formData[item.key as keyof Property] as boolean}
+                    checked={formData[item.key as keyof PropertyFormData] as boolean}
                     onCheckedChange={(checked) => 
                       setFormData({ ...formData, [item.key]: checked })
                     }
