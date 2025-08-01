@@ -218,11 +218,11 @@ const PropertyDetails = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Nebenkosten:</span>
-                        <span className="font-medium">150 €</span>
+                        <span className="font-medium">{property.additional_costs_monthly ? formatPrice(property.additional_costs_monthly) : 'Nicht angegeben'}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Warmmiete:</span>
-                        <span className="font-medium">{formatPrice(property.price_monthly + 150)}</span>
+                        <span className="font-medium">{formatPrice(property.price_monthly + (property.additional_costs_monthly || 0))}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Kaution:</span>
@@ -269,15 +269,19 @@ const PropertyDetails = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <span className="text-sm text-muted-foreground">Energieausweis:</span>
-                      <p className="font-medium">Bedarfsausweis</p>
+                      <p className="font-medium">{property.energy_certificate_type || 'Nicht angegeben'}</p>
                     </div>
                     <div>
                       <span className="text-sm text-muted-foreground">Energieeffizienzklasse:</span>
-                      <p className="font-medium">C</p>
+                      <p className="font-medium">{property.energy_certificate_value || 'Nicht angegeben'}</p>
                     </div>
                     <div>
                       <span className="text-sm text-muted-foreground">Heizungsart:</span>
-                      <p className="font-medium">Zentralheizung</p>
+                      <p className="font-medium">{property.heating_type || 'Nicht angegeben'}</p>
+                    </div>
+                    <div>
+                      <span className="text-sm text-muted-foreground">Befeuerung:</span>
+                      <p className="font-medium">{property.heating_energy_source || 'Nicht angegeben'}</p>
                     </div>
                   </div>
                 </div>
@@ -318,10 +322,60 @@ const PropertyDetails = () => {
                         Möbliert
                       </div>
                     )}
-                    <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Einbauküche
-                    </div>
+                    {property.kitchen_equipped && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Einbauküche
+                      </div>
+                    )}
+                    {property.dishwasher && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Spülmaschine
+                      </div>
+                    )}
+                    {property.washing_machine && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Waschmaschine
+                      </div>
+                    )}
+                    {property.dryer && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Trockner
+                      </div>
+                    )}
+                    {property.tv && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        TV
+                      </div>
+                    )}
+                    {property.garden && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Garten
+                      </div>
+                    )}
+                    {property.cellar && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Keller
+                      </div>
+                    )}
+                    {property.attic && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Dachboden
+                      </div>
+                    )}
+                    {property.internet_speed && (
+                      <div className="flex items-center bg-muted px-3 py-2 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Internet: {property.internet_speed}
+                      </div>
+                    )}
                   </div>
                 </div>
 

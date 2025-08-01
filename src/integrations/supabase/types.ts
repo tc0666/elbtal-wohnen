@@ -46,23 +46,35 @@ export type Database = {
       }
       properties: {
         Row: {
+          additional_costs_monthly: number | null
           address: string
           area_sqm: number
+          attic: boolean | null
           available_from: string | null
           balcony: boolean | null
+          cellar: boolean | null
           city_id: string | null
           coordinates: unknown | null
           created_at: string
           deposit_months: number | null
           description: string | null
+          dishwasher: boolean | null
+          dryer: boolean | null
           elevator: boolean | null
+          energy_certificate_type: string | null
+          energy_certificate_value: string | null
           features: string[] | null
           floor: number | null
           furnished: boolean | null
+          garden: boolean | null
+          heating_energy_source: string | null
+          heating_type: string | null
           id: string
           images: string[] | null
+          internet_speed: string | null
           is_active: boolean | null
           is_featured: boolean | null
+          kitchen_equipped: boolean | null
           neighborhood: string | null
           parking: boolean | null
           pets_allowed: boolean | null
@@ -72,28 +84,42 @@ export type Database = {
           rooms: string
           title: string
           total_floors: number | null
+          tv: boolean | null
           updated_at: string
           utilities_included: boolean | null
+          washing_machine: boolean | null
           year_built: number | null
         }
         Insert: {
+          additional_costs_monthly?: number | null
           address: string
           area_sqm: number
+          attic?: boolean | null
           available_from?: string | null
           balcony?: boolean | null
+          cellar?: boolean | null
           city_id?: string | null
           coordinates?: unknown | null
           created_at?: string
           deposit_months?: number | null
           description?: string | null
+          dishwasher?: boolean | null
+          dryer?: boolean | null
           elevator?: boolean | null
+          energy_certificate_type?: string | null
+          energy_certificate_value?: string | null
           features?: string[] | null
           floor?: number | null
           furnished?: boolean | null
+          garden?: boolean | null
+          heating_energy_source?: string | null
+          heating_type?: string | null
           id?: string
           images?: string[] | null
+          internet_speed?: string | null
           is_active?: boolean | null
           is_featured?: boolean | null
+          kitchen_equipped?: boolean | null
           neighborhood?: string | null
           parking?: boolean | null
           pets_allowed?: boolean | null
@@ -103,28 +129,42 @@ export type Database = {
           rooms: string
           title: string
           total_floors?: number | null
+          tv?: boolean | null
           updated_at?: string
           utilities_included?: boolean | null
+          washing_machine?: boolean | null
           year_built?: number | null
         }
         Update: {
+          additional_costs_monthly?: number | null
           address?: string
           area_sqm?: number
+          attic?: boolean | null
           available_from?: string | null
           balcony?: boolean | null
+          cellar?: boolean | null
           city_id?: string | null
           coordinates?: unknown | null
           created_at?: string
           deposit_months?: number | null
           description?: string | null
+          dishwasher?: boolean | null
+          dryer?: boolean | null
           elevator?: boolean | null
+          energy_certificate_type?: string | null
+          energy_certificate_value?: string | null
           features?: string[] | null
           floor?: number | null
           furnished?: boolean | null
+          garden?: boolean | null
+          heating_energy_source?: string | null
+          heating_type?: string | null
           id?: string
           images?: string[] | null
+          internet_speed?: string | null
           is_active?: boolean | null
           is_featured?: boolean | null
+          kitchen_equipped?: boolean | null
           neighborhood?: string | null
           parking?: boolean | null
           pets_allowed?: boolean | null
@@ -134,8 +174,10 @@ export type Database = {
           rooms?: string
           title?: string
           total_floors?: number | null
+          tv?: boolean | null
           updated_at?: string
           utilities_included?: boolean | null
+          washing_machine?: boolean | null
           year_built?: number | null
         }
         Relationships: [
