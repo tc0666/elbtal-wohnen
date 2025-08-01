@@ -82,16 +82,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log('PropertyForm received property:', property);
+    console.log('PropertyForm received property:', property?.id);
     fetchCitiesAndTypes();
-  }, [property]);
+  }, [property?.id]); // Only depend on property ID to avoid unnecessary re-fetches
 
   // Separate useEffect to set form data after both property and dropdown data are loaded
   useEffect(() => {
     if (property && cities.length > 0 && propertyTypes.length > 0) {
-      console.log('Setting form data with property:', property);
-      console.log('Available cities:', cities);
-      console.log('Available property types:', propertyTypes);
+      console.log('Setting form data with property:', property.id);
+      console.log('Cities loaded:', cities.length, 'Property types loaded:', propertyTypes.length);
       
       setFormData({
         title: property.title || '',
@@ -149,7 +148,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       
       console.log('Form data set with city_id:', property.city_id, 'and property_type_id:', property.property_type_id);
     }
-  }, [property, cities, propertyTypes]);
+  }, [property?.id, cities.length, propertyTypes.length]); // Only run when property ID changes or data is first loaded
 
   const fetchCitiesAndTypes = async () => {
     try {
@@ -284,10 +283,10 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   };
 
   const removeExistingImage = (index: number) => {
-    setFormData({
-      ...formData,
-      images: formData.images.filter((_, i) => i !== index)
-    });
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }));
   };
 
   const addCustomEigenschaftenTag = () => {
