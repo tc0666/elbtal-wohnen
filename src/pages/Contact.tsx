@@ -9,95 +9,32 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import ContactForm from '@/components/ContactForm';
 import { 
   Phone, 
   Mail, 
   MapPin, 
   Clock, 
-  Send,
   Building,
   Users,
-  MessageSquare,
   CheckCircle,
   HeartHandshake
 } from 'lucide-react';
 
 const Contact = () => {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    anrede: '',
-    vorname: '',
-    nachname: '',
-    email: '',
-    telefon: '',
-    strasse: '',
-    nummer: '',
-    plz: '',
-    ort: '',
-    nachricht: '',
-    datenschutz: false
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.datenschutz) {
-      toast({
-        title: "Datenschutz erforderlich",
-        description: "Bitte stimmen Sie der Datenschutzerklärung zu.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      toast({
-        title: "Nachricht gesendet!",
-        description: "Vielen Dank für Ihre Anfrage. Wir melden uns in Kürze bei Ihnen.",
-      });
-      setIsSubmitting(false);
-      
-      // Reset form
-      setFormData({
-        anrede: '',
-        vorname: '',
-        nachname: '',
-        email: '',
-        telefon: '',
-        strasse: '',
-        nummer: '',
-        plz: '',
-        ort: '',
-        nachricht: '',
-        datenschutz: false
-      });
-    }, 1500);
-  };
 
   const contactInfo = [
     {
       icon: Phone,
       title: "Telefon",
-      details: ["+49 123 456 789", "+49 123 456 790"],
+      details: ["+49 123 456 789"],
       description: "Mo-Fr: 9:00-18:00 Uhr, Sa: 9:00-14:00 Uhr"
     },
     {
       icon: Mail,
       title: "E-Mail",
-      details: ["info@elbtal-immobilien.de", "service@elbtal-immobilien.de"],
+      details: ["info@elbtal-immobilien.de"],
       description: "Wir antworten innerhalb von 24 Stunden"
     },
     {
@@ -144,173 +81,9 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="order-2 lg:order-1">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="h-6 w-6 text-primary" />
-                Kontaktformular
-              </CardTitle>
-              <p className="text-muted-foreground">
-                Füllen Sie das Formular aus und wir melden uns schnellstmöglich bei Ihnen.
-              </p>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Message */}
-                <div>
-                  <Label htmlFor="nachricht">Ihre Nachricht *</Label>
-                  <Textarea
-                    id="nachricht"
-                    placeholder="Beschreiben Sie Ihr Anliegen..."
-                    value={formData.nachricht}
-                    onChange={(e) => handleInputChange('nachricht', e.target.value)}
-                    required
-                    className="min-h-[120px] mt-2"
-                  />
-                </div>
-
-                {/* Anrede, Vorname, Nachname */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <Label htmlFor="anrede">Anrede</Label>
-                    <Select value={formData.anrede} onValueChange={(value) => handleInputChange('anrede', value)}>
-                      <SelectTrigger className="mt-2">
-                        <SelectValue placeholder="Bitte wählen" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="herr">Herr</SelectItem>
-                        <SelectItem value="frau">Frau</SelectItem>
-                        <SelectItem value="divers">Divers</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="vorname">Vorname *</Label>
-                    <Input
-                      id="vorname"
-                      value={formData.vorname}
-                      onChange={(e) => handleInputChange('vorname', e.target.value)}
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="nachname">Nachname *</Label>
-                    <Input
-                      id="nachname"
-                      value={formData.nachname}
-                      onChange={(e) => handleInputChange('nachname', e.target.value)}
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-
-                {/* Email & Phone */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="email">E-Mail *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="telefon">Telefon *</Label>
-                    <Input
-                      id="telefon"
-                      type="tel"
-                      value={formData.telefon}
-                      onChange={(e) => handleInputChange('telefon', e.target.value)}
-                      required
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="md:col-span-3">
-                    <Label htmlFor="strasse">Straße</Label>
-                    <Input
-                      id="strasse"
-                      value={formData.strasse}
-                      onChange={(e) => handleInputChange('strasse', e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="nummer">Nr.</Label>
-                    <Input
-                      id="nummer"
-                      value={formData.nummer}
-                      onChange={(e) => handleInputChange('nummer', e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="plz">PLZ</Label>
-                    <Input
-                      id="plz"
-                      value={formData.plz}
-                      onChange={(e) => handleInputChange('plz', e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="ort">Ort</Label>
-                    <Input
-                      id="ort"
-                      value={formData.ort}
-                      onChange={(e) => handleInputChange('ort', e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-                </div>
-
-                {/* Privacy Checkbox */}
-                <div className="flex items-start space-x-2">
-                  <Checkbox
-                    id="datenschutz"
-                    checked={formData.datenschutz}
-                    onCheckedChange={(checked) => handleInputChange('datenschutz', checked as boolean)}
-                  />
-                  <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
-                    Ich habe die{' '}
-                    <a href="#" className="text-primary hover:underline">
-                      Datenschutzerklärung
-                    </a>{' '}
-                    gelesen und willige der Verarbeitung meiner Daten zum Zweck 
-                    der Bearbeitung meiner Anfrage ein. *
-                  </Label>
-                </div>
-
-                {/* Submit Button */}
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  size="lg"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    "Wird gesendet..."
-                  ) : (
-                    <>
-                      <Send className="h-5 w-5 mr-2" />
-                      Jetzt Anfrage senden
-                    </>
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <div className="order-2 lg:order-1">
+            <ContactForm />
+          </div>
 
           {/* Contact Information */}
           <div className="order-1 lg:order-2 space-y-6">

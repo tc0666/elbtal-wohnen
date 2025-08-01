@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import PropertyImageGallery from '@/components/PropertyImageGallery';
+import ContactForm from '@/components/ContactForm';
 import SimpleLocationDisplay from '@/components/SimpleLocationDisplay';
 import { 
   MapPin, 
@@ -361,10 +362,17 @@ const PropertyDetails = () => {
             </Card>
 
             {/* Contact Button */}
-            <Button className="w-full mb-6" size="lg">
-              <MessageSquare className="h-5 w-5 mr-2" />
-              Kontakt aufnehmen
-            </Button>
+            <ContactForm
+              propertyId={property.id}
+              propertyTitle={property.title}
+              isDialog={true}
+              trigger={
+                <Button className="w-full mb-6" size="lg">
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  Kontakt aufnehmen
+                </Button>
+              }
+            />
 
             {/* Location */}
             <Card>
