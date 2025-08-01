@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -352,7 +351,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <div className="md:col-span-2 space-y-2">
                 <Input
                   placeholder="Straße und Hausnummer *"
-                  value={formData.address}
+                  value={formData.address || ''}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   required
                 />
@@ -360,7 +359,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <div className="space-y-2">
                 <Input
                   placeholder="PLZ"
-                  value={formData.postal_code}
+                  value={formData.postal_code || ''}
                   onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
                 />
               </div>
@@ -368,7 +367,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
             <div className="space-y-2">
               <Input
                 placeholder="Stadtteil"
-                value={formData.neighborhood}
+                value={formData.neighborhood || ''}
                 onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
               />
             </div>
@@ -385,7 +384,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Kaltmiete (€) *"
                   type="number"
-                  value={formData.price_monthly}
+                  value={formData.price_monthly || ''}
                   onChange={(e) => setFormData({ ...formData, price_monthly: parseInt(e.target.value) || 0 })}
                   required
                 />
@@ -394,7 +393,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Nebenkosten (€)"
                   type="number"
-                  value={formData.additional_costs_monthly}
+                  value={formData.additional_costs_monthly || ''}
                   onChange={(e) => setFormData({ ...formData, additional_costs_monthly: parseInt(e.target.value) || 0 })}
                 />
               </div>
@@ -402,7 +401,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Wohnfläche (m²) *"
                   type="number"
-                  value={formData.area_sqm}
+                  value={formData.area_sqm || ''}
                   onChange={(e) => setFormData({ ...formData, area_sqm: parseInt(e.target.value) || 0 })}
                   required
                 />
@@ -414,7 +413,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Etage"
                   type="number"
-                  value={formData.floor}
+                  value={formData.floor || ''}
                   onChange={(e) => setFormData({ ...formData, floor: parseInt(e.target.value) || 0 })}
                 />
               </div>
@@ -422,7 +421,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Etagen gesamt"
                   type="number"
-                  value={formData.total_floors}
+                  value={formData.total_floors || ''}
                   onChange={(e) => setFormData({ ...formData, total_floors: parseInt(e.target.value) || 0 })}
                 />
               </div>
@@ -430,7 +429,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Baujahr"
                   type="number"
-                  value={formData.year_built}
+                  value={formData.year_built || ''}
                   onChange={(e) => setFormData({ ...formData, year_built: parseInt(e.target.value) || 0 })}
                 />
               </div>
@@ -438,7 +437,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Kaution (Monate)"
                   type="number"
-                  value={formData.deposit_months}
+                  value={formData.deposit_months || ''}
                   onChange={(e) => setFormData({ ...formData, deposit_months: parseInt(e.target.value) || 3 })}
                 />
               </div>
