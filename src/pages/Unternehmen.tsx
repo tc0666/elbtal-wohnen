@@ -54,8 +54,8 @@ const Unternehmen = () => {
       description: "Vollständige Digitalisierung aller Prozesse und Launch der Online-Plattform"
     },
     {
-      year: "2024",
-      title: "35 Jahre Erfahrung",
+      year: "2025",
+      title: "37 Jahre Erfahrung",
       description: "Über 2.000 verwaltete Einheiten und 10.000 zufriedene Kunden"
     }
   ];
@@ -123,7 +123,7 @@ const Unternehmen = () => {
   const achievements = [
     {
       icon: Trophy,
-      number: "35+",
+      number: "37+",
       label: "Jahre Erfahrung"
     },
     {
@@ -177,72 +177,75 @@ const Unternehmen = () => {
 
         {/* About Section */}
         <div className="mb-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Unsere Geschichte</h2>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  Die Elbtal Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
-                  über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
-                  in der Region entwickelt.
-                </p>
-                <p>
-                  Was als kleine Hausverwaltung begann, ist heute ein modernes Unternehmen mit 
-                  einem umfassenden Serviceangebot. Wir betreuen über 2.000 Wohneinheiten und 
-                  haben bereits mehr als 10.000 Kunden bei ihren Immobilienangelegenheiten unterstützt.
-                </p>
-                <p>
-                  Unser Erfolgsgeheimnis: Die Kombination aus langjähriger Erfahrung, modernster 
-                  Technik und dem persönlichen Kontakt zu unseren Kunden. Jeder Kunde erhält bei 
-                  uns einen festen Ansprechpartner und individuelle Betreuung.
-                </p>
-              </div>
+          <h2 className="text-3xl font-bold text-center mb-12">Unsere Geschichte</h2>
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
+            <div className="aspect-video rounded-lg overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Team meeting in modern office"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="space-y-6">
-              <div className="aspect-video rounded-lg overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Team meeting in modern office"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <Card className="p-6 bg-muted/50">
-                <div className="text-center">
-                  <Building className="h-12 w-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-3">Mission</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Wir schaffen Vertrauen im Immobilienmarkt durch transparente, zuverlässige 
-                    und innovative Dienstleistungen. Unser Ziel ist es, für jeden Kunden die 
-                    optimale Lösung zu finden.
-                  </p>
-                </div>
-              </Card>
+            <div className="space-y-4 text-muted-foreground leading-relaxed">
+              <p>
+                Die Elbtal Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
+                über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
+                in der Region entwickelt.
+              </p>
+              <p>
+                Was als kleine Hausverwaltung begann, ist heute ein modernes Unternehmen mit 
+                einem umfassenden Serviceangebot. Wir betreuen über 2.000 Wohneinheiten und 
+                haben bereits mehr als 10.000 Kunden bei ihren Immobilienangelegenheiten unterstützt.
+              </p>
+              <p>
+                Unser Erfolgsgeheimnis: Die Kombination aus langjähriger Erfahrung, modernster 
+                Technik und dem persönlichen Kontakt zu unseren Kunden. Jeder Kunde erhält bei 
+                uns einen festen Ansprechpartner und individuelle Betreuung.
+              </p>
             </div>
           </div>
+          
+          <Card className="bg-primary text-primary-foreground">
+            <CardContent className="p-8 text-center">
+              <Building className="h-16 w-16 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold mb-4">Unsere Mission</h3>
+              <p className="text-lg leading-relaxed opacity-90">
+                Wir schaffen Vertrauen im Immobilienmarkt durch transparente, zuverlässige 
+                und innovative Dienstleistungen. Unser Ziel ist es, für jeden Kunden die 
+                optimale Lösung zu finden.
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Company Timeline */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Meilensteine unserer Entwicklung</h2>
           
-          <div className="space-y-8">
-            {milestones.map((milestone, index) => (
-              <Card key={index} className="relative">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        {milestone.year}
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">{milestone.title}</h3>
-                      <p className="text-muted-foreground">{milestone.description}</p>
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border"></div>
+            
+            <div className="space-y-12">
+              {milestones.map((milestone, index) => (
+                <div key={index} className="relative flex items-start gap-8">
+                  {/* Timeline dot */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg border-4 border-background">
+                      {milestone.year}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  
+                  {/* Content */}
+                  <Card className="flex-1 shadow-sm hover:shadow-md transition-shadow">
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold mb-2">{milestone.title}</h3>
+                      <p className="text-muted-foreground">{milestone.description}</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -253,8 +256,8 @@ const Unternehmen = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
             <div className="aspect-video rounded-lg overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Innovation and ideas"
+                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Modern technology and innovation"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -318,52 +321,37 @@ const Unternehmen = () => {
         </div>
 
         {/* Services Summary */}
-        <div className="mb-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="aspect-video rounded-lg overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Professional office environment"
-                className="w-full h-full object-cover"
-              />
+        <Card className="mb-20 bg-muted/50">
+          <CardContent className="p-12">
+            <div className="text-center mb-8">
+              <Home className="h-16 w-16 text-primary mx-auto mb-6" />
+              <h2 className="text-3xl font-bold mb-4">Warum Elbtal Immobilienverwaltung?</h2>
             </div>
-            <Card className="bg-muted/50 h-full">
-              <CardContent className="p-8">
-                <Home className="h-12 w-12 text-primary mb-6" />
-                <h2 className="text-2xl font-bold mb-4">Warum Elbtal Immobilienverwaltung?</h2>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h3 className="font-semibold mb-1">Lokale Expertise</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Tiefgreifende Marktkenntnis in Dresden und Umgebung seit über 35 Jahren.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h3 className="font-semibold mb-1">Vollservice</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Alle Immobiliendienstleistungen aus einer Hand - von der Vermietung bis zur Verwaltung.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h3 className="font-semibold mb-1">Persönlicher Service</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Ihr fester Ansprechpartner für alle Anliegen - schnell, zuverlässig, persönlich.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <h3 className="font-semibold mb-3">Lokale Expertise</h3>
+                <p className="text-sm text-muted-foreground">
+                  Tiefgreifende Marktkenntnis in Dresden und Umgebung seit über 35 Jahren.
+                </p>
+              </div>
+              <div className="text-center">
+                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <h3 className="font-semibold mb-3">Vollservice</h3>
+                <p className="text-sm text-muted-foreground">
+                  Alle Immobiliendienstleistungen aus einer Hand - von der Vermietung bis zur Verwaltung.
+                </p>
+              </div>
+              <div className="text-center">
+                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <h3 className="font-semibold mb-3">Persönlicher Service</h3>
+                <p className="text-sm text-muted-foreground">
+                  Ihr fester Ansprechpartner für alle Anliegen - schnell, zuverlässig, persönlich.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Contact CTA */}
         <Card className="bg-primary text-primary-foreground">
