@@ -28,26 +28,26 @@ export const PropertySearchFilter = () => {
   };
 
   return (
-    <Card className="w-full max-w-5xl mx-auto p-8 bg-white/95 backdrop-blur-sm shadow-2xl border-0">
-      <div className="space-y-8">
+    <Card className="w-full max-w-5xl mx-auto p-4 md:p-8 bg-white/95 backdrop-blur-sm shadow-2xl border-0">
+      <div className="space-y-4 md:space-y-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-2">
+          <h2 className="text-xl md:text-2xl font-bold text-foreground mb-2">
             Finden Sie Ihre Traumwohnung
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-sm md:text-base text-muted-foreground">
             Suchen Sie in Berlin, Hamburg, München, Frankfurt, Düsseldorf und weiteren Städten
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
           {/* Location */}
-          <div className="space-y-2">
-            <Label htmlFor="location" className="text-sm font-medium flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-primary" />
+          <div className="space-y-1 md:space-y-2">
+            <Label htmlFor="location" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
+              <MapPin className="h-3 w-3 md:h-4 md:w-4 text-primary" />
               Standort
             </Label>
             <Select value={searchData.location} onValueChange={(value) => setSearchData({ ...searchData, location: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="h-9 md:h-10 text-xs md:text-sm">
                 <SelectValue placeholder="Stadt wählen" />
               </SelectTrigger>
               <SelectContent>
@@ -63,13 +63,13 @@ export const PropertySearchFilter = () => {
           </div>
 
           {/* Property Type */}
-          <div className="space-y-2">
-            <Label htmlFor="propertyType" className="text-sm font-medium flex items-center gap-2">
-              <Home className="h-4 w-4 text-primary" />
+          <div className="space-y-1 md:space-y-2">
+            <Label htmlFor="propertyType" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
+              <Home className="h-3 w-3 md:h-4 md:w-4 text-primary" />
               Objektart
             </Label>
             <Select value={searchData.propertyType} onValueChange={(value) => setSearchData({ ...searchData, propertyType: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="h-9 md:h-10 text-xs md:text-sm">
                 <SelectValue placeholder="Typ wählen" />
               </SelectTrigger>
               <SelectContent>
@@ -83,55 +83,58 @@ export const PropertySearchFilter = () => {
           </div>
 
           {/* Min Price */}
-          <div className="space-y-2">
-            <Label htmlFor="minPrice" className="text-sm font-medium flex items-center gap-2">
-              <Euro className="h-4 w-4 text-primary" />
+          <div className="space-y-1 md:space-y-2">
+            <Label htmlFor="minPrice" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
+              <Euro className="h-3 w-3 md:h-4 md:w-4 text-primary" />
               Miete von
             </Label>
             <Input
               id="minPrice"
               type="number"
               placeholder="z.B. 500"
+              className="h-9 md:h-10 text-xs md:text-sm"
               value={searchData.minPrice}
               onChange={(e) => setSearchData({ ...searchData, minPrice: e.target.value })}
             />
           </div>
 
           {/* Max Price */}
-          <div className="space-y-2">
-            <Label htmlFor="maxPrice" className="text-sm font-medium">
+          <div className="space-y-1 md:space-y-2">
+            <Label htmlFor="maxPrice" className="text-xs md:text-sm font-medium">
               Miete bis
             </Label>
             <Input
               id="maxPrice"
               type="number"
               placeholder="z.B. 2000"
+              className="h-9 md:h-10 text-xs md:text-sm"
               value={searchData.maxPrice}
               onChange={(e) => setSearchData({ ...searchData, maxPrice: e.target.value })}
             />
           </div>
 
           {/* Area */}
-          <div className="space-y-2">
-            <Label htmlFor="minArea" className="text-sm font-medium">
+          <div className="space-y-1 md:space-y-2">
+            <Label htmlFor="minArea" className="text-xs md:text-sm font-medium">
               Fläche ab (m²)
             </Label>
             <Input
               id="minArea"
               type="number"
               placeholder="z.B. 50"
+              className="h-9 md:h-10 text-xs md:text-sm"
               value={searchData.minArea}
               onChange={(e) => setSearchData({ ...searchData, minArea: e.target.value })}
             />
           </div>
 
           {/* Rooms */}
-          <div className="space-y-2">
-            <Label htmlFor="rooms" className="text-sm font-medium">
+          <div className="space-y-1 md:space-y-2">
+            <Label htmlFor="rooms" className="text-xs md:text-sm font-medium">
               Zimmer
             </Label>
             <Select value={searchData.rooms} onValueChange={(value) => setSearchData({ ...searchData, rooms: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="h-9 md:h-10 text-xs md:text-sm">
                 <SelectValue placeholder="Anzahl" />
               </SelectTrigger>
               <SelectContent>
@@ -145,10 +148,10 @@ export const PropertySearchFilter = () => {
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center col-span-2 md:col-span-3 lg:col-span-6">
           <Button 
             onClick={handleSearch}
-            className="px-8 py-2 bg-primary hover:bg-primary-dark text-primary-foreground font-medium"
+            className="w-full md:w-auto px-6 md:px-8 py-2 bg-primary hover:bg-primary-dark text-primary-foreground font-medium text-sm md:text-base"
             size="lg"
           >
             <Search className="h-4 w-4 mr-2" />
