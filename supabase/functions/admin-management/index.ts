@@ -113,6 +113,100 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'get_analytics':
+        const { timeRange } = data
+        const daysAgo = parseInt(timeRange) || 30
+        const dateThreshold = new Date()
+        dateThreshold.setDate(dateThreshold.getDate() - daysAgo)
+        
+        // Get all properties count
+        const { data: allProperties, error: propCountError } = await supabase
+          .from('properties')
+          .select('id, title, is_active')
+        
+        if (propCountError) throw propCountError
+        
+        // Get all contact requests
+        const { data: allRequests, error: allRequestsError } = await supabase
+          .from('contact_requests')
+          .select('id, status, created_at, property_id')
+        
+        if (allRequestsError) throw allRequestsError
+        
+        // Get inquiries by property to find trending properties
+        const propertyInquiries = {}
+        allRequests.forEach(request => {
+          if (request.property_id) {
+            if (!propertyInquiries[request.property_id]) {
+              propertyInquiries[request.property_id] = 0
+            }
+            propertyInquiries[request.property_id]++
+          }
+        })
+        
+        // Create trending properties list
+        const topPerformingProperties = allProperties
+          .map(property => ({
+            id: property.id,
+            title: property.title,
+            inquiries: propertyInquiries[property.id] || 0
+          }))
+          .sort((a, b) => b.inquiries - a.inquiries)
+          .slice(0, 10)
+        
+        // Calculate inquiries by status
+        const inquiriesByStatus = allRequests.reduce((acc, request) => {
+          const existing = acc.find(item => item.status === request.status)
+          if (existing) {
+            existing.count++
+          } else {
+            acc.push({ status: request.status, count: 1 })
+          }
+          return acc
+        }, [])
+        
+        // Filter recent inquiries
+        const recentRequests = allRequests.filter(request => 
+          new Date(request.created_at) >= dateThreshold
+        )
+        
+        // Calculate monthly trends (simplified - last 6 months)
+        const monthlyInquiries = []
+        for (let i = 5; i >= 0; i--) {
+          const month = new Date()
+          month.setMonth(month.getMonth() - i)
+          const monthKey = month.toLocaleDateString('de-DE', { month: 'short' })
+          
+          const monthStart = new Date(month.getFullYear(), month.getMonth(), 1)
+          const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0)
+          
+          const monthCount = allRequests.filter(request => {
+            const reqDate = new Date(request.created_at)
+            return reqDate >= monthStart && reqDate <= monthEnd
+          }).length
+          
+          monthlyInquiries.push({
+            month: monthKey,
+            count: monthCount
+          })
+        }
+        
+        const analytics = {
+          totalProperties: allProperties.length,
+          activeProperties: allProperties.filter(p => p.is_active).length,
+          totalInquiries: allRequests.length,
+          newInquiries: allRequests.filter(r => r.status === 'new').length,
+          inquiriesThisMonth: recentRequests.length,
+          topPerformingProperties,
+          inquiriesByStatus,
+          monthlyInquiries
+        }
+        
+        return new Response(
+          JSON.stringify({ analytics }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+
       case 'get_property_types':
         const { data: types, error: typesError } = await supabase
           .from('property_types')
