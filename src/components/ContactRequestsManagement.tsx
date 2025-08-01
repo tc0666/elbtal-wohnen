@@ -213,56 +213,62 @@ const ContactRequestsManagement = () => {
         <CardContent>
           {currentRequests.length > 0 ? (
             <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Kontakt</TableHead>
-                    <TableHead>Immobilie</TableHead>
-                    <TableHead>Datum</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Aktionen</TableHead>
-                  </TableRow>
-                </TableHeader>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[120px]">Name</TableHead>
+                      <TableHead className="min-w-[160px]">Kontakt</TableHead>
+                      <TableHead className="min-w-[120px]">Immobilie</TableHead>
+                      <TableHead className="min-w-[100px]">Datum</TableHead>
+                      <TableHead className="min-w-[140px]">Status</TableHead>
+                      <TableHead className="text-right min-w-[100px]">Aktionen</TableHead>
+                    </TableRow>
+                  </TableHeader>
                 <TableBody>
                   {currentRequests.map((request) => (
                     <TableRow key={request.id}>
                       <TableCell>
                         <div>
-                          <div className="font-medium">
+                          <div className="font-medium text-sm">
                             {request.anrede && `${request.anrede === 'herr' ? 'Hr.' : request.anrede === 'frau' ? 'Fr.' : 'Divers'} `}
-                            {request.vorname} {request.nachname}
+                            <span className="block sm:inline">{request.vorname} {request.nachname}</span>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1">
-                          <div className="flex items-center gap-1 text-sm">
-                            <Mail className="h-3 w-3" />
-                            {request.email}
+                          <div className="flex items-center gap-1 text-xs">
+                            <Mail className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate">{request.email}</span>
                           </div>
-                          <div className="flex items-center gap-1 text-sm">
-                            <Phone className="h-3 w-3" />
-                            {request.telefon}
+                          <div className="flex items-center gap-1 text-xs">
+                            <Phone className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate">{request.telefon}</span>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
                         {request.property ? (
-                          <div className="flex items-center gap-1 text-sm">
-                            <Building2 className="h-3 w-3" />
-                            <span className="truncate max-w-[150px]">
+                          <div className="flex items-center gap-1 text-xs">
+                            <Building2 className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate max-w-[100px]">
                               {request.property.title}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground text-sm">Allgemeine Anfrage</span>
+                          <span className="text-muted-foreground text-xs">Allgemein</span>
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1 text-sm">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(request.created_at).toLocaleDateString('de-DE')}
+                        <div className="flex items-center gap-1 text-xs">
+                          <Calendar className="h-3 w-3 flex-shrink-0" />
+                          <span className="block">
+                            {new Date(request.created_at).toLocaleDateString('de-DE', {
+                              day: '2-digit',
+                              month: '2-digit'
+                            })}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -270,7 +276,7 @@ const ContactRequestsManagement = () => {
                           value={request.status} 
                           onValueChange={(value) => updateStatus(request.id, value)}
                         >
-                          <SelectTrigger className="w-32">
+                          <SelectTrigger className="w-28 text-xs">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -282,17 +288,18 @@ const ContactRequestsManagement = () => {
                         </Select>
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleViewRequest(request)}
+                            className="p-2"
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Button variant="outline" size="sm">
+                              <Button variant="outline" size="sm" className="p-2">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </AlertDialogTrigger>
@@ -320,7 +327,8 @@ const ContactRequestsManagement = () => {
                     </TableRow>
                   ))}
                 </TableBody>
-              </Table>
+                </Table>
+              </div>
 
               {/* Pagination */}
               {totalPages > 1 && (
