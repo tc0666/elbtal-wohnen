@@ -8,6 +8,7 @@ import Mietangebote from "./pages/Mietangebote";
 import PropertyDetails from "./pages/PropertyDetails";
 import Vermietungsablauf from "./pages/Vermietungsablauf";
 import Leistungsübersicht from "./pages/Leistungsübersicht";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/immobilie/:id" element={<PropertyDetails />} />
           <Route path="/vermietungsablauf" element={<Vermietungsablauf />} />
           <Route path="/leistungsübersicht" element={<Leistungsübersicht />} />
+          <Route path="/kontakt" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
