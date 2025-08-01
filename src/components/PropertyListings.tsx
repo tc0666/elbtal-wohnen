@@ -35,6 +35,28 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
         return;
       }
 
+      // First, get city and property type IDs if filtering by them
+      let cityId: string | null = null;
+      let propertyTypeId: string | null = null;
+
+      if (filters?.location) {
+        const { data: cityData } = await supabase
+          .from('cities')
+          .select('id')
+          .eq('slug', filters.location)
+          .single();
+        cityId = cityData?.id || null;
+      }
+
+      if (filters?.propertyType) {
+        const { data: propertyTypeData } = await supabase
+          .from('property_types')
+          .select('id')
+          .eq('slug', filters.propertyType)
+          .single();
+        propertyTypeId = propertyTypeData?.id || null;
+      }
+
       // Build the main query with joins and filters
       const from = (currentPage - 1) * itemsPerPage;
       const to = from + itemsPerPage - 1;
@@ -49,13 +71,11 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
         .eq('is_active', true);
 
       // Apply filters
-      if (filters?.location) {
-        // For location filter, we need to filter by city.slug
-        query = query.eq('cities.slug', filters.location);
+      if (cityId) {
+        query = query.eq('city_id', cityId);
       }
-      if (filters?.propertyType) {
-        // For property type filter, we need to filter by property_types.slug
-        query = query.eq('property_types.slug', filters.propertyType);
+      if (propertyTypeId) {
+        query = query.eq('property_type_id', propertyTypeId);
       }
       if (filters?.minPrice) {
         query = query.gte('price_monthly', parseInt(filters.minPrice));
