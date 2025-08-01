@@ -252,51 +252,17 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Grunddaten</CardTitle>
+            <CardTitle>Grundinformationen</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Input
                   placeholder="Titel *"
-                  value={formData.title}
+                  value={formData.title || ''}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
                 />
-              </div>
-              <div className="space-y-2">
-                <Input
-                  placeholder="Zimmer * (z.B. 3)"
-                  value={formData.rooms}
-                  onChange={(e) => setFormData({ ...formData, rooms: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Textarea
-                placeholder="Beschreibung"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={4}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Select value={formData.city_id} onValueChange={(value) => setFormData({ ...formData, city_id: value })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Stadt auswählen *" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city.id} value={city.id}>
-                        {city.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
               <div className="space-y-2">
                 <Select value={formData.property_type_id} onValueChange={(value) => setFormData({ ...formData, property_type_id: value })}>
@@ -312,6 +278,30 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Beschreibung"
+                value={formData.description || ''}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                rows={4}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Select value={formData.city_id} onValueChange={(value) => setFormData({ ...formData, city_id: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Stadt auswählen *" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cities.map((city) => (
+                    <SelectItem key={city.id} value={city.id}>
+                      {city.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </CardContent>
         </Card>
@@ -350,10 +340,18 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Preise & Details</CardTitle>
+            <CardTitle>Grunddaten</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Input
+                placeholder="ID (wird automatisch generiert)"
+                value={property?.id || 'Wird automatisch generiert'}
+                disabled
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Input
                   placeholder="Kaltmiete (€) *"
@@ -361,6 +359,14 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   value={formData.price_monthly || ''}
                   onChange={(e) => setFormData({ ...formData, price_monthly: parseInt(e.target.value) || 0 })}
                   required
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
+                  placeholder="Nebenkosten (€)"
+                  type="number"
+                  value={formData.additional_costs_monthly || ''}
+                  onChange={(e) => setFormData({ ...formData, additional_costs_monthly: parseInt(e.target.value) || 0 })}
                 />
               </div>
               <div className="space-y-2">
@@ -373,25 +379,39 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               </div>
               <div className="space-y-2">
                 <Input
-                  placeholder="Nebenkosten (€)"
+                  placeholder="Kaution (Monate)"
                   type="number"
-                  value={formData.additional_costs_monthly || ''}
-                  onChange={(e) => setFormData({ ...formData, additional_costs_monthly: parseInt(e.target.value) || 0 })}
+                  value={formData.deposit_months || ''}
+                  onChange={(e) => setFormData({ ...formData, deposit_months: parseInt(e.target.value) || 3 })}
                 />
               </div>
             </div>
-            
-            <div className="space-y-2">
-              <Input
-                placeholder="Wohnfläche (m²) *"
-                type="number"
-                value={formData.area_sqm || ''}
-                onChange={(e) => setFormData({ ...formData, area_sqm: parseInt(e.target.value) || 0 })}
-                required
-              />
-            </div>
+          </CardContent>
+        </Card>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Flächenangaben</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Input
+                  placeholder="Wohnfläche (m²) *"
+                  type="number"
+                  value={formData.area_sqm || ''}
+                  onChange={(e) => setFormData({ ...formData, area_sqm: parseInt(e.target.value) || 0 })}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
+                  placeholder="Zimmer * (z.B. 3)"
+                  value={formData.rooms || ''}
+                  onChange={(e) => setFormData({ ...formData, rooms: e.target.value })}
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Etage"
@@ -402,36 +422,36 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               </div>
               <div className="space-y-2">
                 <Input
-                  placeholder="Etagen gesamt"
-                  type="number"
-                  value={formData.total_floors || ''}
-                  onChange={(e) => setFormData({ ...formData, total_floors: parseInt(e.target.value) || 0 })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Input
                   placeholder="Baujahr"
                   type="number"
                   value={formData.year_built || ''}
                   onChange={(e) => setFormData({ ...formData, year_built: parseInt(e.target.value) || 0 })}
                 />
               </div>
-              <div className="space-y-2">
-                <Input
-                  placeholder="Kaution (Monate)"
-                  type="number"
-                  value={formData.deposit_months || ''}
-                  onChange={(e) => setFormData({ ...formData, deposit_months: parseInt(e.target.value) || 3 })}
-                />
-              </div>
             </div>
-
+            
             <div className="space-y-2">
               <Input
-                placeholder="Verfügbar ab"
+                placeholder="Verfügbar ab (YYYY-MM-DD)"
                 type="date"
-                value={formData.available_from}
+                value={formData.available_from || ''}
                 onChange={(e) => setFormData({ ...formData, available_from: e.target.value })}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Weitere Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                placeholder="Etagen gesamt"
+                type="number"
+                value={formData.total_floors || ''}
+                onChange={(e) => setFormData({ ...formData, total_floors: parseInt(e.target.value) || 0 })}
               />
             </div>
           </CardContent>
