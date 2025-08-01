@@ -1,14 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import { MapPin } from 'lucide-react';
 
-// Fix for default markers in Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+// Import Leaflet CSS directly in the component
+const CSS_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+
+// Ensure CSS is loaded
+if (typeof window !== 'undefined' && !document.querySelector(`link[href="${CSS_URL}"]`)) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = CSS_URL;
+  document.head.appendChild(link);
+}
+
+// Fix for default markers in Leaflet with CDN URLs
+if (typeof window !== 'undefined' && (L.Icon.Default.prototype as any)._getIconUrl) {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+}
+
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
 interface PropertyMapProps {
@@ -31,22 +44,31 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
   // Free geocoding using Nominatim (OpenStreetMap)
   const geocodeAddress = async (fullAddress: string): Promise<Coordinates | null> => {
     try {
+      console.log('Geocoding address:', fullAddress);
       const encodedAddress = encodeURIComponent(fullAddress);
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&countrycodes=de&limit=1&addressdetails=1`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&countrycodes=de&limit=1&addressdetails=1`,
+        {
+          headers: {
+            'User-Agent': 'PropertyMap/1.0'
+          }
+        }
       );
       
       if (!response.ok) {
-        throw new Error('Geocoding failed');
+        throw new Error(`Geocoding failed: ${response.status}`);
       }
       
       const data = await response.json();
+      console.log('Geocoding response:', data);
       
       if (data && data.length > 0) {
-        return {
+        const coords = {
           lat: parseFloat(data[0].lat),
           lng: parseFloat(data[0].lon)
         };
+        console.log('Found coordinates:', coords);
+        return coords;
       }
       
       return null;
@@ -63,19 +85,31 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       try {
         setLoading(true);
         setError('');
+        console.log('Initializing map for:', address, city);
+
+        // Wait a bit for CSS to load
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         // Geocode the address using free Nominatim service
         const fullAddress = `${address}, ${city}, Germany`;
         const coordinates = await geocodeAddress(fullAddress);
 
         if (!coordinates) {
+          console.error('No coordinates found for address');
           setError('Could not find location for this address');
           setLoading(false);
           return;
         }
 
+        console.log('Creating map with coordinates:', coordinates);
+        
         // Initialize map with OpenStreetMap tiles (completely free)
-        map.current = L.map(mapContainer.current).setView([coordinates.lat, coordinates.lng], 15);
+        map.current = L.map(mapContainer.current, {
+          center: [coordinates.lat, coordinates.lng],
+          zoom: 15,
+          zoomControl: true,
+          scrollWheelZoom: true
+        });
 
         // Add OpenStreetMap tile layer (free)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

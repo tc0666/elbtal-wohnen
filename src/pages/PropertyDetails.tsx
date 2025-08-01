@@ -179,8 +179,9 @@ const PropertyDetails = () => {
                               alt={`${property.title} - Bild ${index + 1}`}
                               className="w-full h-full object-cover"
                               loading="lazy"
+                              onLoad={() => console.log(`Image ${index + 1} loaded:`, image)}
                               onError={(e) => {
-                                console.error(`Failed to load image: ${image}`);
+                                console.error(`Failed to load image ${index + 1}:`, image);
                                 const target = e.target as HTMLImageElement;
                                 target.src = '/placeholder.svg';
                               }}
