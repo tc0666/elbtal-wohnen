@@ -309,16 +309,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="outline" onClick={onClose} className="flex items-center gap-2">
-          <ArrowLeft className="h-4 w-4" />
-          Zurück
-        </Button>
-        <h1 className="text-3xl font-bold">
-          {property ? 'Immobilie bearbeiten' : 'Neue Immobilie'}
-        </h1>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
