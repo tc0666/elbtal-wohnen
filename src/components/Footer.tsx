@@ -1,16 +1,14 @@
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
-
 export const Footer = () => {
-  return (
-    <footer className="bg-secondary/20 border-t border-border">
+  return <footer className="bg-secondary/20 border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div>
               <h3 className="text-xl font-bold text-primary mb-2">Elbtal</h3>
-              <p className="text-sm text-muted-foreground">Immobilien</p>
+              <p className="text-sm text-muted-foreground">Immobilienverwaltung seit 1988</p>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Ihr vertrauensvoller Partner für hochwertige Mietwohnungen in Deutschland. 
@@ -78,6 +76,5 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
