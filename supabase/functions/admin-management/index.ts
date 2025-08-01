@@ -170,29 +170,33 @@ serve(async (req) => {
           new Date(request.created_at) >= dateThreshold
         )
         
-        // Calculate monthly trends (last 12 months for better visualization)
+        // Calculate monthly trends starting from August (last 12 months)
         const monthlyInquiries = []
-        for (let i = 11; i >= 0; i--) {
-          const month = new Date()
-          month.setMonth(month.getMonth() - i)
+        const currentDate = new Date()
+        const currentYear = currentDate.getFullYear()
+        const currentMonth = currentDate.getMonth() // 0-based
+        
+        // Start from August (month 7) of the appropriate year
+        const startMonth = 7 // August
+        const startYear = currentMonth >= 7 ? currentYear : currentYear - 1
+        
+        for (let i = 0; i < 12; i++) {
+          const targetMonth = (startMonth + i) % 12
+          const targetYear = startYear + Math.floor((startMonth + i) / 12)
           
-          // Get month and year for better labeling
-          const monthYear = month.toLocaleDateString('de-DE', { 
-            month: 'short', 
-            year: i > 5 ? '2-digit' : undefined 
-          })
-          
-          const monthStart = new Date(month.getFullYear(), month.getMonth(), 1)
-          const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0)
+          const monthStart = new Date(targetYear, targetMonth, 1)
+          const monthEnd = new Date(targetYear, targetMonth + 1, 0)
           
           const monthCount = allRequests.filter(request => {
             const reqDate = new Date(request.created_at)
             return reqDate >= monthStart && reqDate <= monthEnd
           }).length
           
+          const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
           monthlyInquiries.push({
-            month: monthYear,
-            count: monthCount
+            month: monthNames[targetMonth],
+            count: monthCount,
+            year: targetYear
           })
         }
         
