@@ -156,13 +156,13 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
   };
 
   useEffect(() => {
-    // Add a small delay to ensure the component is fully mounted
+    // Add a longer delay to ensure the component is fully mounted and visible
     const timer = setTimeout(() => {
       if (address && city && mapContainer.current) {
         console.log('🗺️ Starting delayed map initialization');
         initializeMap();
       }
-    }, 200);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [address, city]);

@@ -144,6 +144,8 @@ const PropertyDetails = () => {
                 src={images[featuredImageIndex]}
                 alt={property.title}
                 className="w-full h-[400px] object-cover rounded-lg"
+                loading="eager"
+                crossOrigin="anonymous"
               />
               {property.is_featured && (
                 <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground">
@@ -178,21 +180,8 @@ const PropertyDetails = () => {
                               src={image}
                               alt={`${property.title} - Bild ${index + 1}`}
                               className="w-full h-full object-cover"
-                              loading="lazy"
-                              onLoad={() => console.log(`Image ${index + 1} loaded:`, image)}
-                              onError={(e) => {
-                                console.error(`Failed to load image ${index + 1}:`, image);
-                                const target = e.target as HTMLImageElement;
-                                // Try reloading once before fallback
-                                if (!target.dataset.retried) {
-                                  target.dataset.retried = 'true';
-                                  setTimeout(() => {
-                                    target.src = image + '&retry=1';
-                                  }, 1000);
-                                } else {
-                                  target.src = '/placeholder.svg';
-                                }
-                              }}
+                              loading="eager"
+                              crossOrigin="anonymous"
                             />
                           </button>
                         </div>
