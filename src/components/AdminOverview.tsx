@@ -99,14 +99,14 @@ const AdminOverview = () => {
     return (
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">Dashboard Übersicht</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {[1, 2, 3, 4].map((i) => (
             <Card key={i} className="animate-pulse">
               <CardHeader className="pb-2">
                 <div className="h-4 bg-muted rounded w-3/4"></div>
               </CardHeader>
               <CardContent>
-                <div className="h-8 bg-muted rounded w-1/2 mb-2"></div>
+                <div className="h-6 sm:h-8 bg-muted rounded w-1/2 mb-2"></div>
                 <div className="h-3 bg-muted rounded w-2/3"></div>
               </CardContent>
             </Card>
@@ -118,28 +118,28 @@ const AdminOverview = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Dashboard Übersicht</h1>
-        <div className="text-sm text-muted-foreground">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Dashboard Übersicht</h1>
+        <div className="text-xs sm:text-sm text-muted-foreground">
           Zuletzt aktualisiert: {new Date().toLocaleString('de-DE')}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
         {statsCards.map((card, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+              <CardTitle className="text-sm font-medium leading-tight">
                 {card.title}
               </CardTitle>
-              <card.icon className={`h-5 w-5 ${card.color}`} />
+              <card.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${card.color} shrink-0`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-xl sm:text-2xl font-bold">
                 {card.value}
-                {card.suffix && <span className="text-lg">{card.suffix}</span>}
+                {card.suffix && <span className="text-base sm:text-lg">{card.suffix}</span>}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground leading-tight">
                 {card.description}
               </p>
             </CardContent>
@@ -147,7 +147,7 @@ const AdminOverview = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Schnellzugriff</CardTitle>
@@ -155,15 +155,15 @@ const AdminOverview = () => {
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
               <div className="flex items-center gap-3">
-                <Building2 className="h-5 w-5 text-blue-600" />
-                <span>Neue Immobilie hinzufügen</span>
+                <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 shrink-0" />
+                <span className="text-sm sm:text-base">Neue Immobilie hinzufügen</span>
               </div>
-              <span className="text-xs text-muted-foreground">Strg+N</span>
+              <span className="text-xs text-muted-foreground hidden sm:block">Strg+N</span>
             </div>
             <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
               <div className="flex items-center gap-3">
-                <MessageSquare className="h-5 w-5 text-green-600" />
-                <span>Neue Anfragen prüfen</span>
+                <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 shrink-0" />
+                <span className="text-sm sm:text-base">Neue Anfragen prüfen</span>
               </div>
               <span className="text-xs text-muted-foreground">{stats.newRequests} neu</span>
             </div>
@@ -176,22 +176,22 @@ const AdminOverview = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between">
-              <span>Datenbank</span>
+              <span className="text-sm sm:text-base">Datenbank</span>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-green-600">Online</span>
+                <span className="text-xs sm:text-sm text-green-600">Online</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span>API Status</span>
+              <span className="text-sm sm:text-base">API Status</span>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-green-600">Erreichbar</span>
+                <span className="text-xs sm:text-sm text-green-600">Erreichbar</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span>Letzter Backup</span>
-              <span className="text-sm text-muted-foreground">Automatisch</span>
+              <span className="text-sm sm:text-base">Letzter Backup</span>
+              <span className="text-xs sm:text-sm text-muted-foreground">Automatisch</span>
             </div>
           </CardContent>
         </Card>

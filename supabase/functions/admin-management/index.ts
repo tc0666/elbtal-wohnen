@@ -19,10 +19,10 @@ serve(async (req) => {
 
     const { action, token, ...data } = await req.json()
 
-    // Verify admin token
+    // Verify admin token using sessions table
     if (!token) {
       return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
+        JSON.stringify({ error: 'Token required' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
           status: 401 
@@ -30,22 +30,19 @@ serve(async (req) => {
       )
     }
 
-    try {
-      const decoded = atob(token)
-      const [userId] = decoded.split('-')
-      
-      const { data: user, error } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('id', userId)
-        .single()
+    // Verify session token in admin_sessions table
+    const { data: sessionData, error: sessionError } = await supabase
+      .from('admin_sessions')
+      .select('user_id, is_active, expires_at')
+      .eq('token', token)
+      .eq('is_active', true)
+      .gte('expires_at', new Date().toISOString())
+      .single()
 
-      if (error || !user) {
-        throw new Error('Invalid token')
-      }
-    } catch {
+    if (sessionError || !sessionData) {
+      console.error('Invalid session:', sessionError)
       return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
+        JSON.stringify({ error: 'Invalid or expired session' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
           status: 401 
@@ -110,7 +107,7 @@ serve(async (req) => {
         if (typesError) throw typesError
 
         return new Response(
-          JSON.stringify({ types }),
+          JSON.stringify({ property_types: types }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
