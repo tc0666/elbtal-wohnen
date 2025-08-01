@@ -294,7 +294,7 @@ const AnalyticsReporting = () => {
                             points={points}
                             fill="none"
                             stroke="url(#lineGradient)"
-                            strokeWidth="0.8"
+                            strokeWidth="1"
                             className="drop-shadow-sm"
                           />
                           {/* Data points */}
