@@ -64,7 +64,7 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
         <div className="flex flex-col md:flex-row">
           {/* Image */}
           <div className="relative md:w-80 md:flex-shrink-0">
-            <div className="aspect-[4/3] md:aspect-[3/2] overflow-hidden">
+            <div className="h-full min-h-[200px] md:min-h-full overflow-hidden">
               <img
                 src={property.images[0] || '/placeholder.svg'}
                 alt={property.title}
