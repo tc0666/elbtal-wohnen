@@ -82,15 +82,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log('PropertyForm received property:', property?.id);
+    console.log('PropertyForm received property:', property);
     fetchCitiesAndTypes();
-  }, [property?.id]); // Only depend on property ID to avoid unnecessary re-fetches
+  }, [property]);
 
   // Separate useEffect to set form data after both property and dropdown data are loaded
   useEffect(() => {
     if (property && cities.length > 0 && propertyTypes.length > 0) {
-      console.log('Setting form data with property:', property.id);
-      console.log('Cities loaded:', cities.length, 'Property types loaded:', propertyTypes.length);
+      console.log('Setting form data with property:', property);
+      console.log('Available cities:', cities);
+      console.log('Available property types:', propertyTypes);
       
       setFormData({
         title: property.title || '',
@@ -148,7 +149,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       
       console.log('Form data set with city_id:', property.city_id, 'and property_type_id:', property.property_type_id);
     }
-  }, [property?.id, cities.length, propertyTypes.length]); // Only run when property ID changes or data is first loaded
+  }, [property, cities, propertyTypes]);
 
   const fetchCitiesAndTypes = async () => {
     try {
@@ -283,10 +284,10 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
   };
 
   const removeExistingImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }));
+    setFormData({
+      ...formData,
+      images: formData.images.filter((_, i) => i !== index)
+    });
   };
 
   const addCustomEigenschaftenTag = () => {
@@ -309,6 +310,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Button variant="outline" onClick={onClose} className="flex items-center gap-2">
+          <ArrowLeft className="h-4 w-4" />
+          Zurück
+        </Button>
+        <h1 className="text-3xl font-bold">
+          {property ? 'Immobilie bearbeiten' : 'Neue Immobilie'}
+        </h1>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
@@ -320,12 +331,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Titel *"
                   value={formData.title || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Select value={formData.property_type_id} onValueChange={(value) => setFormData(prev => ({ ...prev, property_type_id: value }))}>
+                <Select value={formData.property_type_id} onValueChange={(value) => setFormData({ ...formData, property_type_id: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Objektart auswählen *" />
                   </SelectTrigger>
@@ -344,13 +355,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Textarea
                 placeholder="Beschreibung"
                 value={formData.description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
               />
             </div>
 
             <div className="space-y-2">
-              <Select value={formData.city_id} onValueChange={(value) => setFormData(prev => ({ ...prev, city_id: value }))}>
+              <Select value={formData.city_id} onValueChange={(value) => setFormData({ ...formData, city_id: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="Stadt auswählen *" />
                 </SelectTrigger>
@@ -376,7 +387,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Straße und Hausnummer *"
                   value={formData.address || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   required
                 />
               </div>
@@ -384,7 +395,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="PLZ"
                   value={formData.postal_code || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, postal_code: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
                 />
               </div>
             </div>
@@ -392,7 +403,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Input
                 placeholder="Stadtteil"
                 value={formData.neighborhood || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, neighborhood: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
               />
             </div>
           </CardContent>
@@ -417,7 +428,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Kaltmiete (€) *"
                   type="number"
                   value={formData.price_monthly !== null ? formData.price_monthly : ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, price_monthly: e.target.value ? parseInt(e.target.value) : null }))}
+                  onChange={(e) => setFormData({ ...formData, price_monthly: e.target.value ? parseInt(e.target.value) : null })}
                   required
                 />
               </div>
@@ -426,7 +437,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Nebenkosten (€)"
                   type="number"
                   value={formData.additional_costs_monthly !== null ? formData.additional_costs_monthly : ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, additional_costs_monthly: e.target.value ? parseInt(e.target.value) : null }))}
+                  onChange={(e) => setFormData({ ...formData, additional_costs_monthly: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
               <div className="space-y-2">
@@ -434,7 +445,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Warmmiete (€)"
                   type="number"
                   value={formData.warmmiete_monthly !== null ? formData.warmmiete_monthly : ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, warmmiete_monthly: e.target.value ? parseInt(e.target.value) : null }))}
+                  onChange={(e) => setFormData({ ...formData, warmmiete_monthly: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
               <div className="space-y-2">
@@ -442,7 +453,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Kaution (Monate)"
                   type="number"
                   value={formData.deposit_months !== null ? formData.deposit_months : ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, deposit_months: e.target.value ? parseInt(e.target.value) : null }))}
+                  onChange={(e) => setFormData({ ...formData, deposit_months: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
             </div>
@@ -460,7 +471,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Wohnfläche (m²) *"
                   type="number"
                   value={formData.area_sqm || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, area_sqm: e.target.value ? parseInt(e.target.value) : 0 }))}
+                  onChange={(e) => setFormData({ ...formData, area_sqm: e.target.value ? parseInt(e.target.value) : 0 })}
                   required
                 />
               </div>
@@ -468,7 +479,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Zimmer * (z.B. 3)"
                   value={formData.rooms || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, rooms: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, rooms: e.target.value })}
                   required
                 />
               </div>
@@ -477,7 +488,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Etage"
                   type="number"
                   value={formData.floor !== null ? formData.floor : ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, floor: e.target.value ? parseInt(e.target.value) : null }))}
+                  onChange={(e) => setFormData({ ...formData, floor: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
               <div className="space-y-2">
@@ -485,7 +496,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                   placeholder="Baujahr"
                   type="number"
                   value={formData.year_built !== null ? formData.year_built : ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, year_built: e.target.value ? parseInt(e.target.value) : null }))}
+                  onChange={(e) => setFormData({ ...formData, year_built: e.target.value ? parseInt(e.target.value) : null })}
                 />
               </div>
             </div>
@@ -495,7 +506,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 placeholder="Verfügbar ab (YYYY-MM-DD)"
                 type="date"
                 value={formData.available_from || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, available_from: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, available_from: e.target.value })}
               />
             </div>
           </CardContent>
@@ -511,7 +522,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 placeholder="Etagen gesamt"
                 type="number"
                 value={formData.total_floors !== null ? formData.total_floors : ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, total_floors: e.target.value ? parseInt(e.target.value) : null }))}
+                onChange={(e) => setFormData({ ...formData, total_floors: e.target.value ? parseInt(e.target.value) : null })}
               />
             </div>
           </CardContent>
@@ -527,35 +538,35 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 <Input
                   placeholder="Energieausweis-Typ (z.B. Verbrauchsausweis)"
                   value={formData.energy_certificate_type}
-                  onChange={(e) => setFormData(prev => ({ ...prev, energy_certificate_type: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, energy_certificate_type: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Energiekennwert (z.B. 120 kWh/(m²·a))"
                   value={formData.energy_certificate_value}
-                  onChange={(e) => setFormData(prev => ({ ...prev, energy_certificate_value: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, energy_certificate_value: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Heizungsart (z.B. Zentralheizung)"
                   value={formData.heating_type}
-                  onChange={(e) => setFormData(prev => ({ ...prev, heating_type: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, heating_type: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Energieträger (z.B. Gas, Öl, Fernwärme)"
                   value={formData.heating_energy_source}
-                  onChange={(e) => setFormData(prev => ({ ...prev, heating_energy_source: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, heating_energy_source: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
                 <Input
                   placeholder="Internet-Geschwindigkeit (z.B. 100 Mbit/s)"
                   value={formData.internet_speed}
-                  onChange={(e) => setFormData(prev => ({ ...prev, internet_speed: e.target.value }))}
+                  onChange={(e) => setFormData({ ...formData, internet_speed: e.target.value })}
                 />
               </div>
             </div>
@@ -571,7 +582,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Textarea
                 placeholder="Detaillierte Ausstattungsbeschreibung (z.B. Luxuriöse 4-Zimmer Wohnung mit exklusiver Ausstattung. Marmorbäder, Einbauschränke, Klimaanlage und Alarmanlage. Tiefgaragenstellplatz inklusive.)"
                 value={formData.features_description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, features_description: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, features_description: e.target.value })}
                 rows={4}
               />
             </div>
@@ -750,7 +761,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Textarea
                 placeholder="Detaillierte Beschreibung der besonderen Eigenschaften (z.B. Diese Wohnung besticht durch ihre moderne Ausstattung und durchdachte Raumaufteilung...)"
                 value={formData.eigenschaften_description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, eigenschaften_description: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, eigenschaften_description: e.target.value })}
                 rows={3}
               />
             </div>
@@ -766,7 +777,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Textarea
                 placeholder="Weitere Beschreibung (z.B. Exklusives Wohnen in bester Lage. Das Gebäude verfügt über einen Concierge-Service und gepflegte Grünanlagen. Fitnessraum und Gemeinschaftsräume stehen den Bewohnern zur Verfügung.)"
                 value={formData.additional_description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, additional_description: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, additional_description: e.target.value })}
                 rows={4}
               />
             </div>
@@ -782,7 +793,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Textarea
                 placeholder="Lage & Umgebung (z.B. Ruhige Lage in beliebtem Stadtteil. Nahe zu öffentlichen Verkehrsmitteln, Einkaufsmöglichkeiten und Parks. Gute Infrastruktur mit Schulen und Kindergärten in der Nähe.)"
                 value={formData.neighborhood_description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, neighborhood_description: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, neighborhood_description: e.target.value })}
                 rows={4}
               />
             </div>
@@ -882,7 +893,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Checkbox
                 id="is_active"
                 checked={formData.is_active}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_active: checked as boolean }))}
+                onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked as boolean })}
               />
               <label htmlFor="is_active" className="cursor-pointer">Aktiv</label>
             </div>
@@ -890,7 +901,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               <Checkbox
                 id="is_featured"
                 checked={formData.is_featured}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_featured: checked as boolean }))}
+                onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked as boolean })}
               />
               <label htmlFor="is_featured" className="cursor-pointer">Empfohlen</label>
             </div>

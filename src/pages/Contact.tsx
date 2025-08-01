@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import ContactFormFixed from '@/components/ContactFormFixed';
+import ContactForm from '@/components/ContactForm';
 import { 
   Phone, 
   Mail, 
@@ -82,7 +82,7 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="order-2 lg:order-1">
-            <ContactFormFixed />
+            <ContactForm />
           </div>
 
           {/* Contact Information */}

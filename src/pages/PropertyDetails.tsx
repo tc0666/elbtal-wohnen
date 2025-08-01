@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import PropertyImageGallery from '@/components/PropertyImageGallery';
-import ContactFormFixed from '@/components/ContactFormFixed';
+import ContactForm from '@/components/ContactForm';
 import SimpleLocationDisplay from '@/components/SimpleLocationDisplay';
 import { 
   MapPin, 
@@ -483,7 +483,7 @@ const PropertyDetails = () => {
             </Card>
 
             {/* Contact Button */}
-            <ContactFormFixed
+            <ContactForm
               propertyId={property.id}
               propertyTitle={property.title}
               isDialog={true}
