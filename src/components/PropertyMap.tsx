@@ -94,11 +94,19 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
       }
 
       if (!mapContainer.current) {
-        console.error('🗺️ Map container not found');
-        setError('Map container not available');
-        setLoading(false);
-        return;
+        console.log('🗺️ Map container not ready, waiting...');
+        // Wait for container to be ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        if (!mapContainer.current) {
+          console.error('🗺️ Map container still not found after waiting');
+          setError('Map container not available');
+          setLoading(false);
+          return;
+        }
       }
+
+      console.log('🗺️ Map container found:', mapContainer.current);
 
       // Clear any existing map
       mapContainer.current.innerHTML = '';
@@ -148,9 +156,15 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ address, city, className = ''
   };
 
   useEffect(() => {
-    if (address && city) {
-      initializeMap();
-    }
+    // Add a small delay to ensure the component is fully mounted
+    const timer = setTimeout(() => {
+      if (address && city && mapContainer.current) {
+        console.log('🗺️ Starting delayed map initialization');
+        initializeMap();
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, [address, city]);
 
   if (loading) {
