@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export const PropertyListings = () => {
+export const PropertyListings = ({ searchFilters }: { searchFilters?: any }) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,53 +17,88 @@ export const PropertyListings = () => {
 
   useEffect(() => {
     fetchProperties();
-  }, [sortBy, currentPage]);
+  }, [sortBy, currentPage, searchFilters]);
 
   const fetchProperties = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // First get the total count
-      const { count } = await supabase
+      // Build the query with filters
+      let countQuery = supabase
         .from('properties')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
 
-      setTotalCount(count || 0);
-
-      // Then get the paginated data
-      const from = (currentPage - 1) * itemsPerPage;
-      const to = from + itemsPerPage - 1;
-
-      let query = supabase
+      let dataQuery = supabase
         .from('properties')
         .select(`
           *,
           city:cities(name),
           property_type:property_types(name)
         `)
-        .eq('is_active', true)
-        .range(from, to);
+        .eq('is_active', true);
+
+      // Apply search filters
+      if (searchFilters) {
+        if (searchFilters.location) {
+          const cityFilter = `city:cities!inner(slug.eq.${searchFilters.location})`;
+          countQuery = countQuery.or(cityFilter);
+          dataQuery = dataQuery.or(cityFilter);
+        }
+        if (searchFilters.propertyType) {
+          const typeFilter = `property_type:property_types!inner(slug.eq.${searchFilters.propertyType})`;
+          countQuery = countQuery.or(typeFilter);
+          dataQuery = dataQuery.or(typeFilter);
+        }
+        if (searchFilters.minPrice) {
+          countQuery = countQuery.gte('price_monthly', parseInt(searchFilters.minPrice));
+          dataQuery = dataQuery.gte('price_monthly', parseInt(searchFilters.minPrice));
+        }
+        if (searchFilters.maxPrice) {
+          countQuery = countQuery.lte('price_monthly', parseInt(searchFilters.maxPrice));
+          dataQuery = dataQuery.lte('price_monthly', parseInt(searchFilters.maxPrice));
+        }
+        if (searchFilters.minArea) {
+          countQuery = countQuery.gte('area_sqm', parseInt(searchFilters.minArea));
+          dataQuery = dataQuery.gte('area_sqm', parseInt(searchFilters.minArea));
+        }
+        if (searchFilters.rooms && searchFilters.rooms !== '5+') {
+          countQuery = countQuery.eq('rooms', searchFilters.rooms);
+          dataQuery = dataQuery.eq('rooms', searchFilters.rooms);
+        } else if (searchFilters.rooms === '5+') {
+          countQuery = countQuery.gte('rooms', '5');
+          dataQuery = dataQuery.gte('rooms', '5');
+        }
+      }
+
+      // Get total count
+      const { count } = await countQuery;
+      setTotalCount(count || 0);
+
+      // Get paginated data
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+      dataQuery = dataQuery.range(from, to);
 
       // Apply sorting
       switch (sortBy) {
         case 'price_low':
-          query = query.order('price_monthly', { ascending: true });
+          dataQuery = dataQuery.order('price_monthly', { ascending: true });
           break;
         case 'price_high':
-          query = query.order('price_monthly', { ascending: false });
+          dataQuery = dataQuery.order('price_monthly', { ascending: false });
           break;
         case 'area':
-          query = query.order('area_sqm', { ascending: false });
+          dataQuery = dataQuery.order('area_sqm', { ascending: false });
           break;
         case 'newest':
         default:
-          query = query.order('created_at', { ascending: false });
+          dataQuery = dataQuery.order('created_at', { ascending: false });
           break;
       }
 
-      const { data, error: fetchError } = await query;
+      const { data, error: fetchError } = await dataQuery;
 
       if (fetchError) {
         throw fetchError;
