@@ -170,15 +170,10 @@ serve(async (req) => {
           new Date(request.created_at) >= dateThreshold
         )
         
-        // Calculate monthly trends starting from August (last 12 months)
+        // Calculate monthly trends starting from August 2025 (12 months forward)
         const monthlyInquiries = []
-        const currentDate = new Date()
-        const currentYear = currentDate.getFullYear()
-        const currentMonth = currentDate.getMonth() // 0-based
-        
-        // Start from August (month 7) of the appropriate year
-        const startMonth = 7 // August
-        const startYear = currentMonth >= 7 ? currentYear : currentYear - 1
+        const startYear = 2025
+        const startMonth = 7 // August (0-based index)
         
         for (let i = 0; i < 12; i++) {
           const targetMonth = (startMonth + i) % 12
@@ -194,7 +189,7 @@ serve(async (req) => {
           
           const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
           monthlyInquiries.push({
-            month: monthNames[targetMonth],
+            month: `${monthNames[targetMonth]} ${targetYear.toString().slice(-2)}`,
             count: monthCount,
             year: targetYear
           })
