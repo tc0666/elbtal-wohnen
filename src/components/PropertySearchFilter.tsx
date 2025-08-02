@@ -83,7 +83,7 @@ export const PropertySearchFilter = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Location */}
           <div className="space-y-1 md:space-y-2">
             <Label htmlFor="location" className="text-xs md:text-sm font-medium flex items-center gap-1 md:gap-2">
@@ -196,10 +196,10 @@ export const PropertySearchFilter = () => {
           </div>
         </div>
 
-        <div className="flex justify-center col-span-2 md:col-span-3 lg:col-span-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 col-span-full">
           <Button 
             onClick={handleSearch}
-            className="w-full md:w-auto px-6 md:px-8 py-2 bg-primary hover:bg-primary-dark text-primary-foreground font-medium text-sm md:text-base"
+            className="w-full px-6 py-3 bg-primary hover:bg-primary-dark text-primary-foreground font-medium text-base"
             size="lg"
           >
             <Search className="h-4 w-4 mr-2" />

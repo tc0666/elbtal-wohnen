@@ -81,7 +81,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
   return (
     <Card className="w-full bg-background border shadow-sm">
       <div className="p-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {/* Location */}
           <div className="space-y-1">
             <Select value={searchData.location} onValueChange={(value) => setSearchData({ ...searchData, location: value })}>
