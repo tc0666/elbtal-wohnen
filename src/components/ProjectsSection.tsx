@@ -19,8 +19,8 @@ export const ProjectsSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-5xl mx-auto">
-          <div className="relative group">
+        <div className="flex flex-col md:flex-row gap-8 mt-12 max-w-5xl mx-auto">
+          <div className="relative group md:w-[35%]">
             <img 
               src="/lovable-uploads/11592b9e-0fa6-423a-bca8-f1636341f7e4.png" 
               alt="Klassisches Gebäude"
@@ -29,7 +29,7 @@ export const ProjectsSection = () => {
             <div className="absolute inset-0 bg-black/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
           
-          <div className="relative group">
+          <div className="relative group md:w-[65%]">
             <img 
               src="/lovable-uploads/8da215fa-e00e-46ad-acb1-6fddfe11057e.png" 
               alt="Moderne Wohnanlage"
