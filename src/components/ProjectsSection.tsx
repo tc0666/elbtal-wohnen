@@ -19,7 +19,7 @@ export const ProjectsSection = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8 mt-12 max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-8 mt-12">
           <div className="relative group md:w-[35%]">
             <img 
               src="/lovable-uploads/11592b9e-0fa6-423a-bca8-f1636341f7e4.png" 
