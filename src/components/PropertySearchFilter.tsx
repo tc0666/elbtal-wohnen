@@ -202,6 +202,7 @@ export const PropertySearchFilter = () => {
             className="w-full"
             size="lg"
           >
+            <Search className="h-4 w-4 mr-2" />
             Suchen
           </Button>
         </div>
