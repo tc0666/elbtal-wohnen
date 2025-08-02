@@ -199,11 +199,10 @@ export const PropertySearchFilter = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 col-span-full">
           <Button 
             onClick={handleSearch}
-            className="w-full px-6 py-3"
+            className="w-full"
             size="lg"
           >
-            <Search className="h-4 w-4 mr-2" />
-            Immobilien suchen
+            Suchen
           </Button>
         </div>
       </div>
