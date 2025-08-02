@@ -1,6 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Building, MapPin, Users, Award } from "lucide-react";
-
 export const ProjectsSection = () => {
   return (
     <section className="py-16 bg-background">
@@ -22,54 +19,24 @@ export const ProjectsSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
-          <Card className="text-center hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Building className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Wohnimmobilien</h3>
-              <p className="text-muted-foreground text-sm">
-                Moderne Wohnkomplexe und Einzelobjekte in besten Lagen
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Gewerbeimmobilien</h3>
-              <p className="text-muted-foreground text-sm">
-                Büroflächen, Einzelhandel und Gastronomieobjekte
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Ärztehäuser</h3>
-              <p className="text-muted-foreground text-sm">
-                Spezialisierte Immobilien für medizinische Einrichtungen
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Hotels</h3>
-              <p className="text-muted-foreground text-sm">
-                Hotelimmobilien in erstklassigen Standorten
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-5xl mx-auto">
+          <div className="relative group">
+            <img 
+              src="/lovable-uploads/11592b9e-0fa6-423a-bca8-f1636341f7e4.png" 
+              alt="Klassisches Gebäude"
+              className="w-full h-80 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+          
+          <div className="relative group">
+            <img 
+              src="/lovable-uploads/8da215fa-e00e-46ad-acb1-6fddfe11057e.png" 
+              alt="Moderne Wohnanlage"
+              className="w-full h-80 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
         </div>
       </div>
     </section>
