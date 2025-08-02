@@ -255,7 +255,7 @@ const Unternehmen = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {values.map((value, index) => (
               <Card key={index} className="text-center p-6 h-full">
                 <value.icon className="h-12 w-12 text-primary mx-auto mb-4" />
@@ -298,7 +298,7 @@ const Unternehmen = () => {
               <Home className="h-16 w-16 text-primary mx-auto mb-6" />
               <h2 className="text-3xl font-bold mb-4">Warum Elbtal Immobilienverwaltung?</h2>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="text-center">
                 <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
                 <h3 className="font-semibold mb-3">Lokale Expertise</h3>
