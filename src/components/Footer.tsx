@@ -8,7 +8,7 @@ export const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-xl font-bold text-primary mb-2">Elbtal</h3>
+              <h3 className="text-xl font-bold text-primary mb-2">ELBTAL</h3>
               <p className="text-sm text-muted-foreground">Immobilienverwaltung seit 1988</p>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -68,7 +68,7 @@ export const Footer = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-muted-foreground">
           <div>
-            © 2025 Elbtal Immobilien. Alle Rechte vorbehalten.
+            © 2025 ELBTAL Immobilien. Alle Rechte vorbehalten.
           </div>
           <div className="flex space-x-6">
             <Link to="/impressum" className="hover:text-primary transition-colors">Impressum</Link>
