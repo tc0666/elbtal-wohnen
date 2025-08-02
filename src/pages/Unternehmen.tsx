@@ -178,31 +178,22 @@ const Unternehmen = () => {
         {/* About Section */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Geschichte</h2>
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
-            <div className="aspect-video rounded-lg overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Team meeting in modern office"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                Die Elbtal Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
-                über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
-                in der Region entwickelt.
-              </p>
-              <p>
-                Was als kleine Hausverwaltung begann, ist heute ein modernes Unternehmen mit 
-                einem umfassenden Serviceangebot. Wir betreuen über 2.000 Wohneinheiten und 
-                haben bereits mehr als 10.000 Kunden bei ihren Immobilienangelegenheiten unterstützt.
-              </p>
-              <p>
-                Unser Erfolgsgeheimnis: Die Kombination aus langjähriger Erfahrung, modernster 
-                Technik und dem persönlichen Kontakt zu unseren Kunden. Jeder Kunde erhält bei 
-                uns einen festen Ansprechpartner und individuelle Betreuung.
-              </p>
-            </div>
+          <div className="space-y-4 text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center">
+            <p>
+              Die Elbtal Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
+              über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
+              in der Region entwickelt.
+            </p>
+            <p>
+              Was als kleine Hausverwaltung begann, ist heute ein modernes Unternehmen mit 
+              einem umfassenden Serviceangebot. Wir betreuen über 2.000 Wohneinheiten und 
+              haben bereits mehr als 10.000 Kunden bei ihren Immobilienangelegenheiten unterstützt.
+            </p>
+            <p>
+              Unser Erfolgsgeheimnis: Die Kombination aus langjähriger Erfahrung, modernster 
+              Technik und dem persönlichen Kontakt zu unseren Kunden. Jeder Kunde erhält bei 
+              uns einen festen Ansprechpartner und individuelle Betreuung.
+            </p>
           </div>
           
           <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
@@ -255,22 +246,13 @@ const Unternehmen = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Werte</h2>
           
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
-            <div className="aspect-video rounded-lg overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Modern technology and innovation"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="text-center lg:text-left">
-              <h3 className="text-2xl font-bold mb-4">Innovation & Tradition vereint</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Seit über 35 Jahren verbinden wir bewährte Traditionen mit innovativen Lösungen. 
-                Unsere Werte sind das Fundament für den vertrauensvollen Umgang mit unseren Kunden 
-                und den nachhaltigen Erfolg unseres Unternehmens.
-              </p>
-            </div>
+          <div className="text-center mb-12 max-w-4xl mx-auto">
+            <h3 className="text-2xl font-bold mb-4">Innovation & Tradition vereint</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">
+              Seit über 35 Jahren verbinden wir bewährte Traditionen mit innovativen Lösungen. 
+              Unsere Werte sind das Fundament für den vertrauensvollen Umgang mit unseren Kunden 
+              und den nachhaltigen Erfolg unseres Unternehmens.
+            </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -288,37 +270,24 @@ const Unternehmen = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unser Führungsteam</h2>
           
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
-            <div className="order-2 lg:order-1">
-              <div className="grid md:grid-cols-1 gap-6">
-                {team.map((member, index) => (
-                  <Card key={index}>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                          <Users className="h-8 w-8 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-semibold">{member.name}</h3>
-                          <p className="text-primary font-medium mb-2">{member.position}</p>
-                          <p className="text-sm text-muted-foreground mb-1">{member.experience}</p>
-                          <p className="text-xs text-muted-foreground">{member.specialization}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-            <div className="order-1 lg:order-2">
-              <div className="aspect-square rounded-lg overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Professional team working together"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {team.map((member, index) => (
+              <Card key={index}>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Users className="h-8 w-8 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold">{member.name}</h3>
+                      <p className="text-primary font-medium mb-2">{member.position}</p>
+                      <p className="text-sm text-muted-foreground mb-1">{member.experience}</p>
+                      <p className="text-xs text-muted-foreground">{member.specialization}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
 
