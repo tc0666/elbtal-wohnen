@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { HorizontalPropertyCard, Property } from "@/components/HorizontalPropertyCard";
+import { SimplePropertyCard, Property } from "@/components/SimplePropertyCard";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
@@ -156,18 +156,21 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
           </div>
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex gap-4">
-                <Skeleton className="w-80 h-48 rounded-lg flex-shrink-0" />
-                <div className="flex-1 space-y-3">
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                  <div className="grid grid-cols-4 gap-4">
-                    {Array.from({ length: 4 }).map((_, j) => (
-                      <Skeleton key={j} className="h-12 w-full" />
-                    ))}
+              <div key={i} className="flex flex-col sm:flex-row gap-4 border border-border/50 rounded-lg overflow-hidden">
+                <Skeleton className="w-full sm:w-72 lg:w-80 h-48 sm:h-32 flex-shrink-0" />
+                <div className="flex-1 p-4 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <div className="flex-1">
+                      <Skeleton className="h-5 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </div>
+                    <Skeleton className="h-6 w-24" />
                   </div>
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-2/3" />
+                  <div className="grid grid-cols-2 gap-4">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                  </div>
+                  <Skeleton className="h-9 w-32" />
                 </div>
               </div>
             ))}
@@ -220,7 +223,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
         <>
           <div className="space-y-6">
             {properties.map((property) => (
-              <HorizontalPropertyCard key={property.id} property={property} />
+              <SimplePropertyCard key={property.id} property={property} />
             ))}
           </div>
 
