@@ -21,8 +21,11 @@ export const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="block">
-              <h1 className="text-2xl font-bold text-primary">ELBTAL</h1>
-              <span className="text-xs text-muted-foreground">Immobilienverwaltung seit 1988</span>
+              <img 
+                src="/lovable-uploads/85f03621-9d59-40ab-9c45-71ecc1659f72.png" 
+                alt="ELBTAL - Immobilienverwaltung seit 1988" 
+                className="h-12 w-auto"
+              />
             </Link>
           </div>
 

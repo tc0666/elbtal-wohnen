@@ -8,8 +8,11 @@ export const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-xl font-bold text-primary mb-2">ELBTAL</h3>
-              <p className="text-sm text-muted-foreground">Immobilienverwaltung seit 1988</p>
+              <img 
+                src="/lovable-uploads/85f03621-9d59-40ab-9c45-71ecc1659f72.png" 
+                alt="ELBTAL - Immobilienverwaltung seit 1988" 
+                className="h-16 w-auto mb-2"
+              />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Ihr vertrauensvoller Partner für hochwertige Mietwohnungen in Deutschland. 
