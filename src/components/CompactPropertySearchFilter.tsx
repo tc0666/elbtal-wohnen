@@ -85,7 +85,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
           {/* Location */}
           <div className="space-y-1">
             <Select value={searchData.location} onValueChange={(value) => setSearchData({ ...searchData, location: value })}>
-              <SelectTrigger className="h-9 text-sm">
+              <SelectTrigger className="h-12 text-sm">
                 <SelectValue placeholder="Stadt" />
               </SelectTrigger>
               <SelectContent>
@@ -102,7 +102,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
           {/* Property Type */}
           <div className="space-y-1">
             <Select value={searchData.propertyType} onValueChange={(value) => setSearchData({ ...searchData, propertyType: value })}>
-              <SelectTrigger className="h-9 text-sm">
+              <SelectTrigger className="h-12 text-sm">
                 <SelectValue placeholder="Typ" />
               </SelectTrigger>
               <SelectContent>
@@ -121,7 +121,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
             <Input
               type="number"
               placeholder="Preis min"
-              className="h-9 text-sm"
+              className="h-12 text-sm"
               value={searchData.minPrice}
               onChange={(e) => setSearchData({ ...searchData, minPrice: e.target.value })}
             />
@@ -132,7 +132,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
             <Input
               type="number"
               placeholder="Preis max"
-              className="h-9 text-sm"
+              className="h-12 text-sm"
               value={searchData.maxPrice}
               onChange={(e) => setSearchData({ ...searchData, maxPrice: e.target.value })}
             />
@@ -143,7 +143,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
             <Input
               type="number"
               placeholder="Fläche (m²)"
-              className="h-9 text-sm"
+              className="h-12 text-sm"
               value={searchData.minArea}
               onChange={(e) => setSearchData({ ...searchData, minArea: e.target.value })}
             />
@@ -152,7 +152,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
           {/* Rooms */}
           <div className="space-y-1">
             <Select value={searchData.rooms} onValueChange={(value) => setSearchData({ ...searchData, rooms: value })}>
-              <SelectTrigger className="h-9 text-sm">
+              <SelectTrigger className="h-12 text-sm">
                 <SelectValue placeholder="Zimmer" />
               </SelectTrigger>
               <SelectContent>
@@ -170,7 +170,7 @@ export const CompactPropertySearchFilter = ({ onFilterChange, initialFilters }: 
           <div className="space-y-1">
             <Button 
               onClick={handleSearch}
-              className="w-full h-9 px-3 text-sm"
+              className="w-full h-12 px-3 text-sm"
               size="sm"
             >
               <Search className="h-4 w-4 mr-1" />

@@ -91,7 +91,7 @@ export const PropertySearchFilter = () => {
               Standort
             </Label>
             <Select value={searchData.location} onValueChange={(value) => setSearchData({ ...searchData, location: value })}>
-              <SelectTrigger className="h-9 md:h-10 text-xs md:text-sm">
+              <SelectTrigger className="h-12 text-xs md:text-sm">
                 <SelectValue placeholder="Stadt wählen" />
               </SelectTrigger>
               <SelectContent>
@@ -112,7 +112,7 @@ export const PropertySearchFilter = () => {
               Objektart
             </Label>
             <Select value={searchData.propertyType} onValueChange={(value) => setSearchData({ ...searchData, propertyType: value })}>
-              <SelectTrigger className="h-9 md:h-10 text-xs md:text-sm">
+              <SelectTrigger className="h-12 text-xs md:text-sm">
                 <SelectValue placeholder="Typ wählen" />
               </SelectTrigger>
               <SelectContent>
@@ -136,7 +136,7 @@ export const PropertySearchFilter = () => {
               id="minPrice"
               type="number"
               placeholder="z.B. 500"
-              className="h-9 md:h-10 text-xs md:text-sm"
+              className="h-12 text-xs md:text-sm"
               value={searchData.minPrice}
               onChange={(e) => setSearchData({ ...searchData, minPrice: e.target.value })}
             />
@@ -152,7 +152,7 @@ export const PropertySearchFilter = () => {
               id="maxPrice"
               type="number"
               placeholder="z.B. 2000"
-              className="h-9 md:h-10 text-xs md:text-sm"
+              className="h-12 text-xs md:text-sm"
               value={searchData.maxPrice}
               onChange={(e) => setSearchData({ ...searchData, maxPrice: e.target.value })}
             />
@@ -168,7 +168,7 @@ export const PropertySearchFilter = () => {
               id="minArea"
               type="number"
               placeholder="z.B. 50"
-              className="h-9 md:h-10 text-xs md:text-sm"
+              className="h-12 text-xs md:text-sm"
               value={searchData.minArea}
               onChange={(e) => setSearchData({ ...searchData, minArea: e.target.value })}
             />
@@ -181,7 +181,7 @@ export const PropertySearchFilter = () => {
               Zimmer
             </Label>
             <Select value={searchData.rooms} onValueChange={(value) => setSearchData({ ...searchData, rooms: value })}>
-              <SelectTrigger className="h-9 md:h-10 text-xs md:text-sm">
+              <SelectTrigger className="h-12 text-xs md:text-sm">
                 <SelectValue placeholder="Anzahl" />
               </SelectTrigger>
               <SelectContent>
