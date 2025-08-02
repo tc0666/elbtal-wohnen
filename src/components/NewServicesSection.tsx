@@ -14,30 +14,30 @@ const services = [{
   description: "24/7 Erreichbarkeit für Notfälle, regelmäßige Objektbesichtigungen und proaktive Wartung stehen im Mittelpunkt unseres Service. Wir bieten persönliche Beratung, digitale Verwaltungslösungen und schnelle Problemlösung für alle Anliegen."
 }];
 export const NewServicesSection = () => {
-  return <section className="py-16 bg-muted/50">
+  return (
+    <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => {
-          const IconComponent = service.icon;
-          return <Card key={index} className="h-full hover:shadow-lg transition-all duration-300">
-                <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <IconComponent className="h-8 w-8 text-primary" />
+            const IconComponent = service.icon;
+            return (
+              <Card key={index} className="h-full hover:shadow-xl transition-all duration-500 border-0 bg-card/80 backdrop-blur-sm">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <IconComponent className="h-10 w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                  <CardTitle className="text-2xl font-bold tracking-tight">{service.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
+                <CardContent className="pt-0">
+                  <p className="text-muted-foreground leading-relaxed text-center">
                     {service.description}
                   </p>
                 </CardContent>
-              </Card>;
-        })}
+              </Card>
+            );
+          })}
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
