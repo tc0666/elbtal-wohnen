@@ -178,7 +178,7 @@ const Unternehmen = () => {
         {/* About Section */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Geschichte</h2>
-          <div className="space-y-4 text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center">
+          <div className="space-y-4 text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center mb-12">
             <p>
               Die Elbtal Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
               über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
