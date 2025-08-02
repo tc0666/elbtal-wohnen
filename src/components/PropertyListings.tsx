@@ -157,7 +157,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="flex flex-col sm:flex-row gap-4 border border-border/50 rounded-lg overflow-hidden">
-                <Skeleton className="w-full sm:w-72 lg:w-80 h-48 sm:h-32 flex-shrink-0" />
+                <Skeleton className="w-full sm:w-48 lg:w-56 h-48 sm:h-32 flex-shrink-0" />
                 <div className="flex-1 p-4 space-y-3">
                   <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
                     <div className="flex-1">
