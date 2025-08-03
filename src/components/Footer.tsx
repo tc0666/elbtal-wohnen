@@ -9,8 +9,8 @@ export const Footer = () => {
           <div className="space-y-4">
             <div>
               <img 
-                src="/lovable-uploads/85f03621-9d59-40ab-9c45-71ecc1659f72.png" 
-                alt="ELBTAL - Immobilienverwaltung seit 1988" 
+                src="/lovable-uploads/a7735ad6-ddd2-4f51-a31e-f2247aeeb345.png" 
+                alt="AMIEL - Immobilienverwaltung seit 1988" 
                 className="h-16 w-auto mb-2"
               />
             </div>
