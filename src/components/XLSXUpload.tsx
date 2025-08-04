@@ -202,9 +202,9 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
           const property = {
             title: title || `Property ${i}`,
             description: `Imported from XLSX`,
-            address: `${postalCode} ${cityName}`,
+            address: postalCode, // Only postal code
             postal_code: postalCode,
-            neighborhood: cityName,
+            neighborhood: cityName, // Only city name
             rooms: rooms,
             area_sqm: areaSqm,
             price_monthly: priceMonthly,

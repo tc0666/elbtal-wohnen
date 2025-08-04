@@ -131,9 +131,9 @@ Deno.serve(async (req) => {
         const propertyToInsert = {
           title: property.title,
           description: property.description || `Imported from XLSX`,
-          address: property.address,
+          address: property.address, // Just postal code now
           postal_code: property.postal_code,
-          neighborhood: property.neighborhood,
+          neighborhood: property.neighborhood, // Just city name
           rooms: property.rooms,
           area_sqm: property.area_sqm,
           price_monthly: property.price_monthly,
