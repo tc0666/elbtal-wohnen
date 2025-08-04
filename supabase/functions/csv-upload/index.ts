@@ -147,20 +147,36 @@ Deno.serve(async (req) => {
 
         console.log(`Processing row ${i}:`, row);
 
-        // Extract postal code and city from location
-        const locationMatch = row.location.match(/(\d{5}),?\s*(.+)/);
-        const postalCode = locationMatch?.[1] || '';
-        const cityName = locationMatch?.[2] || row.location;
+        // Extract postal code and city from location (e.g., "14199, Berlin")
+        const locationMatch = row.location.match(/^"?(\d{5}),?\s*(.+?)"?$/);
+        let postalCode = '';
+        let cityName = '';
+        
+        if (locationMatch) {
+          postalCode = locationMatch[1]; // e.g., "14199"
+          cityName = locationMatch[2].trim(); // e.g., "Berlin"
+        } else {
+          // Fallback parsing
+          const parts = row.location.replace(/"/g, '').split(',');
+          if (parts.length >= 2) {
+            postalCode = parts[0].trim();
+            cityName = parts[1].trim();
+          } else {
+            cityName = row.location.replace(/"/g, '').trim();
+          }
+        }
 
         // Parse price - handle formats like "2.13€", "1.40€", etc.
         let priceMonthly = 0;
         if (row.priceValue && row.priceValue !== 'auf Anfrage') {
-          // Remove € symbol and convert comma to dot, then multiply by 1000 (assuming it's in thousands)
-          const cleanPrice = row.priceValue.replace(/[€\s]/g, '').replace(',', '.');
-          const priceMatch = cleanPrice.match(/[\d.]+/);
-          if (priceMatch) {
-            const priceValue = parseFloat(priceMatch[0]);
-            // If the price is like 2.13, it's likely 2130€, so multiply by 1000
+          // Clean the price value: remove € symbol and quotes
+          const cleanPrice = row.priceValue.replace(/[€"]/g, '').trim();
+          // For German format, comma is decimal separator
+          const normalizedPrice = cleanPrice.replace(',', '.');
+          const priceValue = parseFloat(normalizedPrice);
+          
+          if (!isNaN(priceValue)) {
+            // If the price is like 2.13, it likely means 2130€, so multiply by 1000
             if (priceValue < 100) {
               priceMonthly = Math.round(priceValue * 1000);
             } else {
@@ -172,25 +188,34 @@ Deno.serve(async (req) => {
         // Parse area - handle formats like "85,28 m²", "139,54 m²", etc.
         let areaSqm = 0;
         if (row.areaValue) {
-          // Remove m² and other units, convert comma to dot
-          const cleanArea = row.areaValue.replace(/[m²\s]/g, '').replace(',', '.');
-          const areaMatch = cleanArea.match(/[\d.]+/);
-          if (areaMatch) {
-            areaSqm = Math.round(parseFloat(areaMatch[0]));
+          // Clean the area value: remove m², quotes, and other units
+          const cleanArea = row.areaValue.replace(/[m²"]/g, '').trim();
+          // For German format, comma is decimal separator
+          const normalizedArea = cleanArea.replace(',', '.');
+          const areaValue = parseFloat(normalizedArea);
+          
+          if (!isNaN(areaValue)) {
+            areaSqm = Math.round(areaValue);
           }
         }
 
-        // Parse rooms - should be in column 11 (additionalValue)
+        // Parse rooms - from column 10 (additionalValue) 
         let rooms = '1';
         if (row.additionalValue && !isNaN(parseInt(row.additionalValue))) {
-          rooms = row.additionalValue;
-        } else if (row.additionalLabel && row.additionalLabel.toLowerCase().includes('zimmer')) {
-          // Fallback: look for room number in the label
-          const roomMatch = row.additionalValue.match(/\d+/);
-          if (roomMatch) {
-            rooms = roomMatch[0];
-          }
+          rooms = row.additionalValue.toString();
         }
+
+        console.log(`Parsed data for row ${i}:`, {
+          postalCode,
+          cityName,
+          priceMonthly,
+          areaSqm,
+          rooms,
+          originalLocation: row.location,
+          originalPrice: row.priceValue,
+          originalArea: row.areaValue,
+          originalRooms: row.additionalValue
+        });
 
         // Find or create the city
         const cityId = await findOrCreateCity(cityName.trim());
@@ -198,7 +223,7 @@ Deno.serve(async (req) => {
         const property = {
           title: row.title,
           description: `Imported from CSV. Original ID: ${row.propertyId}`,
-          address: cityName,
+          address: `${postalCode} ${cityName}`, // Show postal code with city
           postal_code: postalCode,
           neighborhood: cityName,
           rooms: rooms,

@@ -50,8 +50,8 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
         <div className="flex flex-col sm:flex-row h-full">
           {/* Image */}
           <Link to={`/immobilie/${property.id}`} className="block overflow-hidden">
-            <div className="relative sm:w-48 lg:w-56 sm:flex-shrink-0 h-full">
-              <div className="h-48 sm:h-full overflow-hidden cursor-pointer">
+            <div className="relative w-full sm:w-48 lg:w-56 sm:flex-shrink-0 h-48 sm:h-full">
+              <div className="w-full h-full overflow-hidden cursor-pointer">
                 <img
                   src={property.images[0] || '/placeholder.svg'}
                   alt={property.title}
