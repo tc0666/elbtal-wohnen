@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2, Eye, Calendar, Phone, Mail, MessageSquare, User, Clock } from 'lucide-react';
 import PropertyForm from '@/components/PropertyForm';
 import { PropertyWithRelations } from '@/types/property';
-import { CSVUpload } from '@/components/CSVUpload';
+import { XLSXUpload } from '@/components/XLSXUpload';
 
 interface ContactRequest {
   id: string;
@@ -325,7 +325,7 @@ const PropertiesManagement = () => {
       </div>
 
       {/* CSV Upload Section */}
-      <CSVUpload onUploadComplete={fetchProperties} />
+      <XLSXUpload onUploadComplete={fetchProperties} />
 
       {/* Filter Section */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
