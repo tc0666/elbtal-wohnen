@@ -69,12 +69,61 @@ Deno.serve(async (req) => {
     const properties = [];
     const errors = [];
 
-    // Get default city and property type IDs
-    const { data: cities } = await supabase.from('cities').select('id, name').limit(1);
+    // Get default property type ID and fallback city
     const { data: propertyTypes } = await supabase.from('property_types').select('id, name').limit(1);
-    
-    const defaultCityId = cities?.[0]?.id;
+    const { data: fallbackCities } = await supabase.from('cities').select('id, name').limit(1);
     const defaultPropertyTypeId = propertyTypes?.[0]?.id;
+    const fallbackCityId = fallbackCities?.[0]?.id;
+
+    // Cache for cities to avoid duplicate database calls
+    const cityCache = new Map();
+    
+    // Helper function to find or create city
+    const findOrCreateCity = async (cityName: string) => {
+      if (cityCache.has(cityName)) {
+        return cityCache.get(cityName);
+      }
+
+      // First try to find existing city
+      const { data: existingCity } = await supabase
+        .from('cities')
+        .select('id')
+        .ilike('name', cityName)
+        .single();
+
+      if (existingCity) {
+        cityCache.set(cityName, existingCity.id);
+        return existingCity.id;
+      }
+
+      // If not found, create new city
+      const slug = cityName.toLowerCase()
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+
+      const { data: newCity } = await supabase
+        .from('cities')
+        .insert({
+          name: cityName,
+          slug: slug,
+          display_order: 999,
+          is_active: true
+        })
+        .select('id')
+        .single();
+
+      if (newCity) {
+        cityCache.set(cityName, newCity.id);
+        return newCity.id;
+      }
+
+      return null;
+    };
 
     for (let i = 1; i < lines.length; i++) {
       try {
@@ -143,6 +192,9 @@ Deno.serve(async (req) => {
           }
         }
 
+        // Find or create the city
+        const cityId = await findOrCreateCity(cityName.trim());
+
         const property = {
           title: row.title,
           description: `Imported from CSV. Original ID: ${row.propertyId}`,
@@ -155,7 +207,7 @@ Deno.serve(async (req) => {
           warmmiete_monthly: priceMonthly,
           additional_costs_monthly: 0,
           property_type_id: defaultPropertyTypeId,
-          city_id: defaultCityId,
+          city_id: cityId || fallbackCityId, // Fallback to first available city if city creation fails
           floor: 1,
           total_floors: 5,
           year_built: 2000,
