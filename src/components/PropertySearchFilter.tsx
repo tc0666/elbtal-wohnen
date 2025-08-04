@@ -37,7 +37,8 @@ export const PropertySearchFilter = () => {
         .order('display_order');
       
       if (error) throw error;
-      return data || [];
+      // Filter out cities with empty slugs or names to prevent Select.Item errors
+      return (data || []).filter(city => city.slug && city.slug.trim() !== '' && city.name && city.name.trim() !== '');
     }
   });
 
@@ -52,7 +53,8 @@ export const PropertySearchFilter = () => {
         .order('display_order');
       
       if (error) throw error;
-      return data || [];
+      // Filter out property types with empty slugs or names to prevent Select.Item errors
+      return (data || []).filter(type => type.slug && type.slug.trim() !== '' && type.name && type.name.trim() !== '');
     }
   });
 
