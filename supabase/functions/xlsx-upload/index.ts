@@ -53,20 +53,38 @@ Deno.serve(async (req) => {
     
     // Helper function to find or create city
     const findOrCreateCity = async (cityName: string) => {
-      if (cityCache.has(cityName)) {
-        return cityCache.get(cityName);
+      if (!cityName || cityName.trim() === '') {
+        return fallbackCityId;
+      }
+      
+      const cleanCityName = cityName.trim();
+      
+      if (cityCache.has(cleanCityName)) {
+        return cityCache.get(cleanCityName);
       }
 
-      // First try to find existing city
+      // First try to find existing city (exact match first, then case-insensitive)
       const { data: existingCity } = await supabase
         .from('cities')
         .select('id')
-        .ilike('name', cityName)
+        .eq('name', cleanCityName)
         .single();
 
       if (existingCity) {
-        cityCache.set(cityName, existingCity.id);
+        cityCache.set(cleanCityName, existingCity.id);
         return existingCity.id;
+      }
+
+      // Try case-insensitive match
+      const { data: existingCityInsensitive } = await supabase
+        .from('cities')
+        .select('id, name')
+        .ilike('name', cleanCityName)
+        .single();
+
+      if (existingCityInsensitive) {
+        cityCache.set(cleanCityName, existingCityInsensitive.id);
+        return existingCityInsensitive.id;
       }
 
       // If not found, create new city

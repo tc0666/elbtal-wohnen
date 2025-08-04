@@ -76,19 +76,26 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
       const headers = xlsxData[0] as string[];
       console.log('XLSX Headers:', headers);
 
-      // Find column indices
+      // Find column indices - handle multiple Frymo-listing-meta-item-value columns
       const imageColIndex = headers.findIndex(h => h && h.toLowerCase().includes('attachment-medium image'));
       const titleColIndex = headers.findIndex(h => h === 'A');
       const locationColIndex = headers.findIndex(h => h && h.toLowerCase().includes('frymo-listing-location'));
       const priceColIndex = headers.findIndex(h => h && h.toLowerCase().includes('price'));
-      const zimmerColIndex = headers.findIndex(h => h && h.toLowerCase().includes('frymo-listing-meta-item-value'));
+      
+      // Find all Frymo-listing-meta-item-value columns
+      const metaValueColumns = [];
+      headers.forEach((header, index) => {
+        if (header && header.toLowerCase().includes('frymo-listing-meta-item-value')) {
+          metaValueColumns.push(index);
+        }
+      });
 
       console.log('Column indices:', {
         image: imageColIndex,
         title: titleColIndex,
         location: locationColIndex,
         price: priceColIndex,
-        zimmer: zimmerColIndex
+        metaValueColumns: metaValueColumns
       });
 
       const properties = [];
@@ -103,14 +110,16 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
           const title = row[titleColIndex] || '';
           const location = row[locationColIndex] || '';
           const priceRaw = row[priceColIndex] || '';
-          const zimmer = row[zimmerColIndex] || '';
-
+          
+          // Get values from all meta value columns
+          const metaValues = metaValueColumns.map(colIndex => row[colIndex] || '');
+          
           console.log(`Processing row ${i}:`, {
             imageUrl,
             title,
             location,
             priceRaw,
-            zimmer
+            metaValues
           });
 
           // Skip empty rows
@@ -151,12 +160,31 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             }
           }
 
-          // Parse rooms
+          // Parse rooms and area from meta values
           let rooms = '1';
-          if (zimmer) {
-            const roomNumber = parseInt(zimmer.toString());
-            if (!isNaN(roomNumber)) {
-              rooms = roomNumber.toString();
+          let areaSqm = 50;
+          
+          for (const metaValue of metaValues) {
+            const valueStr = metaValue.toString().trim();
+            
+            // Check if this is rooms (just a number without units)
+            if (valueStr && /^\d+$/.test(valueStr)) {
+              const roomNumber = parseInt(valueStr);
+              if (roomNumber > 0 && roomNumber <= 20) { // Reasonable room count
+                rooms = roomNumber.toString();
+              }
+            }
+            
+            // Check if this is area (contains m² or numbers with decimal)
+            if (valueStr && (valueStr.includes('m²') || valueStr.includes(','))) {
+              const areaMatch = valueStr.match(/(\d+(?:,\d+)?)/);
+              if (areaMatch) {
+                const areaStr = areaMatch[1].replace(',', '.');
+                const areaValue = parseFloat(areaStr);
+                if (!isNaN(areaValue) && areaValue > 10 && areaValue < 1000) {
+                  areaSqm = Math.round(areaValue);
+                }
+              }
             }
           }
 
@@ -165,8 +193,9 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             cityName,
             priceMonthly,
             rooms,
+            areaSqm,
             originalPrice: priceRaw,
-            originalZimmer: zimmer
+            originalMetaValues: metaValues
           });
 
           // Create property object
@@ -177,7 +206,7 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             postal_code: postalCode,
             neighborhood: cityName,
             rooms: rooms,
-            area_sqm: 50, // Default area
+            area_sqm: areaSqm,
             price_monthly: priceMonthly,
             warmmiete_monthly: priceMonthly,
             additional_costs_monthly: 0,
@@ -257,7 +286,7 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
               <li><strong>A:</strong> Listing name/title</li>
               <li><strong>Frymo-listing-location:</strong> Postcode, city</li>
               <li><strong>Price:</strong> Price (×100 for decimals, as-is for whole numbers)</li>
-              <li><strong>Frymo-listing-meta-item-value:</strong> Number of rooms</li>
+              <li><strong>Frymo-listing-meta-item-value:</strong> Rooms (number) and Size (with m²)</li>
             </ul>
           </div>
         </div>
