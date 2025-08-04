@@ -39,9 +39,9 @@ export const CSVUpload: React.FC<CSVUploadProps> = ({ onUploadComplete }) => {
 
     try {
       // Get admin session token from localStorage
-      const token = localStorage.getItem('admin_token');
+      const token = localStorage.getItem('adminToken'); // Fixed: changed from 'admin_token' to 'adminToken'
       if (!token) {
-        throw new Error('No admin session found');
+        throw new Error('No admin session found. Please log in again.');
       }
 
       const formData = new FormData();
