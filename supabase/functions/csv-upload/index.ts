@@ -166,7 +166,7 @@ Deno.serve(async (req) => {
           }
         }
 
-        // Parse price - handle formats like "2.13€", "1.40€", etc.
+        // Parse price - handle formats like "3.24€", "2.13€", etc.
         let priceMonthly = 0;
         if (row.priceValue && row.priceValue !== 'auf Anfrage') {
           // Clean the price value: remove € symbol and quotes
@@ -176,12 +176,8 @@ Deno.serve(async (req) => {
           const priceValue = parseFloat(normalizedPrice);
           
           if (!isNaN(priceValue)) {
-            // If the price is like 2.13, it likely means 2130€, so multiply by 1000
-            if (priceValue < 100) {
-              priceMonthly = Math.round(priceValue * 1000);
-            } else {
-              priceMonthly = Math.round(priceValue);
-            }
+            // Price like 3.24€ means 324€, so multiply by 100
+            priceMonthly = Math.round(priceValue * 100);
           }
         }
 
@@ -199,10 +195,11 @@ Deno.serve(async (req) => {
           }
         }
 
-        // Parse rooms - from column 10 (additionalValue) 
+        // Parse rooms - from column 10 (additionalValue) - should be just the number
         let rooms = '1';
         if (row.additionalValue && !isNaN(parseInt(row.additionalValue))) {
-          rooms = row.additionalValue.toString();
+          const roomNumber = parseInt(row.additionalValue);
+          rooms = roomNumber.toString();
         }
 
         console.log(`Parsed data for row ${i}:`, {
