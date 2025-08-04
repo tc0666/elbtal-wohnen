@@ -188,6 +188,8 @@ export type Database = {
           description: string | null
           dishwasher: boolean | null
           dryer: boolean | null
+          eigenschaften_description: string | null
+          eigenschaften_tags: string[] | null
           elevator: boolean | null
           energy_certificate_type: string | null
           energy_certificate_value: string | null
@@ -216,6 +218,7 @@ export type Database = {
           tv: boolean | null
           updated_at: string
           utilities_included: boolean | null
+          warmmiete_monthly: number | null
           washing_machine: boolean | null
           year_built: number | null
         }
@@ -235,6 +238,8 @@ export type Database = {
           description?: string | null
           dishwasher?: boolean | null
           dryer?: boolean | null
+          eigenschaften_description?: string | null
+          eigenschaften_tags?: string[] | null
           elevator?: boolean | null
           energy_certificate_type?: string | null
           energy_certificate_value?: string | null
@@ -263,6 +268,7 @@ export type Database = {
           tv?: boolean | null
           updated_at?: string
           utilities_included?: boolean | null
+          warmmiete_monthly?: number | null
           washing_machine?: boolean | null
           year_built?: number | null
         }
@@ -282,6 +288,8 @@ export type Database = {
           description?: string | null
           dishwasher?: boolean | null
           dryer?: boolean | null
+          eigenschaften_description?: string | null
+          eigenschaften_tags?: string[] | null
           elevator?: boolean | null
           energy_certificate_type?: string | null
           energy_certificate_value?: string | null
@@ -310,6 +318,7 @@ export type Database = {
           tv?: boolean | null
           updated_at?: string
           utilities_included?: boolean | null
+          warmmiete_monthly?: number | null
           washing_machine?: boolean | null
           year_built?: number | null
         }
