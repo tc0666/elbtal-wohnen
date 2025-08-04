@@ -103,24 +103,44 @@ Deno.serve(async (req) => {
         const postalCode = locationMatch?.[1] || '';
         const cityName = locationMatch?.[2] || row.location;
 
-        // Parse price
+        // Parse price - handle formats like "2.13€", "1.40€", etc.
         let priceMonthly = 0;
-        const priceMatch = row.priceValue.match(/[\d.,]+/);
-        if (priceMatch && row.priceValue !== 'auf Anfrage') {
-          priceMonthly = Math.round(parseFloat(priceMatch[0].replace(',', '.')) * 100); // Convert to cents
+        if (row.priceValue && row.priceValue !== 'auf Anfrage') {
+          // Remove € symbol and convert comma to dot, then multiply by 1000 (assuming it's in thousands)
+          const cleanPrice = row.priceValue.replace(/[€\s]/g, '').replace(',', '.');
+          const priceMatch = cleanPrice.match(/[\d.]+/);
+          if (priceMatch) {
+            const priceValue = parseFloat(priceMatch[0]);
+            // If the price is like 2.13, it's likely 2130€, so multiply by 1000
+            if (priceValue < 100) {
+              priceMonthly = Math.round(priceValue * 1000);
+            } else {
+              priceMonthly = Math.round(priceValue);
+            }
+          }
         }
 
-        // Parse area
+        // Parse area - handle formats like "85,28 m²", "139,54 m²", etc.
         let areaSqm = 0;
-        const areaMatch = row.areaValue.match(/[\d.,]+/);
-        if (areaMatch) {
-          areaSqm = Math.round(parseFloat(areaMatch[0].replace(',', '.')));
+        if (row.areaValue) {
+          // Remove m² and other units, convert comma to dot
+          const cleanArea = row.areaValue.replace(/[m²\s]/g, '').replace(',', '.');
+          const areaMatch = cleanArea.match(/[\d.]+/);
+          if (areaMatch) {
+            areaSqm = Math.round(parseFloat(areaMatch[0]));
+          }
         }
 
-        // Parse rooms from additional data
+        // Parse rooms - should be in column 11 (additionalValue)
         let rooms = '1';
-        if (row.additionalLabel.toLowerCase().includes('zimmer')) {
-          rooms = row.additionalValue || '1';
+        if (row.additionalValue && !isNaN(parseInt(row.additionalValue))) {
+          rooms = row.additionalValue;
+        } else if (row.additionalLabel && row.additionalLabel.toLowerCase().includes('zimmer')) {
+          // Fallback: look for room number in the label
+          const roomMatch = row.additionalValue.match(/\d+/);
+          if (roomMatch) {
+            rooms = roomMatch[0];
+          }
         }
 
         const property = {

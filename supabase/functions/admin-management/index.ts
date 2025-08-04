@@ -349,6 +349,27 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'bulk_delete_properties':
+        const { error: bulkDeleteError } = await supabase
+          .from('properties')
+          .delete()
+          .neq('id', '00000000-0000-0000-0000-000000000000') // This will delete all properties
+        
+        if (bulkDeleteError) {
+          return new Response(
+            JSON.stringify({ error: 'Failed to delete properties', details: bulkDeleteError.message }),
+            { 
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+              status: 400 
+            }
+          )
+        }
+        
+        return new Response(
+          JSON.stringify({ success: true, message: 'All properties deleted successfully' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+
       default:
         return new Response(
           JSON.stringify({ error: 'Invalid action' }),

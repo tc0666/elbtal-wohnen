@@ -209,6 +209,34 @@ const PropertiesManagement = () => {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (!confirm('Sind Sie sicher, dass Sie ALLE Immobilien löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const { data } = await supabase.functions.invoke('admin-management', {
+        body: { action: 'bulk_delete_properties', token }
+      });
+
+      if (data?.success) {
+        toast({
+          title: "Erfolgreich",
+          description: "Alle Immobilien wurden gelöscht.",
+        });
+        fetchProperties();
+      }
+    } catch (error) {
+      console.error('Error bulk deleting properties:', error);
+      toast({
+        title: "Fehler",
+        description: "Immobilien konnten nicht gelöscht werden.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleEdit = (property: PropertyWithRelations) => {
     setEditingProperty(property);
     setShowForm(true);
@@ -275,12 +303,24 @@ const PropertiesManagement = () => {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold">Immobilien Verwaltung</h1>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-4 items-center">
         <Button 
           onClick={() => setShowForm(true)} 
-          className="w-full sm:w-auto flex items-center gap-2"
+          className="flex items-center gap-2"
         >
           <Plus className="h-4 w-4" />
           Neue Immobilie
+        </Button>
+        <Button 
+          variant="destructive" 
+          onClick={handleBulkDelete}
+          className="flex items-center gap-2"
+        >
+          <Trash2 className="h-4 w-4" />
+          Alle Immobilien löschen
         </Button>
       </div>
 
