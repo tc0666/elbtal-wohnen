@@ -162,7 +162,6 @@ Deno.serve(async (req) => {
           internet_speed: '100 Mbit/s',
           features_description: '',
           additional_description: `Original CSV data: ${JSON.stringify(row)}`,
-          neighborhood_description: '',
           eigenschaften_description: '',
           eigenschaften_tags: [],
           is_featured: false,
