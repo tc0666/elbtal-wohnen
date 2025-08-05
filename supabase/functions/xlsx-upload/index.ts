@@ -183,6 +183,12 @@ Deno.serve(async (req) => {
           arr.indexOf(img) === index && img !== ''
         );
 
+        console.log('Image processing for property:', {
+          allImageSources,
+          filteredImages: images,
+          duplicatesRemoved: allImageSources.length - images.length
+        });
+
         // Parse numeric values with proper decimal handling
         const parseNumber = (value, fallback = 0) => {
           if (!value) return fallback;
@@ -190,18 +196,36 @@ Deno.serve(async (req) => {
           // Convert to string and clean up
           const str = value.toString().trim();
           
-          // Replace German comma with decimal point
-          const normalized = str.replace(',', '.');
+          // Remove currency symbols and spaces first
+          const cleaned = str.replace(/[€$£¥\s]/g, '');
           
-          // Extract number (including decimals)
-          const match = normalized.match(/\d+(?:\.\d+)?/);
-          if (match) {
-            const parsed = parseFloat(match[0]);
-            return isNaN(parsed) ? fallback : Math.round(parsed);
+          // Replace German comma with decimal point
+          const normalized = cleaned.replace(/,/g, '.');
+          
+          // Remove all non-digit and non-dot characters except for thousands separators
+          // Handle cases like 1.250,50 (German) or 1,250.50 (US)
+          let numberStr = normalized.replace(/[^\d.]/g, '');
+          
+          // If multiple dots, assume the last one is decimal separator
+          const dotCount = (numberStr.match(/\./g) || []).length;
+          if (dotCount > 1) {
+            const lastDotIndex = numberStr.lastIndexOf('.');
+            numberStr = numberStr.substring(0, lastDotIndex).replace(/\./g, '') + numberStr.substring(lastDotIndex);
           }
           
-          return fallback;
+          const parsed = parseFloat(numberStr);
+          return isNaN(parsed) ? fallback : Math.round(parsed);
         };
+
+        console.log('Original property data:', {
+          Title: property['Title'],
+          Rent: property['Rent'],
+          Nebenkosten: property['Nebenkosten'],
+          size: property['size'],
+          'image-featured': property['image-featured'],
+          'image-1': property['image-1'],
+          'image-2': property['image-2']
+        });
 
         const propertyToInsert = {
           title: property['Title'] || 'Untitled Property',

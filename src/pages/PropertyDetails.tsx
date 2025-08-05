@@ -112,7 +112,7 @@ const PropertyDetails = () => {
     );
   }
 
-  const images = property.images || ['/placeholder.svg'];
+  const images = (property.images && property.images.length > 0) ? property.images : ['/placeholder.svg'];
 
   return (
     <div className="min-h-screen bg-background">
