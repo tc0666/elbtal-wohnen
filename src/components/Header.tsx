@@ -92,14 +92,12 @@ export const Header = () => {
           </NavigationMenu>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
+          <div
+            className="lg:hidden cursor-pointer"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
-          </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
