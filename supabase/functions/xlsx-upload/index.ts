@@ -189,30 +189,38 @@ Deno.serve(async (req) => {
           duplicatesRemoved: allImageSources.length - images.length
         });
 
-        // Parse numeric values with proper decimal handling
+        // Parse numeric values with proper European currency handling
         const parseNumber = (value, fallback = 0) => {
           if (!value) return fallback;
           
           // Convert to string and clean up
           const str = value.toString().trim();
           
-          // Remove currency symbols and spaces first
-          const cleaned = str.replace(/[€$£¥\s]/g, '');
-          
-          // Replace German comma with decimal point
-          const normalized = cleaned.replace(/,/g, '.');
-          
-          // Remove all non-digit and non-dot characters except for thousands separators
-          // Handle cases like 1.250,50 (German) or 1,250.50 (US)
-          let numberStr = normalized.replace(/[^\d.]/g, '');
-          
-          // If multiple dots, assume the last one is decimal separator
-          const dotCount = (numberStr.match(/\./g) || []).length;
-          if (dotCount > 1) {
-            const lastDotIndex = numberStr.lastIndexOf('.');
-            numberStr = numberStr.substring(0, lastDotIndex).replace(/\./g, '') + numberStr.substring(lastDotIndex);
+          // Check if this looks like European currency format (e.g., 1.360€, 1.36€)
+          const europeanCurrencyMatch = str.match(/^(\d+)\.(\d+)€?$/);
+          if (europeanCurrencyMatch) {
+            const wholePart = europeanCurrencyMatch[1];
+            const fractionalPart = europeanCurrencyMatch[2];
+            
+            // If fractional part is 2-3 digits, treat dot as thousands separator
+            // e.g., 1.360€ = 1360€, 1.36€ = 136€
+            if (fractionalPart.length <= 3) {
+              return parseInt(wholePart + fractionalPart);
+            }
           }
           
+          // Remove currency symbols and spaces
+          const cleaned = str.replace(/[€$£¥\s]/g, '');
+          
+          // Handle German decimal notation (comma as decimal separator)
+          if (cleaned.includes(',') && !cleaned.includes('.')) {
+            const normalized = cleaned.replace(',', '.');
+            const parsed = parseFloat(normalized);
+            return isNaN(parsed) ? fallback : Math.round(parsed);
+          }
+          
+          // Handle standard decimal notation
+          const numberStr = cleaned.replace(/[^\d.]/g, '');
           const parsed = parseFloat(numberStr);
           return isNaN(parsed) ? fallback : Math.round(parsed);
         };
