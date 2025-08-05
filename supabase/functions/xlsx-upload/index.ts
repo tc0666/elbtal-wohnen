@@ -196,17 +196,15 @@ Deno.serve(async (req) => {
           // Convert to string and clean up
           const str = value.toString().trim();
           
-          // Check if this looks like European currency format (e.g., 1.360€, 1.36€)
+          // Check if this looks like European currency format with thousands separator
+          // e.g., 1.249€ = 1249€, 1.36€ = 136€, 1.360€ = 1360€
           const europeanCurrencyMatch = str.match(/^(\d+)\.(\d+)€?$/);
           if (europeanCurrencyMatch) {
             const wholePart = europeanCurrencyMatch[1];
             const fractionalPart = europeanCurrencyMatch[2];
             
-            // If fractional part is 2-3 digits, treat dot as thousands separator
-            // e.g., 1.360€ = 1360€, 1.36€ = 136€
-            if (fractionalPart.length <= 3) {
-              return parseInt(wholePart + fractionalPart);
-            }
+            // In European format, dot is thousands separator, so combine the parts
+            return parseInt(wholePart + fractionalPart);
           }
           
           // Remove currency symbols and spaces
