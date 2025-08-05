@@ -65,159 +65,118 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
         throw new Error('No admin session found. Please log in again.');
       }
 
-      // Parse XLSX file
+      // Parse XLSX file using the new structure
       const xlsxData = await parseXLSXFile(file);
       
       if (xlsxData.length < 2) {
         throw new Error('XLSX file must have at least a header row and one data row');
       }
 
-      // Get headers from first row
-      const headers = xlsxData[0] as string[];
-      console.log('XLSX Headers:', headers);
+      // Convert to JSON format with column headers
+      const workbook = XLSX.read(await file.arrayBuffer());
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      // Find column indices - handle multiple Frymo-listing-meta-item-value columns
-      const imageColIndex = headers.findIndex(h => h && h.toLowerCase().includes('attachment-medium image'));
-      const titleColIndex = headers.findIndex(h => h === 'A');
-      const locationColIndex = headers.findIndex(h => h && h.toLowerCase().includes('frymo-listing-location'));
-      const priceColIndex = headers.findIndex(h => h && h.toLowerCase().includes('price'));
-      
-      // Find all Frymo-listing-meta-item-value columns
-      const metaValueColumns = [];
-      headers.forEach((header, index) => {
-        if (header && header.toLowerCase().includes('frymo-listing-meta-item-value')) {
-          metaValueColumns.push(index);
-        }
-      });
-
-      console.log('Column indices:', {
-        image: imageColIndex,
-        title: titleColIndex,
-        location: locationColIndex,
-        price: priceColIndex,
-        metaValueColumns: metaValueColumns
-      });
+      console.log('XLSX Data:', jsonData);
 
       const properties = [];
       const errors = [];
 
-      // Process each row (skip header)
-      for (let i = 1; i < xlsxData.length; i++) {
+      // Process each row
+      for (let i = 0; i < jsonData.length; i++) {
         try {
-          const row = xlsxData[i] as any[];
+          const row = jsonData[i] as any;
           
-          const imageUrl = row[imageColIndex] || '';
-          const title = row[titleColIndex] || '';
-          const location = row[locationColIndex] || '';
-          const priceRaw = row[priceColIndex] || '';
-          
-          // Get values from all meta value columns
-          const metaValues = metaValueColumns.map(colIndex => row[colIndex] || '');
-          
-          console.log(`Processing row ${i}:`, {
-            imageUrl,
-            title,
-            location,
-            priceRaw,
-            metaValues
-          });
+          console.log(`Processing row ${i + 1}:`, row);
 
           // Skip empty rows
-          if (!title && !location) continue;
+          if (!row['Title'] && !row['postcode-city']) continue;
 
-          // Parse location (e.g., "14199, Berlin")
-          const locationMatch = location.match(/^(\d{5}),?\s*(.+)$/);
+          // Parse postcode-city field
           let postalCode = '';
           let cityName = '';
-          
-          if (locationMatch) {
-            postalCode = locationMatch[1];
-            cityName = locationMatch[2].trim();
-          } else {
-            const parts = location.split(',');
-            if (parts.length >= 2) {
-              postalCode = parts[0].trim();
-              cityName = parts[1].trim();
+          if (row['postcode-city']) {
+            const postcodeCity = row['postcode-city'].toString().trim();
+            const match = postcodeCity.match(/^(\d{5})\s+(.+)$/);
+            if (match) {
+              postalCode = match[1];
+              cityName = match[2];
             } else {
-              cityName = location.trim();
-            }
-          }
-
-          // Parse price - multiply by 100 if it contains a decimal point
-          let priceMonthly = 0;
-          if (priceRaw && priceRaw !== 'auf Anfrage') {
-            const priceStr = priceRaw.toString().replace(/[€,]/g, '').trim();
-            const priceValue = parseFloat(priceStr);
-            
-            if (!isNaN(priceValue)) {
-              if (priceStr.includes('.')) {
-                // Has decimal point, multiply by 100
-                priceMonthly = Math.round(priceValue * 100);
+              // Fallback: try to split by space and assume first part is postcode
+              const parts = postcodeCity.split(' ');
+              if (parts.length >= 2 && /^\d{5}$/.test(parts[0])) {
+                postalCode = parts[0];
+                cityName = parts.slice(1).join(' ');
               } else {
-                // No decimal point, use as is
-                priceMonthly = Math.round(priceValue);
+                cityName = postcodeCity;
               }
             }
           }
 
-          // Parse rooms and area from meta values
-          let rooms = '1';
-          let areaSqm = 50;
+          // Parse available date
+          let availableFrom = new Date().toISOString().split('T')[0];
+          if (row['Verfügbar']) {
+            try {
+              const verfugbarDate = new Date(row['Verfügbar']);
+              if (!isNaN(verfugbarDate.getTime())) {
+                availableFrom = verfugbarDate.toISOString().split('T')[0];
+              }
+            } catch (e) {
+              console.log('Could not parse Verfügbar date:', row['Verfügbar']);
+            }
+          }
+
+          // Collect all images
+          const images = [];
           
-          for (const metaValue of metaValues) {
-            const valueStr = metaValue.toString().trim();
-            
-            // Check if this is rooms (just a number without units)
-            if (valueStr && /^\d+$/.test(valueStr)) {
-              const roomNumber = parseInt(valueStr);
-              if (roomNumber > 0 && roomNumber <= 20) { // Reasonable room count
-                rooms = roomNumber.toString();
-              }
-            }
-            
-            // Check if this is area (contains m² or numbers with decimal)
-            if (valueStr && (valueStr.includes('m²') || valueStr.includes(','))) {
-              const areaMatch = valueStr.match(/(\d+(?:,\d+)?)/);
-              if (areaMatch) {
-                const areaStr = areaMatch[1].replace(',', '.');
-                const areaValue = parseFloat(areaStr);
-                if (!isNaN(areaValue) && areaValue > 10 && areaValue < 1000) {
-                  areaSqm = Math.round(areaValue);
-                }
-              }
+          // Add featured image first
+          if (row['image-featured']) {
+            images.push(row['image-featured']);
+          }
+          
+          // Add additional images
+          for (let imgNum = 1; imgNum <= 7; imgNum++) {
+            const imgKey = `image-${imgNum}`;
+            if (row[imgKey]) {
+              images.push(row[imgKey]);
             }
           }
 
-          console.log(`Parsed data for row ${i}:`, {
-            postalCode,
-            cityName,
-            priceMonthly,
-            rooms,
-            areaSqm,
-            originalPrice: priceRaw,
-            originalMetaValues: metaValues
-          });
+          // Parse numeric values with fallbacks
+          const parseNumber = (value: any, fallback = 0) => {
+            if (!value) return fallback;
+            const parsed = parseInt(value.toString().replace(/[^\d]/g, ''));
+            return isNaN(parsed) ? fallback : parsed;
+          };
 
           // Create property object
           const property = {
-            title: title || `Property ${i}`,
-            description: `Imported from XLSX`,
-            address: postalCode, // Only postal code
-            postal_code: postalCode,
-            neighborhood: cityName, // Only city name
-            rooms: rooms,
-            area_sqm: areaSqm,
-            price_monthly: priceMonthly,
-            warmmiete_monthly: priceMonthly,
-            additional_costs_monthly: 0,
-            city_name: cityName,
-            images: imageUrl ? [imageUrl] : []
+            Title: row['Title'] || 'Untitled Property',
+            'image-featured': row['image-featured'] || '',
+            'image-1': row['image-1'] || '',
+            'image-2': row['image-2'] || '',
+            'image-3': row['image-3'] || '',
+            'image-4': row['image-4'] || '',
+            'image-5': row['image-5'] || '',
+            'image-6': row['image-6'] || '',
+            'image-7': row['image-7'] || '',
+            'Verfügbar': row['Verfügbar'] || '',
+            'Objektbeschreibung': row['Objektbeschreibung'] || '',
+            'Ausstattungsmerkmale': row['Ausstattungsmerkmale'] || '',
+            'Rent': row['Rent'] || '',
+            'Nebenkosten': row['Nebenkosten'] || '',
+            'postcode-city': row['postcode-city'] || '',
+            'address': row['address'] || '',
+            'size': row['size'] || '',
+            'zimmer': row['zimmer'] || '',
+            'Weitere': row['Weitere'] || ''
           };
 
           properties.push(property);
         } catch (error) {
-          console.error(`Error processing row ${i}:`, error);
-          errors.push(`Row ${i}: ${error.message}`);
+          console.error(`Error processing row ${i + 1}:`, error);
+          errors.push(`Row ${i + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
 
@@ -282,11 +241,19 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
           <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
             <p>The XLSX should have these columns:</p>
             <ul className="list-disc list-inside mt-1 space-y-0.5">
-              <li><strong>Attachment-medium Image:</strong> Property image URL</li>
-              <li><strong>A:</strong> Listing name/title</li>
-              <li><strong>Frymo-listing-location:</strong> Postcode, city</li>
-              <li><strong>Price:</strong> Price (×100 for decimals, as-is for whole numbers)</li>
-              <li><strong>Frymo-listing-meta-item-value:</strong> Rooms (number) and Size (with m²)</li>
+              <li><strong>Title:</strong> Property title</li>
+              <li><strong>image-featured:</strong> Featured image URL</li>
+              <li><strong>image-1, image-2, ..., image-7:</strong> Additional carousel images</li>
+              <li><strong>Verfügbar:</strong> Available from date</li>
+              <li><strong>Objektbeschreibung:</strong> Property description</li>
+              <li><strong>Ausstattungsmerkmale:</strong> Features description</li>
+              <li><strong>Rent:</strong> Cold rent amount</li>
+              <li><strong>Nebenkosten:</strong> Additional costs</li>
+              <li><strong>postcode-city:</strong> Postcode and city (e.g., "12345 Berlin")</li>
+              <li><strong>address:</strong> Property address</li>
+              <li><strong>size:</strong> Property size in m²</li>
+              <li><strong>zimmer:</strong> Number of rooms</li>
+              <li><strong>Weitere:</strong> Additional description</li>
             </ul>
           </div>
         </div>
