@@ -24,7 +24,7 @@ export const Header = () => {
               <img 
                 src="/lovable-uploads/a7735ad6-ddd2-4f51-a31e-f2247aeeb345.png" 
                 alt="AMIEL - Immobilienverwaltung seit 1988" 
-                className="h-12 w-auto"
+                className="h-12 w-auto lg:h-12 md:h-10 h-8"
               />
             </Link>
           </div>
@@ -95,10 +95,10 @@ export const Header = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden h-12 w-12"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
 
