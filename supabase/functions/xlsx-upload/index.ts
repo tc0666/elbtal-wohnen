@@ -173,14 +173,13 @@ Deno.serve(async (req) => {
           allImageSources.push(property['image-featured'].trim());
         }
         
-        // Add additional images, but skip if they're identical to featured image
-        for (let imgNum = 1; imgNum <= 7; imgNum++) {
+        // Skip image-1 and image-2, only add image-3 onwards
+        for (let imgNum = 3; imgNum <= 7; imgNum++) {
           const imgKey = `image-${imgNum}`;
           if (property[imgKey] && 
               property[imgKey].trim() &&
               !property[imgKey].includes('data:image/svg+xml') &&
-              property[imgKey].trim() !== '' &&
-              property[imgKey].trim() !== property['image-featured']?.trim()) {
+              property[imgKey].trim() !== '') {
             allImageSources.push(property[imgKey].trim());
           }
         }
