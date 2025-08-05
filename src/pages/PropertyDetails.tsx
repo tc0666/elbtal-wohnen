@@ -212,7 +212,18 @@ const PropertyDetails = () => {
                   </>
                 )}
 
-                <Separator className="my-6" />
+                {/* Ausstattung Section */}
+                {property.features_description && (
+                  <>
+                    <div className="mb-6">
+                      <CardTitle className="mb-3">Ausstattung</CardTitle>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {property.features_description}
+                      </p>
+                    </div>
+                    <Separator className="my-6" />
+                  </>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
@@ -272,7 +283,7 @@ const PropertyDetails = () => {
 
                 {/* Address Section */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Adresse</h4>
+                  <CardTitle className="mb-3">Adresse</CardTitle>
                   <div className="space-y-2">
                     <div className="text-lg font-medium">{property.address}</div>
                     <div className="text-muted-foreground">
@@ -292,9 +303,9 @@ const PropertyDetails = () => {
 
                 {/* Energy Information */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3">
+                  <CardTitle className="mb-3">
                     Energie & Heizung
-                  </h4>
+                  </CardTitle>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <span className="text-sm text-muted-foreground">Energieausweis:</span>
@@ -317,12 +328,9 @@ const PropertyDetails = () => {
 
                 <Separator className="my-6" />
 
-
-                <Separator className="my-6" />
-
                 {/* Additional Description */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Weitere Beschreibung</h4>
+                  <CardTitle className="mb-3">Weitere Beschreibung</CardTitle>
                   <div className="text-muted-foreground leading-relaxed">
                     {property.additional_description ? (
                       <div dangerouslySetInnerHTML={{
@@ -333,19 +341,6 @@ const PropertyDetails = () => {
                     )}
                   </div>
                 </div>
-
-                {/* Ausstattung Section */}
-                {property.features_description && (
-                  <>
-                    <Separator className="my-6" />
-                    <div className="mb-6">
-                      <h4 className="font-semibold mb-3">Ausstattung</h4>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {property.features_description}
-                      </p>
-                    </div>
-                  </>
-                )}
               </CardContent>
             </Card>
           </div>
