@@ -162,27 +162,45 @@ Deno.serve(async (req) => {
           }
         }
 
-        // Collect all images
-        const images = [];
+        // Collect all images and filter duplicates
+        const allImageSources = [];
         
         // Add featured image first
-        if (property['image-featured']) {
-          images.push(property['image-featured']);
+        if (property['image-featured'] && property['image-featured'].trim()) {
+          allImageSources.push(property['image-featured'].trim());
         }
         
         // Add additional images
         for (let imgNum = 1; imgNum <= 7; imgNum++) {
           const imgKey = `image-${imgNum}`;
-          if (property[imgKey]) {
-            images.push(property[imgKey]);
+          if (property[imgKey] && property[imgKey].trim()) {
+            allImageSources.push(property[imgKey].trim());
           }
         }
+        
+        // Remove duplicates while preserving order
+        const images = allImageSources.filter((img, index, arr) => 
+          arr.indexOf(img) === index && img !== ''
+        );
 
-        // Parse numeric values with fallbacks
+        // Parse numeric values with proper decimal handling
         const parseNumber = (value, fallback = 0) => {
           if (!value) return fallback;
-          const parsed = parseInt(value.toString().replace(/[^\d]/g, ''));
-          return isNaN(parsed) ? fallback : parsed;
+          
+          // Convert to string and clean up
+          const str = value.toString().trim();
+          
+          // Replace German comma with decimal point
+          const normalized = str.replace(',', '.');
+          
+          // Extract number (including decimals)
+          const match = normalized.match(/\d+(?:\.\d+)?/);
+          if (match) {
+            const parsed = parseFloat(match[0]);
+            return isNaN(parsed) ? fallback : Math.round(parsed);
+          }
+          
+          return fallback;
         };
 
         const propertyToInsert = {
