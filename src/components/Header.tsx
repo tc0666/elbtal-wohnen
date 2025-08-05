@@ -22,7 +22,7 @@ export const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="block">
               <img 
-                src="/lovable-uploads/a7735ad6-ddd2-4f51-a31e-f2247aeeb345.png" 
+                src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png" 
                 alt="AMIEL - Immobilienverwaltung seit 1988" 
                 className="h-12 w-auto lg:h-12 md:h-10 h-8"
               />

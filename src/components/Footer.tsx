@@ -9,7 +9,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <div>
               <img 
-                src="/lovable-uploads/a7735ad6-ddd2-4f51-a31e-f2247aeeb345.png" 
+                src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png" 
                 alt="AMIEL - Immobilienverwaltung seit 1988" 
                 className="h-16 w-auto mb-2"
               />
