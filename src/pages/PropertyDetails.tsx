@@ -182,19 +182,6 @@ const PropertyDetails = () => {
                   {property.description}
                 </p>
 
-                {/* Ausstattung Description */}
-                {property.features_description && (
-                  <>
-                    <div className="mb-6">
-                      <h4 className="font-semibold mb-3">Ausstattung</h4>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {property.features_description}
-                      </p>
-                    </div>
-                    <Separator className="my-6" />
-                  </>
-                )}
-
                 {/* Eigenschaften Tags */}
                 {(property as any).eigenschaften_tags && (property as any).eigenschaften_tags.length > 0 && (
                   <>
@@ -224,91 +211,6 @@ const PropertyDetails = () => {
                     <Separator className="my-6" />
                   </>
                 )}
-
-                {/* Property checkboxes features */}
-                <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Ausstattungsmerkmale</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {property.balcony && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                        Balkon
-                      </div>
-                    )}
-                    {property.elevator && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <ArrowUp className="h-4 w-4 mr-2" />
-                        Aufzug
-                      </div>
-                    )}
-                    {property.parking && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <Car className="h-4 w-4 mr-2" />
-                        Parkplatz
-                      </div>
-                    )}
-                    {property.pets_allowed && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <PawPrint className="h-4 w-4 mr-2" />
-                        Haustiere erlaubt
-                      </div>
-                    )}
-                    {property.furnished && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <Home className="h-4 w-4 mr-2" />
-                        Möbliert
-                      </div>
-                    )}
-                    {property.kitchen_equipped && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Küche ausgestattet
-                      </div>
-                    )}
-                    {property.dishwasher && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Spülmaschine
-                      </div>
-                    )}
-                    {property.washing_machine && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Waschmaschine
-                      </div>
-                    )}
-                    {property.dryer && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Trockner
-                      </div>
-                    )}
-                    {property.tv && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        TV
-                      </div>
-                    )}
-                    {property.garden && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Garten
-                      </div>
-                    )}
-                    {property.cellar && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Keller
-                      </div>
-                    )}
-                    {property.attic && (
-                      <div className="flex items-center text-sm bg-muted px-3 py-2 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Dachboden
-                      </div>
-                    )}
-                  </div>
-                </div>
 
                 <Separator className="my-6" />
 
@@ -433,6 +335,20 @@ const PropertyDetails = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Ausstattung Section */}
+            {property.features_description && (
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle>Ausstattung</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {property.features_description}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Right Column - 40% */}
