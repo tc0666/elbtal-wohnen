@@ -162,26 +162,37 @@ Deno.serve(async (req) => {
           }
         }
 
-        // Collect all images and filter duplicates
+        // Collect all images and filter duplicates more strictly
         const allImageSources = [];
         
-        // Add featured image first
-        if (property['image-featured'] && property['image-featured'].trim()) {
+        // Add featured image first if it exists and is valid
+        if (property['image-featured'] && 
+            property['image-featured'].trim() && 
+            !property['image-featured'].includes('data:image/svg+xml') &&
+            property['image-featured'].trim() !== '') {
           allImageSources.push(property['image-featured'].trim());
         }
         
-        // Add additional images
+        // Add additional images, but skip if they're identical to featured image
         for (let imgNum = 1; imgNum <= 7; imgNum++) {
           const imgKey = `image-${imgNum}`;
-          if (property[imgKey] && property[imgKey].trim()) {
+          if (property[imgKey] && 
+              property[imgKey].trim() &&
+              !property[imgKey].includes('data:image/svg+xml') &&
+              property[imgKey].trim() !== '' &&
+              property[imgKey].trim() !== property['image-featured']?.trim()) {
             allImageSources.push(property[imgKey].trim());
           }
         }
         
-        // Remove duplicates while preserving order
-        const images = allImageSources.filter((img, index, arr) => 
-          arr.indexOf(img) === index && img !== ''
-        );
+        // Remove duplicates while preserving order and filter out empty/invalid URLs
+        const images = allImageSources.filter((img, index, arr) => {
+          return img && 
+                 img.trim() !== '' && 
+                 arr.indexOf(img) === index && 
+                 !img.includes('data:image/svg+xml') &&
+                 img.startsWith('http');
+        });
 
         console.log('Image processing for property:', {
           allImageSources,

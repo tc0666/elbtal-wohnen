@@ -421,9 +421,15 @@ const PropertyDetails = () => {
                 {/* Additional Description */}
                 <div className="mb-6">
                   <h4 className="font-semibold mb-3">Weitere Beschreibung</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {property.additional_description || 'Weitere Informationen werden in Kürze ergänzt.'}
-                  </p>
+                  <div className="text-muted-foreground leading-relaxed">
+                    {property.additional_description ? (
+                      <div dangerouslySetInnerHTML={{
+                        __html: property.additional_description.replace(/\n/g, '<br />')
+                      }} />
+                    ) : (
+                      'Weitere Informationen werden in Kürze ergänzt.'
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
