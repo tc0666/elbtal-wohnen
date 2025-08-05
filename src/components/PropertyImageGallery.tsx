@@ -17,8 +17,16 @@ const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({
   const [loadingImages, setLoadingImages] = useState<Set<number>>(new Set());
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
 
-  // Filter out failed images
-  const validImages = images.filter((_, index) => !failedImages.has(index));
+  // Filter out empty, duplicate, and failed images
+  const uniqueImages = images
+    .filter((img, index, array) => 
+      img && // Remove empty/null images
+      img.trim() !== '' && // Remove empty strings
+      img !== '/placeholder.svg' && // Remove placeholder
+      array.indexOf(img) === index // Remove duplicates (keep first occurrence)
+    );
+  
+  const validImages = uniqueImages.filter((_, index) => !failedImages.has(index));
   const currentValidIndex = Math.min(currentIndex, validImages.length - 1);
 
   const handlePrevious = () => {
@@ -119,27 +127,24 @@ const PropertyImageGallery: React.FC<PropertyImageGalleryProps> = ({
       {/* Thumbnail Strip */}
       {validImages.length > 1 && (
         <div className="mt-4 flex space-x-3 overflow-x-auto pb-2">
-          {validImages.map((image, index) => {
-            const originalIndex = images.findIndex(img => img === image);
-            return (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`flex-shrink-0 w-24 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                  index === currentValidIndex
-                    ? 'border-primary ring-2 ring-primary/20'
-                    : 'border-border hover:border-muted-foreground'
-                }`}
-              >
-                <img
-                  src={image}
-                  alt={`${title} - Thumbnail ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  onError={() => handleImageError(originalIndex)}
-                />
-              </button>
-            );
-          })}
+          {validImages.map((image, index) => (
+            <button
+              key={`${image}-${index}`}
+              onClick={() => setCurrentIndex(index)}
+              className={`flex-shrink-0 w-24 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                index === currentValidIndex
+                  ? 'border-primary ring-2 ring-primary/20'
+                  : 'border-border hover:border-muted-foreground'
+              }`}
+            >
+              <img
+                src={image}
+                alt={`${title} - Thumbnail ${index + 1}`}
+                className="w-full h-full object-cover"
+                onError={() => handleImageError(index)}
+              />
+            </button>
+          ))}
         </div>
       )}
     </div>
