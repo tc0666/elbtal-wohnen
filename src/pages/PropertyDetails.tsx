@@ -333,22 +333,21 @@ const PropertyDetails = () => {
                     )}
                   </div>
                 </div>
+
+                {/* Ausstattung Section */}
+                {property.features_description && (
+                  <>
+                    <Separator className="my-6" />
+                    <div className="mb-6">
+                      <h4 className="font-semibold mb-3">Ausstattung</h4>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {property.features_description}
+                      </p>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
-
-            {/* Ausstattung Section */}
-            {property.features_description && (
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle>Ausstattung</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {property.features_description}
-                  </p>
-                </CardContent>
-              </Card>
-            )}
           </div>
 
           {/* Right Column - 40% */}
