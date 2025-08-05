@@ -189,14 +189,26 @@ Deno.serve(async (req) => {
           duplicatesRemoved: allImageSources.length - images.length
         });
 
-        // Parse numeric values with proper European currency handling
+        // Parse numeric values with proper handling for different field types
         const parseNumber = (value, fallback = 0) => {
           if (!value) return fallback;
           
           // Convert to string and clean up
           const str = value.toString().trim();
           
-          // Check if this looks like European currency format with thousands separator
+          // Handle area/size fields (e.g., "ca. 83,60 m²")
+          if (str.includes('m²') || str.includes('qm') || str.includes('ca.')) {
+            // Extract number from size string, handle German decimal notation
+            const sizeMatch = str.match(/(\d+[,.]?\d*)/);
+            if (sizeMatch) {
+              const numberStr = sizeMatch[1].replace(',', '.');
+              const parsed = parseFloat(numberStr);
+              return isNaN(parsed) ? fallback : Math.round(parsed);
+            }
+            return fallback;
+          }
+          
+          // Handle European currency format with thousands separator
           // e.g., 1.249€ = 1249€, 1.36€ = 136€, 1.360€ = 1360€
           const europeanCurrencyMatch = str.match(/^(\d+)\.(\d+)€?$/);
           if (europeanCurrencyMatch) {
