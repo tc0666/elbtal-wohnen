@@ -125,26 +125,83 @@ Deno.serve(async (req) => {
         
         console.log(`Processing property ${i + 1}:`, property);
 
+        // Parse postcode-city field
+        let postalCode = '';
+        let cityName = '';
+        if (property['postcode-city']) {
+          const postcodeCity = property['postcode-city'].toString().trim();
+          const match = postcodeCity.match(/^(\d{5})\s+(.+)$/);
+          if (match) {
+            postalCode = match[1];
+            cityName = match[2];
+          } else {
+            // Fallback: try to split by space and assume first part is postcode
+            const parts = postcodeCity.split(' ');
+            if (parts.length >= 2 && /^\d{5}$/.test(parts[0])) {
+              postalCode = parts[0];
+              cityName = parts.slice(1).join(' ');
+            } else {
+              cityName = postcodeCity;
+            }
+          }
+        }
+
         // Find or create the city
-        const cityId = await findOrCreateCity(property.city_name || 'Unknown');
+        const cityId = await findOrCreateCity(cityName || 'Unknown');
+
+        // Parse available date
+        let availableFrom = new Date().toISOString().split('T')[0];
+        if (property['Verfügbar']) {
+          try {
+            const verfugbarDate = new Date(property['Verfügbar']);
+            if (!isNaN(verfugbarDate.getTime())) {
+              availableFrom = verfugbarDate.toISOString().split('T')[0];
+            }
+          } catch (e) {
+            console.log('Could not parse Verfügbar date:', property['Verfügbar']);
+          }
+        }
+
+        // Collect all images
+        const images = [];
+        
+        // Add featured image first
+        if (property['image-featured']) {
+          images.push(property['image-featured']);
+        }
+        
+        // Add additional images
+        for (let imgNum = 1; imgNum <= 7; imgNum++) {
+          const imgKey = `image-${imgNum}`;
+          if (property[imgKey]) {
+            images.push(property[imgKey]);
+          }
+        }
+
+        // Parse numeric values with fallbacks
+        const parseNumber = (value, fallback = 0) => {
+          if (!value) return fallback;
+          const parsed = parseInt(value.toString().replace(/[^\d]/g, ''));
+          return isNaN(parsed) ? fallback : parsed;
+        };
 
         const propertyToInsert = {
-          title: property.title,
-          description: property.description || `Imported from XLSX`,
-          address: property.address, // Just postal code now
-          postal_code: property.postal_code,
-          neighborhood: property.neighborhood, // Just city name
-          rooms: property.rooms,
-          area_sqm: property.area_sqm,
-          price_monthly: property.price_monthly,
-          warmmiete_monthly: property.warmmiete_monthly,
-          additional_costs_monthly: property.additional_costs_monthly,
+          title: property['Title'] || 'Untitled Property',
+          description: property['Objektbeschreibung'] || 'Imported from XLSX',
+          address: property['address'] || '',
+          postal_code: postalCode,
+          neighborhood: cityName,
+          rooms: property['zimmer']?.toString() || '1',
+          area_sqm: parseNumber(property['size'], 50),
+          price_monthly: parseNumber(property['Rent']),
+          warmmiete_monthly: parseNumber(property['Rent']) + parseNumber(property['Nebenkosten']),
+          additional_costs_monthly: parseNumber(property['Nebenkosten']),
           property_type_id: defaultPropertyTypeId,
           city_id: cityId || fallbackCityId,
           floor: 1,
           total_floors: 5,
           year_built: 2000,
-          available_from: new Date().toISOString().split('T')[0],
+          available_from: availableFrom,
           deposit_months: 3,
           kitchen_equipped: false,
           furnished: false,
@@ -165,13 +222,13 @@ Deno.serve(async (req) => {
           heating_type: 'Zentralheizung',
           heating_energy_source: 'Gas',
           internet_speed: '100 Mbit/s',
-          features_description: '',
-          additional_description: `Imported from XLSX: ${JSON.stringify(property)}`,
+          features_description: property['Ausstattungsmerkmale'] || '',
+          additional_description: property['Weitere'] || '',
           eigenschaften_description: '',
           eigenschaften_tags: [],
           is_featured: false,
           is_active: true,
-          images: property.images || [],
+          images: images,
         };
 
         const { data, error } = await supabase
