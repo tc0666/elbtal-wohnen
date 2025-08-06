@@ -37,10 +37,21 @@ serve(async (req) => {
       .eq('token', token)
       .eq('is_active', true)
       .gte('expires_at', new Date().toISOString())
-      .single()
+      .maybeSingle()
 
-    if (sessionError || !sessionData) {
-      console.error('Invalid session:', sessionError)
+    if (sessionError) {
+      console.error('Session query error:', sessionError)
+      return new Response(
+        JSON.stringify({ error: 'Session validation failed' }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+          status: 500 
+        }
+      )
+    }
+
+    if (!sessionData) {
+      console.error('No valid session found for token')
       return new Response(
         JSON.stringify({ error: 'Invalid or expired session' }),
         { 
