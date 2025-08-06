@@ -173,8 +173,8 @@ Deno.serve(async (req) => {
           allImageSources.push(property['image-featured'].trim());
         }
         
-        // Add additional images from image-1 to image-6
-        for (let imgNum = 1; imgNum <= 6; imgNum++) {
+        // Skip image-1 and image-2, only add image-3 onwards
+        for (let imgNum = 3; imgNum <= 7; imgNum++) {
           const imgKey = `image-${imgNum}`;
           if (property[imgKey] && 
               property[imgKey].trim() &&
@@ -219,24 +219,14 @@ Deno.serve(async (req) => {
           }
           
           // Handle European currency format with thousands separator
-          // e.g., 1.249€ = 1249€, but 1.044 = 1044 (price in euros)
+          // e.g., 1.249€ = 1249€, 1.36€ = 136€, 1.360€ = 1360€
           const europeanCurrencyMatch = str.match(/^(\d+)\.(\d+)€?$/);
           if (europeanCurrencyMatch) {
-            const wholePart = parseInt(europeanCurrencyMatch[1]);
-            const fractionalPart = parseInt(europeanCurrencyMatch[2]);
+            const wholePart = europeanCurrencyMatch[1];
+            const fractionalPart = europeanCurrencyMatch[2];
             
-            // If fractional part is small (< 100), treat as cents/decimal
-            if (fractionalPart < 100) {
-              return wholePart * 1000 + fractionalPart; // Convert 1.044 to 1044
-            } else {
-              // Otherwise treat as thousands separator
-              return parseInt(wholePart + europeanCurrencyMatch[2]);
-            }
-          }
-          
-          // Handle decimal numbers like 1.044 (should become 1044)
-          if (typeof value === 'number') {
-            return Math.round(value * 1000);
+            // In European format, dot is thousands separator, so combine the parts
+            return parseInt(wholePart + fractionalPart);
           }
           
           // Remove currency symbols and spaces
@@ -273,7 +263,7 @@ Deno.serve(async (req) => {
           neighborhood: cityName,
           rooms: property['zimmer']?.toString() || '1',
           area_sqm: parseNumber(property['size'], 50),
-          price_monthly: parseNumber(property['Rent']) || 1, // Ensure minimum value
+          price_monthly: parseNumber(property['Rent']),
           warmmiete_monthly: parseNumber(property['Rent']) + parseNumber(property['Nebenkosten']),
           additional_costs_monthly: parseNumber(property['Nebenkosten']),
           property_type_id: defaultPropertyTypeId,
@@ -304,22 +294,12 @@ Deno.serve(async (req) => {
           internet_speed: '100 Mbit/s',
           features_description: property['Ausstattungsmerkmale'] || '',
           additional_description: property['Weitere'] || '',
-          neighborhood_description: property['Lage'] || '',
           eigenschaften_description: '',
           eigenschaften_tags: [],
           is_featured: false,
           is_active: true,
           images: images,
         };
-
-        console.log('Inserting property:', {
-          title: propertyToInsert.title,
-          price_monthly: propertyToInsert.price_monthly,
-          area_sqm: propertyToInsert.area_sqm,
-          city_id: propertyToInsert.city_id,
-          property_type_id: propertyToInsert.property_type_id,
-          images_count: images.length
-        });
 
         const { data, error } = await supabase
           .from('properties')
