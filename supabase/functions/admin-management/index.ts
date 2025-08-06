@@ -225,71 +225,103 @@ serve(async (req) => {
         )
 
       case 'create_property':
-        const propertyData = data.propertyData || data.property;
-        
-        if (!propertyData) {
-          console.error('No property data provided');
-          throw new Error('Property data is required');
-        }
+        try {
+          const propertyData = data.propertyData || data.property;
+          
+          if (!propertyData) {
+            return new Response(
+              JSON.stringify({ error: 'Property data is required' }),
+              { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
 
-        console.log('Received property data:', JSON.stringify(propertyData, null, 2));
+          console.log('Received property data:', JSON.stringify(propertyData, null, 2));
 
-        // Validate required fields
-        const requiredFields = ['title', 'rooms', 'area_sqm', 'price_monthly', 'address'];
-        const missingFields = requiredFields.filter(field => {
-          const value = propertyData[field];
-          return value === null || value === undefined || value === '' || 
-                 (field === 'area_sqm' && (isNaN(Number(value)) || Number(value) <= 0)) ||
-                 (field === 'price_monthly' && (isNaN(Number(value)) || Number(value) <= 0));
-        });
+          // Basic validation for required fields
+          if (!propertyData.title || !propertyData.address || !propertyData.rooms) {
+            return new Response(
+              JSON.stringify({ error: 'Title, address, and rooms are required' }),
+              { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
 
-        if (missingFields.length > 0) {
-          console.error('Missing or invalid required fields:', missingFields, 'Data:', propertyData);
+          // Clean and validate data
+          const cleanPropertyData = {
+            title: String(propertyData.title).trim(),
+            description: propertyData.description ? String(propertyData.description).trim() : null,
+            address: String(propertyData.address).trim(),
+            postal_code: propertyData.postal_code ? String(propertyData.postal_code).trim() : null,
+            neighborhood: propertyData.neighborhood ? String(propertyData.neighborhood).trim() : null,
+            rooms: String(propertyData.rooms).trim(),
+            area_sqm: Math.max(1, parseInt(propertyData.area_sqm) || 1),
+            price_monthly: Math.max(1, parseInt(propertyData.price_monthly) || 1),
+            warmmiete_monthly: propertyData.warmmiete_monthly ? parseInt(propertyData.warmmiete_monthly) : null,
+            additional_costs_monthly: propertyData.additional_costs_monthly ? parseInt(propertyData.additional_costs_monthly) : null,
+            property_type_id: propertyData.property_type_id || null,
+            city_id: propertyData.city_id || null,
+            floor: propertyData.floor ? parseInt(propertyData.floor) : null,
+            total_floors: propertyData.total_floors ? parseInt(propertyData.total_floors) : null,
+            year_built: propertyData.year_built ? parseInt(propertyData.year_built) : null,
+            available_from: propertyData.available_from || null,
+            deposit_months: propertyData.deposit_months ? parseInt(propertyData.deposit_months) : 3,
+            kitchen_equipped: Boolean(propertyData.kitchen_equipped),
+            furnished: Boolean(propertyData.furnished),
+            pets_allowed: Boolean(propertyData.pets_allowed),
+            utilities_included: Boolean(propertyData.utilities_included),
+            balcony: Boolean(propertyData.balcony),
+            elevator: Boolean(propertyData.elevator),
+            parking: Boolean(propertyData.parking),
+            garden: Boolean(propertyData.garden),
+            cellar: Boolean(propertyData.cellar),
+            attic: Boolean(propertyData.attic),
+            dishwasher: Boolean(propertyData.dishwasher),
+            washing_machine: Boolean(propertyData.washing_machine),
+            dryer: Boolean(propertyData.dryer),
+            tv: Boolean(propertyData.tv),
+            energy_certificate_type: propertyData.energy_certificate_type || null,
+            energy_certificate_value: propertyData.energy_certificate_value || null,
+            heating_type: propertyData.heating_type || null,
+            heating_energy_source: propertyData.heating_energy_source || null,
+            internet_speed: propertyData.internet_speed || null,
+            features_description: propertyData.features_description || null,
+            additional_description: propertyData.additional_description || null,
+            neighborhood_description: propertyData.neighborhood_description || null,
+            eigenschaften_description: propertyData.eigenschaften_description || null,
+            eigenschaften_tags: Array.isArray(propertyData.eigenschaften_tags) ? propertyData.eigenschaften_tags : [],
+            is_featured: Boolean(propertyData.is_featured),
+            is_active: propertyData.is_active !== false,
+            images: Array.isArray(propertyData.images) ? propertyData.images : []
+          };
+
+          console.log('Clean property data:', JSON.stringify(cleanPropertyData, null, 2));
+
+          const { data: newProperty, error: createError } = await supabase
+            .from('properties')
+            .insert([cleanPropertyData])
+            .select()
+            .single()
+
+          if (createError) {
+            console.error('Database error:', createError);
+            return new Response(
+              JSON.stringify({ error: `Database error: ${createError.message}` }),
+              { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
+
+          console.log('Property created successfully:', newProperty);
+
           return new Response(
-            JSON.stringify({ error: `Missing or invalid required fields: ${missingFields.join(', ')}` }),
-            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            JSON.stringify({ property: newProperty }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        } catch (error) {
+          console.error('Unexpected error in create_property:', error);
+          return new Response(
+            JSON.stringify({ error: `Unexpected error: ${error.message}` }),
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-
-        // Ensure required fields are present and properly typed
-        const processedPropertyData = {
-          ...propertyData,
-          // Ensure numeric fields are properly converted
-          area_sqm: parseInt(propertyData.area_sqm) || 0,
-          price_monthly: parseInt(propertyData.price_monthly) || 0,
-          warmmiete_monthly: propertyData.warmmiete_monthly ? parseInt(propertyData.warmmiete_monthly) : null,
-          additional_costs_monthly: propertyData.additional_costs_monthly ? parseInt(propertyData.additional_costs_monthly) : null,
-          floor: propertyData.floor ? parseInt(propertyData.floor) : null,
-          total_floors: propertyData.total_floors ? parseInt(propertyData.total_floors) : null,
-          year_built: propertyData.year_built ? parseInt(propertyData.year_built) : null,
-          deposit_months: propertyData.deposit_months ? parseInt(propertyData.deposit_months) : null,
-          // Set defaults for optional fields
-          is_active: propertyData.is_active !== undefined ? propertyData.is_active : true,
-          is_featured: propertyData.is_featured !== undefined ? propertyData.is_featured : false,
-          images: propertyData.images || [],
-          features: propertyData.features || [],
-          eigenschaften_tags: propertyData.eigenschaften_tags || []
-        };
-
-        console.log('Processed property data:', JSON.stringify(processedPropertyData, null, 2));
-
-        const { data: newProperty, error: createError } = await supabase
-          .from('properties')
-          .insert([processedPropertyData])
-          .select()
-          .single()
-
-        if (createError) {
-          console.error('Create property error:', createError);
-          throw createError;
-        }
-
-        console.log('Property created successfully:', newProperty);
-
-        return new Response(
-          JSON.stringify({ property: newProperty }),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
 
       case 'update_property':
         const { data: updatedProperty, error: updateError } = await supabase
