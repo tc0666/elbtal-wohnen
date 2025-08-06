@@ -127,7 +127,7 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             }
           }
 
-          // Collect all images
+          // Collect all images including featured
           const images = [];
           
           // Add featured image first
@@ -135,8 +135,8 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             images.push(row['image-featured']);
           }
           
-          // Add additional images
-          for (let imgNum = 1; imgNum <= 7; imgNum++) {
+          // Add additional images from image-1 to image-6
+          for (let imgNum = 1; imgNum <= 6; imgNum++) {
             const imgKey = `image-${imgNum}`;
             if (row[imgKey]) {
               images.push(row[imgKey]);
@@ -160,7 +160,6 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             'image-4': row['image-4'] || '',
             'image-5': row['image-5'] || '',
             'image-6': row['image-6'] || '',
-            'image-7': row['image-7'] || '',
             'Verfügbar': row['Verfügbar'] || '',
             'Objektbeschreibung': row['Objektbeschreibung'] || '',
             'Ausstattungsmerkmale': row['Ausstattungsmerkmale'] || '',
@@ -170,6 +169,7 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             'address': row['address'] || '',
             'size': row['size'] || '',
             'zimmer': row['zimmer'] || '',
+            'Lage': row['Lage'] || '',
             'Weitere': row['Weitere'] || ''
           };
 
@@ -243,7 +243,7 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
             <ul className="list-disc list-inside mt-1 space-y-0.5">
               <li><strong>Title:</strong> Property title</li>
               <li><strong>image-featured:</strong> Featured image URL</li>
-              <li><strong>image-1, image-2, ..., image-7:</strong> Additional carousel images</li>
+              <li><strong>image-1 to image-6:</strong> Additional carousel images</li>
               <li><strong>Verfügbar:</strong> Available from date</li>
               <li><strong>Objektbeschreibung:</strong> Property description</li>
               <li><strong>Ausstattungsmerkmale:</strong> Features description</li>
@@ -253,6 +253,7 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
               <li><strong>address:</strong> Property address</li>
               <li><strong>size:</strong> Property size in m²</li>
               <li><strong>zimmer:</strong> Number of rooms</li>
+              <li><strong>Lage:</strong> Location/neighborhood description</li>
               <li><strong>Weitere:</strong> Additional description</li>
             </ul>
           </div>

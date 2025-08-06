@@ -173,8 +173,8 @@ Deno.serve(async (req) => {
           allImageSources.push(property['image-featured'].trim());
         }
         
-        // Skip image-1 and image-2, only add image-3 onwards
-        for (let imgNum = 3; imgNum <= 7; imgNum++) {
+        // Add additional images from image-1 to image-6
+        for (let imgNum = 1; imgNum <= 6; imgNum++) {
           const imgKey = `image-${imgNum}`;
           if (property[imgKey] && 
               property[imgKey].trim() &&
@@ -294,6 +294,7 @@ Deno.serve(async (req) => {
           internet_speed: '100 Mbit/s',
           features_description: property['Ausstattungsmerkmale'] || '',
           additional_description: property['Weitere'] || '',
+          neighborhood_description: property['Lage'] || '',
           eigenschaften_description: '',
           eigenschaften_tags: [],
           is_featured: false,
