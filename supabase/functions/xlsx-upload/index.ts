@@ -173,8 +173,8 @@ Deno.serve(async (req) => {
           allImageSources.push(property['image-featured'].trim());
         }
         
-        // Add image-1 to image-6
-        for (let imgNum = 1; imgNum <= 6; imgNum++) {
+        // Add image-2 to image-6 (skip image-1 to avoid duplicates)
+        for (let imgNum = 2; imgNum <= 6; imgNum++) {
           const imgKey = `image-${imgNum}`;
           if (property[imgKey] && 
               property[imgKey].trim() &&

@@ -425,6 +425,7 @@ const PropertyDetails = () => {
                   city={property.city?.name || ''}
                   postalCode={property.postal_code || undefined}
                   neighborhood={property.neighborhood || undefined}
+                  locationDescription={property.additional_description || undefined}
                   className="w-full p-6"
                 />
               </CardContent>

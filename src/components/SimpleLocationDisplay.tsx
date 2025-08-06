@@ -6,6 +6,7 @@ interface SimpleLocationDisplayProps {
   city: string;
   postalCode?: string;
   neighborhood?: string;
+  locationDescription?: string;
   className?: string;
 }
 
@@ -14,6 +15,7 @@ const SimpleLocationDisplay: React.FC<SimpleLocationDisplayProps> = ({
   city, 
   postalCode, 
   neighborhood, 
+  locationDescription,
   className = '' 
 }) => {
   return (
@@ -21,9 +23,9 @@ const SimpleLocationDisplay: React.FC<SimpleLocationDisplayProps> = ({
       {/* Description only */}
       <div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Diese Immobilie befindet sich in einer sehr begehrten Wohnlage mit exzellenter 
-          Infrastruktur. In unmittelbarer Nähe finden Sie Einkaufsmöglichkeiten, Restaurants, 
-          Schulen und öffentliche Verkehrsmittel.
+          {locationDescription || 
+            'Diese Immobilie befindet sich in einer sehr begehrten Wohnlage mit exzellenter Infrastruktur. In unmittelbarer Nähe finden Sie Einkaufsmöglichkeiten, Restaurants, Schulen und öffentliche Verkehrsmittel.'
+          }
         </p>
       </div>
     </div>
