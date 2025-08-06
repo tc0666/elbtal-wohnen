@@ -219,14 +219,24 @@ Deno.serve(async (req) => {
           }
           
           // Handle European currency format with thousands separator
-          // e.g., 1.249€ = 1249€, 1.36€ = 136€, 1.360€ = 1360€
+          // e.g., 1.249€ = 1249€, but 1.044 = 1044 (price in euros)
           const europeanCurrencyMatch = str.match(/^(\d+)\.(\d+)€?$/);
           if (europeanCurrencyMatch) {
-            const wholePart = europeanCurrencyMatch[1];
-            const fractionalPart = europeanCurrencyMatch[2];
+            const wholePart = parseInt(europeanCurrencyMatch[1]);
+            const fractionalPart = parseInt(europeanCurrencyMatch[2]);
             
-            // In European format, dot is thousands separator, so combine the parts
-            return parseInt(wholePart + fractionalPart);
+            // If fractional part is small (< 100), treat as cents/decimal
+            if (fractionalPart < 100) {
+              return wholePart * 1000 + fractionalPart; // Convert 1.044 to 1044
+            } else {
+              // Otherwise treat as thousands separator
+              return parseInt(wholePart + europeanCurrencyMatch[2]);
+            }
+          }
+          
+          // Handle decimal numbers like 1.044 (should become 1044)
+          if (typeof value === 'number') {
+            return Math.round(value * 1000);
           }
           
           // Remove currency symbols and spaces
