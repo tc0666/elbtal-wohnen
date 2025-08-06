@@ -237,6 +237,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       
       const propertyData = {
         ...formData,
+        // Ensure required numeric fields have valid values
+        area_sqm: formData.area_sqm && formData.area_sqm > 0 ? formData.area_sqm : 0,
+        price_monthly: formData.price_monthly && formData.price_monthly > 0 ? formData.price_monthly : 0,
         images: allImages,
         available_from: formData.available_from || null,
         eigenschaften_tags: eigenschaftenTags,

@@ -238,12 +238,17 @@ serve(async (req) => {
         const requiredFields = ['title', 'rooms', 'area_sqm', 'price_monthly', 'address'];
         const missingFields = requiredFields.filter(field => {
           const value = propertyData[field];
-          return value === null || value === undefined || value === '' || (typeof value === 'number' && value <= 0);
+          return value === null || value === undefined || value === '' || 
+                 (field === 'area_sqm' && (isNaN(Number(value)) || Number(value) <= 0)) ||
+                 (field === 'price_monthly' && (isNaN(Number(value)) || Number(value) <= 0));
         });
 
         if (missingFields.length > 0) {
-          console.error('Missing required fields:', missingFields);
-          throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+          console.error('Missing or invalid required fields:', missingFields, 'Data:', propertyData);
+          return new Response(
+            JSON.stringify({ error: `Missing or invalid required fields: ${missingFields.join(', ')}` }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
         }
 
         // Ensure required fields are present and properly typed
