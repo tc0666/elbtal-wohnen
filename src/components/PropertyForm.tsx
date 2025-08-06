@@ -254,8 +254,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
       console.log('Request body:', requestBody);
 
-      const { data, error } = await supabase.functions.invoke('admin-management', {
-        body: requestBody
+      const { data, error } = await supabase.functions.invoke('simple-property-create', {
+        body: { propertyData }
       });
 
       console.log('Response data:', data);
