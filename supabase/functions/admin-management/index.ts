@@ -228,13 +228,37 @@ serve(async (req) => {
         const propertyData = data.propertyData || data.property;
         
         if (!propertyData) {
+          console.error('No property data provided');
           throw new Error('Property data is required');
         }
 
-        // Ensure required fields are present
+        console.log('Received property data:', JSON.stringify(propertyData, null, 2));
+
+        // Validate required fields
+        const requiredFields = ['title', 'rooms', 'area_sqm', 'price_monthly', 'address'];
+        const missingFields = requiredFields.filter(field => {
+          const value = propertyData[field];
+          return value === null || value === undefined || value === '' || (typeof value === 'number' && value <= 0);
+        });
+
+        if (missingFields.length > 0) {
+          console.error('Missing required fields:', missingFields);
+          throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+        }
+
+        // Ensure required fields are present and properly typed
         const processedPropertyData = {
           ...propertyData,
-          // Set defaults for required fields if missing
+          // Ensure numeric fields are properly converted
+          area_sqm: parseInt(propertyData.area_sqm) || 0,
+          price_monthly: parseInt(propertyData.price_monthly) || 0,
+          warmmiete_monthly: propertyData.warmmiete_monthly ? parseInt(propertyData.warmmiete_monthly) : null,
+          additional_costs_monthly: propertyData.additional_costs_monthly ? parseInt(propertyData.additional_costs_monthly) : null,
+          floor: propertyData.floor ? parseInt(propertyData.floor) : null,
+          total_floors: propertyData.total_floors ? parseInt(propertyData.total_floors) : null,
+          year_built: propertyData.year_built ? parseInt(propertyData.year_built) : null,
+          deposit_months: propertyData.deposit_months ? parseInt(propertyData.deposit_months) : null,
+          // Set defaults for optional fields
           is_active: propertyData.is_active !== undefined ? propertyData.is_active : true,
           is_featured: propertyData.is_featured !== undefined ? propertyData.is_featured : false,
           images: propertyData.images || [],
@@ -242,7 +266,7 @@ serve(async (req) => {
           eigenschaften_tags: propertyData.eigenschaften_tags || []
         };
 
-        console.log('Creating property with data:', JSON.stringify(processedPropertyData, null, 2));
+        console.log('Processed property data:', JSON.stringify(processedPropertyData, null, 2));
 
         const { data: newProperty, error: createError } = await supabase
           .from('properties')
@@ -254,6 +278,8 @@ serve(async (req) => {
           console.error('Create property error:', createError);
           throw createError;
         }
+
+        console.log('Property created successfully:', newProperty);
 
         return new Response(
           JSON.stringify({ property: newProperty }),
