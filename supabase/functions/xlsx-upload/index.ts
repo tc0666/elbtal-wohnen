@@ -173,8 +173,8 @@ Deno.serve(async (req) => {
           allImageSources.push(property['image-featured'].trim());
         }
         
-        // Skip image-1 and image-2, only add image-3 onwards
-        for (let imgNum = 3; imgNum <= 7; imgNum++) {
+        // Add image-1 to image-6
+        for (let imgNum = 1; imgNum <= 6; imgNum++) {
           const imgKey = `image-${imgNum}`;
           if (property[imgKey] && 
               property[imgKey].trim() &&
@@ -263,9 +263,9 @@ Deno.serve(async (req) => {
           neighborhood: cityName,
           rooms: property['zimmer']?.toString() || '1',
           area_sqm: parseNumber(property['size'], 50),
-          price_monthly: parseNumber(property['Rent']),
-          warmmiete_monthly: parseNumber(property['Rent']) + parseNumber(property['Nebenkosten']),
-          additional_costs_monthly: parseNumber(property['Nebenkosten']),
+          price_monthly: parseNumber(property['Rent']) || 1,
+          warmmiete_monthly: (parseNumber(property['Rent']) || 1) + (parseNumber(property['Nebenkosten']) || 0),
+          additional_costs_monthly: parseNumber(property['Nebenkosten']) || 0,
           property_type_id: defaultPropertyTypeId,
           city_id: cityId || fallbackCityId,
           floor: 1,
@@ -294,7 +294,7 @@ Deno.serve(async (req) => {
           internet_speed: '100 Mbit/s',
           features_description: property['Ausstattungsmerkmale'] || '',
           additional_description: property['Weitere'] || '',
-          eigenschaften_description: '',
+          eigenschaften_description: property['Lage'] || '',
           eigenschaften_tags: [],
           is_featured: false,
           is_active: true,
