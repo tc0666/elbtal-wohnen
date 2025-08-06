@@ -199,18 +199,6 @@ const PropertyDetails = () => {
                   </>
                 )}
 
-                {/* Eigenschaften Description */}
-                {(property as any).eigenschaften_description && (
-                  <>
-                    <div className="mb-6">
-                      <h4 className="font-semibold mb-3">Eigenschaften</h4>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {(property as any).eigenschaften_description}
-                      </p>
-                    </div>
-                    <Separator className="my-6" />
-                  </>
-                )}
 
                 {/* Ausstattung Section */}
                 {property.features_description && (
