@@ -12,12 +12,21 @@ serve(async (req) => {
   }
 
   try {
+    console.log('=== FUNCTION START ===')
+    
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { action, token, ...data } = await req.json()
+    console.log('Supabase client created')
+
+    const requestBody = await req.json()
+    console.log('Raw request body:', JSON.stringify(requestBody, null, 2))
+    
+    const { action, token, ...data } = requestBody
+    console.log('Parsed action:', action)
+    console.log('Token exists:', !!token)
 
     // Verify admin token using sessions table
     if (!token) {
