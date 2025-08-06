@@ -219,10 +219,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
     try {
       const token = localStorage.getItem('adminToken');
+      console.log('Starting form submission, token:', token ? 'exists' : 'missing');
+      console.log('Form data:', formData);
       
       // Upload new images if any
       let newImageUrls: string[] = [];
       if (featuredImageFile || additionalImageFiles.length > 0) {
+        console.log('Uploading images...');
         newImageUrls = await uploadImages();
       }
 
@@ -230,6 +233,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       const allImages = [...formData.images, ...newImageUrls];
       
       const action = property ? 'update_property' : 'create_property';
+      console.log('Action:', action);
       
       const propertyData = {
         ...formData,
@@ -239,20 +243,35 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         ...featureCheckboxes
       };
 
+      console.log('Property data to send:', propertyData);
+
       const requestBody = property 
         ? { action, token, propertyId: property.id, propertyData }
         : { action, token, propertyData };
 
-      const { data } = await supabase.functions.invoke('admin-management', {
+      console.log('Request body:', requestBody);
+
+      const { data, error } = await supabase.functions.invoke('admin-management', {
         body: requestBody
       });
 
+      console.log('Response data:', data);
+      console.log('Response error:', error);
+
       if (data?.property) {
+        console.log('Success! Property created/updated:', data.property);
         toast({
           title: "Erfolgreich",
           description: `Immobilie wurde ${property ? 'aktualisiert' : 'erstellt'}.`,
         });
         onClose();
+      } else {
+        console.log('No property in response, data:', data);
+        toast({
+          title: "Fehler",
+          description: `Immobilie konnte nicht ${property ? 'aktualisiert' : 'erstellt'} werden.`,
+          variant: "destructive"
+        });
       }
     } catch (error) {
       console.error('Error saving property:', error);
