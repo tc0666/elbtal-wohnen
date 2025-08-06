@@ -69,7 +69,6 @@ serve(async (req) => {
       internet_speed: propertyData.internet_speed || null,
       features_description: propertyData.features_description || null,
       additional_description: propertyData.additional_description || null,
-      neighborhood_description: propertyData.neighborhood_description || null,
       eigenschaften_description: propertyData.eigenschaften_description || null,
       eigenschaften_tags: Array.isArray(propertyData.eigenschaften_tags) ? propertyData.eigenschaften_tags : [],
       is_featured: Boolean(propertyData.is_featured),
