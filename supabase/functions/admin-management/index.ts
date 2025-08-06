@@ -225,26 +225,28 @@ serve(async (req) => {
         )
 
       case 'create_property':
-        if (!data.property) {
+        const propertyData = data.propertyData || data.property;
+        
+        if (!propertyData) {
           throw new Error('Property data is required');
         }
 
         // Ensure required fields are present
-        const propertyData = {
-          ...data.property,
+        const processedPropertyData = {
+          ...propertyData,
           // Set defaults for required fields if missing
-          is_active: data.property.is_active !== undefined ? data.property.is_active : true,
-          is_featured: data.property.is_featured !== undefined ? data.property.is_featured : false,
-          images: data.property.images || [],
-          features: data.property.features || [],
-          eigenschaften_tags: data.property.eigenschaften_tags || []
+          is_active: propertyData.is_active !== undefined ? propertyData.is_active : true,
+          is_featured: propertyData.is_featured !== undefined ? propertyData.is_featured : false,
+          images: propertyData.images || [],
+          features: propertyData.features || [],
+          eigenschaften_tags: propertyData.eigenschaften_tags || []
         };
 
-        console.log('Creating property with data:', JSON.stringify(propertyData, null, 2));
+        console.log('Creating property with data:', JSON.stringify(processedPropertyData, null, 2));
 
         const { data: newProperty, error: createError } = await supabase
           .from('properties')
-          .insert([propertyData])
+          .insert([processedPropertyData])
           .select()
           .single()
 
