@@ -39,7 +39,7 @@ export const HeroSection = () => {
   }}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">Willkommen zum wohnen, arbeiten &amp; wohlfühlen</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight drop-shadow-lg lg:text-5xl">Willkommen zum wohnen, arbeiten &amp; wohlfühlen</h1>
           <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
             Entdecken Sie erstklassige Mietwohnungen in Deutschlands beliebtesten Städten. 
             Professionell, vertrauenswürdig, persönlich.
