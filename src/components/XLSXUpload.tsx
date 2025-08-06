@@ -191,8 +191,10 @@ export const XLSXUpload: React.FC<XLSXUploadProps> = ({ onUploadComplete }) => {
         throw error;
       }
 
+      console.log('XLSX Upload response:', data);
       setResult(data);
       if (data.success && onUploadComplete) {
+        console.log('Calling onUploadComplete callback');
         onUploadComplete();
       }
     } catch (error) {

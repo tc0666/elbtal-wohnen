@@ -263,7 +263,7 @@ Deno.serve(async (req) => {
           neighborhood: cityName,
           rooms: property['zimmer']?.toString() || '1',
           area_sqm: parseNumber(property['size'], 50),
-          price_monthly: parseNumber(property['Rent']),
+          price_monthly: parseNumber(property['Rent']) || 1, // Ensure minimum value
           warmmiete_monthly: parseNumber(property['Rent']) + parseNumber(property['Nebenkosten']),
           additional_costs_monthly: parseNumber(property['Nebenkosten']),
           property_type_id: defaultPropertyTypeId,
@@ -301,6 +301,15 @@ Deno.serve(async (req) => {
           is_active: true,
           images: images,
         };
+
+        console.log('Inserting property:', {
+          title: propertyToInsert.title,
+          price_monthly: propertyToInsert.price_monthly,
+          area_sqm: propertyToInsert.area_sqm,
+          city_id: propertyToInsert.city_id,
+          property_type_id: propertyToInsert.property_type_id,
+          images_count: images.length
+        });
 
         const { data, error } = await supabase
           .from('properties')
