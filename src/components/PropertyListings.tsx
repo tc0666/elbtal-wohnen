@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SimplePropertyCard, Property } from "@/components/SimplePropertyCard";
 import { Button } from "@/components/ui/button";
@@ -12,13 +13,16 @@ interface PropertyListingsProps {
 }
 
 export const PropertyListings = ({ filters }: PropertyListingsProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'price_low' | 'price_high' | 'newest' | 'area'>('newest');
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 10;
+  
+  // Get current page from URL parameters, default to 1
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   useEffect(() => {
     fetchProperties();
@@ -31,7 +35,7 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
 
       // Reset to page 1 when filters change
       if (currentPage > 1 && filters) {
-        setCurrentPage(1);
+        updatePageInUrl(1);
         return;
       }
 
@@ -132,8 +136,15 @@ export const PropertyListings = ({ filters }: PropertyListingsProps) => {
 
   const totalPages = Math.ceil(totalCount / itemsPerPage);
 
+  // Function to update page in URL
+  const updatePageInUrl = (page: number) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set('page', page.toString());
+    setSearchParams(newSearchParams, { replace: true });
+  };
+
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    updatePageInUrl(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
