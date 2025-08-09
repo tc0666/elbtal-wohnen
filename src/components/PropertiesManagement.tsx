@@ -13,6 +13,7 @@ import { Plus, Edit, Trash2, MapPin, Euro, Ruler, Users, Building2, Eye, Calenda
 import PropertyForm from '@/components/PropertyForm';
 import { PropertyWithRelations } from '@/types/property';
 import { XLSXUpload } from '@/components/XLSXUpload';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ContactRequest {
   id: string;
@@ -50,6 +51,7 @@ const PropertiesManagement = () => {
     contactId: ''
   });
   const { toast } = useToast();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const fetchProperties = async () => {
     setIsLoading(true);
@@ -76,10 +78,12 @@ const PropertiesManagement = () => {
         console.log('Properties loaded:', data.properties.length);
         setProperties(data.properties);
         setFilteredProperties(data.properties);
+        setSelectedIds([]);
       } else {
         console.warn('No properties data received');
         setProperties([]);
         setFilteredProperties([]);
+        setSelectedIds([]);
       }
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -237,6 +241,55 @@ const PropertiesManagement = () => {
     }
   };
 
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+  };
+
+  const toggleSelectAll = () => {
+    const currentIds = filteredProperties.map((p) => p.id);
+    const allSelected = currentIds.every((id) => selectedIds.includes(id));
+    if (allSelected) {
+      setSelectedIds((prev) => prev.filter((id) => !currentIds.includes(id)));
+    } else {
+      setSelectedIds((prev) => Array.from(new Set([...prev, ...currentIds])));
+    }
+  };
+
+  const handleBulkDeleteSelected = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Sind Sie sicher, dass Sie ${selectedIds.length} ausgewählte Immobilie(n) löschen möchten?`)) {
+      return;
+    }
+    try {
+      const token = localStorage.getItem('adminToken');
+      const results = await Promise.all(
+        selectedIds.map((id) =>
+          supabase.functions.invoke('admin-management', {
+            body: { action: 'delete_property', token, id }
+          })
+        )
+      );
+      const allOk = results.every((r: any) => r?.data?.success);
+      if (allOk) {
+        toast({
+          title: 'Erfolgreich',
+          description: `${selectedIds.length} Immobilie(n) wurden gelöscht.`,
+        });
+        setSelectedIds([]);
+        fetchProperties();
+      } else {
+        throw new Error('Einige Löschvorgänge sind fehlgeschlagen');
+      }
+    } catch (error) {
+      console.error('Error deleting selected properties:', error);
+      toast({
+        title: 'Fehler',
+        description: 'Ausgewählte Immobilien konnten nicht gelöscht werden.',
+        variant: 'destructive',
+      });
+    }
+  };
+  
   const handleEdit = (property: PropertyWithRelations) => {
     setEditingProperty(property);
     setShowForm(true);
@@ -306,22 +359,39 @@ const PropertiesManagement = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-4 items-center">
-        <Button 
-          onClick={() => setShowForm(true)} 
-          className="flex items-center gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Neue Immobilie
-        </Button>
-        <Button 
-          variant="destructive" 
-          onClick={handleBulkDelete}
-          className="flex items-center gap-2"
-        >
-          <Trash2 className="h-4 w-4" />
-          Alle Immobilien löschen
-        </Button>
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div className="flex gap-4 items-center">
+          <Button 
+            onClick={() => setShowForm(true)} 
+            className="flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Neue Immobilie
+          </Button>
+          <Button 
+            variant="destructive" 
+            onClick={handleBulkDelete}
+            className="flex items-center gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            Alle Immobilien löschen
+          </Button>
+        </div>
+        <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-2">
+            <Checkbox checked={filteredProperties.length > 0 && filteredProperties.every(p => selectedIds.includes(p.id))} onCheckedChange={() => toggleSelectAll()} />
+            <span className="text-sm">Alle auswählen (aktuelle Ansicht)</span>
+          </div>
+          <Button 
+            variant="destructive" 
+            onClick={handleBulkDeleteSelected}
+            disabled={selectedIds.length === 0}
+            className="flex items-center gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            Ausgewählte löschen ({selectedIds.length})
+          </Button>
+        </div>
       </div>
 
       {/* CSV Upload Section */}
@@ -396,7 +466,8 @@ const PropertiesManagement = () => {
                           {property.address}, {property.city?.name}
                         </div>
                       </div>
-                      <div className="flex flex-row gap-2">
+                      <div className="flex flex-row gap-2 items-center">
+                        <Checkbox checked={selectedIds.includes(property.id)} onCheckedChange={() => toggleSelect(property.id)} />
                         <Button
                           variant="outline"
                           size="sm"

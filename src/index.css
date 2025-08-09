@@ -39,6 +39,9 @@
     --input: 213 20% 95%;
     --ring: 213 85% 45%;
 
+    /* Brand color exact as requested */
+    --brand-blue: 213 86% 45%;
+
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
