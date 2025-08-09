@@ -54,12 +54,12 @@ export const AnsprechpartnerSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {ansprechpartner.map((person) => (
             <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
-              <CardHeader className="text-center pt-8 pb-4">
+              <CardHeader className="text-center pt-12 pb-6">
                 <div className="flex items-center justify-center mx-auto mb-2">
                   <img
                     src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png"
                     alt="ELBTAL Logo"
-                    className="w-64 h-auto object-contain block"
+                    className="w-56 h-auto object-contain block"
                   />
                 </div>
               </CardHeader>
