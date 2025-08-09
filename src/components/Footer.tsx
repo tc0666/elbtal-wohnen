@@ -11,7 +11,7 @@ export const Footer = () => {
               <img 
                 src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png" 
                 alt="AMIEL - Immobilienverwaltung seit 1988" 
-                className="h-16 w-auto mb-2"
+                className="max-h-16 h-auto w-auto object-contain mb-2"
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">

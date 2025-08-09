@@ -1,11 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, User, Wrench, Shield, Calculator } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 
 const ansprechpartner = [
   {
     id: 1,
-    icon: User,
     title: "Ihr Verwalter",
     name: "Thomas Müller",
     phone: "+49 30 123456789",
@@ -14,7 +13,6 @@ const ansprechpartner = [
   },
   {
     id: 2,
-    icon: Wrench,
     title: "Ihr Techniker", 
     name: "Stefan Weber",
     phone: "+49 30 987654321",
@@ -23,7 +21,6 @@ const ansprechpartner = [
   },
   {
     id: 3,
-    icon: Shield,
     title: "Schadensbearbeitung",
     name: "Marina Schmidt",
     phone: "+49 30 555123456",
@@ -32,7 +29,6 @@ const ansprechpartner = [
   },
   {
     id: 4,
-    icon: Calculator,
     title: "Buchhaltung",
     name: "Andrea Klein",
     phone: "+49 30 444987654",
@@ -56,47 +52,48 @@ export const AnsprechpartnerSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {ansprechpartner.map((person) => {
-            const IconComponent = person.icon;
-            return (
-              <Card key={person.id} className="h-full hover:shadow-lg transition-all duration-300 hover:scale-105">
-                <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <IconComponent className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle className="text-xl text-center">{person.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-lg text-foreground">{person.name}</h4>
-                    <p className="text-sm text-muted-foreground">{person.description}</p>
-                  </div>
+          {ansprechpartner.map((person) => (
+            <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 rounded-md flex items-center justify-center mx-auto mb-4 bg-muted">
+                  <img
+                    src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png"
+                    alt="ELBTAL Logo"
+                    className="w-12 h-12 object-contain"
+                  />
+                </div>
+                <CardTitle className="text-xl text-center">{person.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center space-y-4">
+                <div>
+                  <h4 className="font-semibold text-lg text-foreground">{person.name}</h4>
+                  <p className="text-sm text-muted-foreground">{person.description}</p>
+                </div>
+                
+                <div className="space-y-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full"
+                    onClick={() => window.location.href = `tel:${person.phone}`}
+                  >
+                    <Phone className="h-4 w-4 mr-2" />
+                    {person.phone}
+                  </Button>
                   
-                  <div className="space-y-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => window.location.href = `tel:${person.phone}`}
-                    >
-                      <Phone className="h-4 w-4 mr-2" />
-                      {person.phone}
-                    </Button>
-                    
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => window.location.href = `mailto:${person.email}`}
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      {person.email}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full"
+                    onClick={() => window.location.href = `mailto:${person.email}`}
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    {person.email}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>

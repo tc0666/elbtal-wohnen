@@ -151,6 +151,12 @@ const CitiesManagement = () => {
           description: "Stadt wurde gelöscht.",
         });
         fetchCities();
+      } else {
+        toast({
+          title: "Löschen nicht möglich",
+          description: data?.message || "Diese Stadt ist noch mit Immobilien verknüpft. Bitte löschen oder verschieben Sie zuerst die zugehörigen Immobilien.",
+          variant: "destructive"
+        });
       }
     } catch (error) {
       console.error('Error deleting city:', error);

@@ -3,9 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
-  MapPin, 
-  Ruler, 
-  Users
+  MapPin 
 } from "lucide-react";
 
 export interface Property {
@@ -100,14 +98,12 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                     <div className="text-xs text-muted-foreground">pro Monat</div>
                   </div>
                   <div className="flex items-center justify-center">
-                    <Ruler className="h-4 w-4 mr-1 text-primary flex-shrink-0" />
                     <div className="text-center">
                       <div className="font-medium text-sm">{property.area_sqm} m²</div>
                       <div className="text-xs text-muted-foreground">Fläche</div>
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
-                    <Users className="h-4 w-4 mr-1 text-primary flex-shrink-0" />
                     <div className="text-center">
                       <div className="font-medium text-sm">{property.rooms}</div>
                       <div className="text-xs text-muted-foreground">Zimmer</div>
@@ -117,22 +113,20 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
 
                 {/* Desktop: Size, Rooms, and Details Button in same row */}
                 <div className="hidden sm:flex sm:items-center sm:justify-between sm:gap-6">
-                  <div className="flex items-center gap-6">
-                    <div className="flex items-center">
-                      <Ruler className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-                      <div>
-                        <div className="font-medium text-sm">{property.area_sqm} m²</div>
-                        <div className="text-xs text-muted-foreground">Wohnfläche</div>
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center">
+                        <div>
+                          <div className="font-medium text-sm">{property.area_sqm} m²</div>
+                          <div className="text-xs text-muted-foreground">Wohnfläche</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <div>
+                          <div className="font-medium text-sm">{property.rooms} Zimmer</div>
+                          <div className="text-xs text-muted-foreground">Räume</div>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      <Users className="h-4 w-4 mr-2 text-primary flex-shrink-0" />
-                      <div>
-                        <div className="font-medium text-sm">{property.rooms} Zimmer</div>
-                        <div className="text-xs text-muted-foreground">Räume</div>
-                      </div>
-                    </div>
-                  </div>
                   <Link to={`/immobilie/${property.id}`}>
                     <Button 
                       variant="outline" 
