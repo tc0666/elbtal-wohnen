@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail } from "lucide-react";
 
@@ -55,19 +55,17 @@ export const AnsprechpartnerSection = () => {
           {ansprechpartner.map((person) => (
             <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
               <CardHeader className="text-center">
-                <div className="w-16 h-16 rounded-md flex items-center justify-center mx-auto mb-4 bg-muted">
+                <div className="flex items-center justify-center mx-auto mb-4">
                   <img
                     src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png"
                     alt="ELBTAL Logo"
-                    className="w-12 h-12 object-contain"
+                    className="w-24 h-24 object-contain"
                   />
                 </div>
-                <CardTitle className="text-xl text-center">{person.title}</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <div>
-                  <h4 className="font-semibold text-lg text-foreground">{person.name}</h4>
-                  <p className="text-sm text-muted-foreground">{person.description}</p>
+                  <h4 className="font-semibold text-xl text-foreground">{person.name}</h4>
                 </div>
                 
                 <div className="space-y-2">
