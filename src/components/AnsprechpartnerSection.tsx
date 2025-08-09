@@ -54,7 +54,7 @@ export const AnsprechpartnerSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {ansprechpartner.map((person) => (
             <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
-              <CardHeader className="text-center pt-3 pb-2">
+              <CardHeader className="text-center pt-6 pb-2">
                 <div className="flex items-center justify-center mx-auto mb-2">
                   <img
                     src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png"
