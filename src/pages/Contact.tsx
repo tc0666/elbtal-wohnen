@@ -17,8 +17,6 @@ import {
   MapPin, 
   Clock, 
   Building,
-  Users,
-  CheckCircle,
   HeartHandshake
 } from 'lucide-react';
 
@@ -111,25 +109,6 @@ const Contact = () => {
               </Card>
             ))}
 
-            {/* Services Overview */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-6 w-6 text-primary" />
-                  Unsere Services
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-2">
-                  {services.map((service, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                      <span className="text-sm">{service}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
 
             {/* CTA Card */}
             <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
