@@ -3,25 +3,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Send, X } from 'lucide-react';
 
 interface ContactFormData {
-  anrede: string;
   vorname: string;
   nachname: string;
-  email: string;
-  telefon: string;
-  strasse: string;
-  nummer: string;
+  adresse: string;
   plz: string;
-  ort: string;
-  nachricht: string;
+  geburtsort: string;
+  staatsangehoerigkeit: string;
+  geburtsdatum: string;
+  nettoeinkommen: string;
   datenschutz: boolean;
   propertyId?: string;
 }
@@ -42,20 +38,18 @@ const ContactForm: React.FC<ContactFormProps> = ({
   onClose
 }) => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState<ContactFormData>({
-    anrede: '',
-    vorname: '',
-    nachname: '',
-    email: '',
-    telefon: '',
-    strasse: '',
-    nummer: '',
-    plz: '',
-    ort: '',
-    nachricht: propertyTitle ? `Ich interessiere mich für die Immobilie: ${propertyTitle}` : '',
-    datenschutz: false,
-    propertyId: propertyId
-  });
+const [formData, setFormData] = useState<ContactFormData>({
+  vorname: '',
+  nachname: '',
+  adresse: '',
+  plz: '',
+  geburtsort: '',
+  staatsangehoerigkeit: '',
+  geburtsdatum: '',
+  nettoeinkommen: '',
+  datenschutz: false,
+  propertyId: propertyId
+});
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
@@ -82,13 +76,24 @@ const ContactForm: React.FC<ContactFormProps> = ({
     setIsSubmitting(true);
     
     try {
-      // Submit to contact-submit edge function
+      const payload = {
+        propertyId: formData.propertyId,
+        vorname: formData.vorname,
+        nachname: formData.nachname,
+        strasse: formData.adresse,
+        nummer: '',
+        plz: formData.plz,
+        ort: '',
+        nachricht: `Geburtsort: ${formData.geburtsort}\nStaatsangehörigkeit: ${formData.staatsangehoerigkeit}\nGeburtsdatum: ${formData.geburtsdatum}\nNettoeinkommen: ${formData.nettoeinkommen}`,
+        datenschutz: formData.datenschutz
+      };
+
       const { data, error } = await supabase.functions.invoke('contact-submit', {
-        body: formData
+        body: payload
       });
 
-      if (error || data.error) {
-        throw new Error(data.error || 'Submission failed');
+      if (error || (data && (data as any).error)) {
+        throw new Error((data as any)?.error || 'Submission failed');
       }
       
       toast({
@@ -98,16 +103,14 @@ const ContactForm: React.FC<ContactFormProps> = ({
       
       // Reset form
       setFormData({
-        anrede: '',
         vorname: '',
         nachname: '',
-        email: '',
-        telefon: '',
-        strasse: '',
-        nummer: '',
+        adresse: '',
         plz: '',
-        ort: '',
-        nachricht: '',
+        geburtsort: '',
+        staatsangehoerigkeit: '',
+        geburtsdatum: '',
+        nettoeinkommen: '',
         datenschutz: false,
         propertyId: propertyId
       });
@@ -130,34 +133,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
   const FormContent = () => (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Message */}
-      <div>
-        <Label htmlFor="nachricht">Ihre Nachricht *</Label>
-        <Textarea
-          id="nachricht"
-          placeholder="Beschreiben Sie Ihr Anliegen..."
-          value={formData.nachricht}
-          onChange={(e) => handleInputChange('nachricht', e.target.value)}
-          required
-          className="min-h-[120px] mt-2"
-        />
-      </div>
-
-      {/* Anrede, Vorname, Nachname */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <Label htmlFor="anrede">Anrede</Label>
-          <Select value={formData.anrede} onValueChange={(value) => handleInputChange('anrede', value)}>
-            <SelectTrigger className="mt-2">
-              <SelectValue placeholder="Bitte wählen" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="herr">Herr</SelectItem>
-              <SelectItem value="frau">Frau</SelectItem>
-              <SelectItem value="divers">Divers</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="vorname">Vorname *</Label>
           <Input
@@ -180,76 +156,79 @@ const ContactForm: React.FC<ContactFormProps> = ({
         </div>
       </div>
 
-      {/* Email & Phone */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="email">E-Mail *</Label>
+          <Label htmlFor="adresse">Adresse *</Label>
           <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
+            id="adresse"
+            value={formData.adresse}
+            onChange={(e) => handleInputChange('adresse', e.target.value)}
             required
             className="mt-2"
           />
         </div>
         <div>
-          <Label htmlFor="telefon">Telefon *</Label>
-          <Input
-            id="telefon"
-            type="tel"
-            value={formData.telefon}
-            onChange={(e) => handleInputChange('telefon', e.target.value)}
-            required
-            className="mt-2"
-          />
-        </div>
-      </div>
-
-      {/* Address */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="md:col-span-3">
-          <Label htmlFor="strasse">Straße</Label>
-          <Input
-            id="strasse"
-            value={formData.strasse}
-            onChange={(e) => handleInputChange('strasse', e.target.value)}
-            className="mt-2"
-          />
-        </div>
-        <div>
-          <Label htmlFor="nummer">Nr.</Label>
-          <Input
-            id="nummer"
-            value={formData.nummer}
-            onChange={(e) => handleInputChange('nummer', e.target.value)}
-            className="mt-2"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="plz">PLZ</Label>
+          <Label htmlFor="plz">Postleitzahl *</Label>
           <Input
             id="plz"
             value={formData.plz}
             onChange={(e) => handleInputChange('plz', e.target.value)}
-            className="mt-2"
-          />
-        </div>
-        <div>
-          <Label htmlFor="ort">Ort</Label>
-          <Input
-            id="ort"
-            value={formData.ort}
-            onChange={(e) => handleInputChange('ort', e.target.value)}
+            required
             className="mt-2"
           />
         </div>
       </div>
 
-      {/* Privacy Checkbox */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="geburtsort">Geburtsort *</Label>
+          <Input
+            id="geburtsort"
+            value={formData.geburtsort}
+            onChange={(e) => handleInputChange('geburtsort', e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label htmlFor="staatsangehoerigkeit">Staatsangehörigkeit *</Label>
+          <Input
+            id="staatsangehoerigkeit"
+            value={formData.staatsangehoerigkeit}
+            onChange={(e) => handleInputChange('staatsangehoerigkeit', e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="geburtsdatum">Geburtsdatum *</Label>
+          <Input
+            id="geburtsdatum"
+            type="date"
+            value={formData.geburtsdatum}
+            onChange={(e) => handleInputChange('geburtsdatum', e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+          <Input
+            id="nettoeinkommen"
+            type="number"
+            min={0}
+            step="1"
+            value={formData.nettoeinkommen}
+            onChange={(e) => handleInputChange('nettoeinkommen', e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+      </div>
+
       <div className="flex items-start space-x-2">
         <Checkbox
           id="datenschutz"
@@ -266,7 +245,6 @@ const ContactForm: React.FC<ContactFormProps> = ({
         </Label>
       </div>
 
-      {/* Submit Button */}
       <Button 
         type="submit" 
         className="w-full" 

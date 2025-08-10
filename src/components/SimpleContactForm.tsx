@@ -3,9 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -28,127 +26,90 @@ const SimpleContactForm: React.FC<SimpleContactFormProps> = ({
 }) => {
   const { toast } = useToast();
   
-  // Individual state variables for each field
-  const [anrede, setAnrede] = useState('');
-  const [vorname, setVorname] = useState('');
-  const [nachname, setNachname] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefon, setTelefon] = useState('');
-  const [strasse, setStrasse] = useState('');
-  const [nummer, setNummer] = useState('');
-  const [plz, setPlz] = useState('');
-  const [ort, setOrt] = useState('');
-  const [nachricht, setNachricht] = useState(
-    propertyTitle ? `Ich interessiere mich für die Immobilie: ${propertyTitle}` : ''
-  );
-  const [datenschutz, setDatenschutz] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [open, setOpen] = useState(false);
+// Pflichtfelder laut Anforderung
+const [vorname, setVorname] = useState('');
+const [nachname, setNachname] = useState('');
+const [adresse, setAdresse] = useState('');
+const [plz, setPlz] = useState('');
+const [geburtsort, setGeburtsort] = useState('');
+const [staatsangehoerigkeit, setStaatsangehoerigkeit] = useState('');
+const [geburtsdatum, setGeburtsdatum] = useState('');
+const [nettoeinkommen, setNettoeinkommen] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!datenschutz) {
-      toast({
-        title: "Datenschutz erforderlich",
-        description: "Bitte stimmen Sie der Datenschutzerklärung zu.",
-        variant: "destructive"
-      });
-      return;
+const [datenschutz, setDatenschutz] = useState(false);
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [open, setOpen] = useState(false);
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!datenschutz) {
+    toast({
+      title: "Datenschutz erforderlich",
+      description: "Bitte stimmen Sie der Datenschutzerklärung zu.",
+      variant: "destructive"
+    });
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const payload = {
+      propertyId,
+      vorname,
+      nachname,
+      strasse: adresse,
+      nummer: '',
+      plz,
+      ort: '',
+      nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nNettoeinkommen: ${nettoeinkommen}`,
+      datenschutz
+    };
+
+    const { data, error } = await supabase.functions.invoke('contact-submit', {
+      body: payload
+    });
+
+    if (error || (data && (data as any).error)) {
+      throw new Error((data as any)?.error || 'Submission failed');
     }
 
-    setIsSubmitting(true);
-    
-    try {
-      const formData = {
-        propertyId,
-        anrede,
-        vorname,
-        nachname,
-        email,
-        telefon,
-        strasse,
-        nummer,
-        plz,
-        ort,
-        nachricht,
-        datenschutz
-      };
+    toast({
+      title: "Nachricht gesendet!",
+      description: "Vielen Dank für Ihre Anfrage. Wir melden uns in Kürze bei Ihnen.",
+    });
 
-      // Submit to contact-submit edge function
-      const { data, error } = await supabase.functions.invoke('contact-submit', {
-        body: formData
-      });
+    // Reset
+    setVorname('');
+    setNachname('');
+    setAdresse('');
+    setPlz('');
+    setGeburtsort('');
+    setStaatsangehoerigkeit('');
+    setGeburtsdatum('');
+    setNettoeinkommen('');
+    setDatenschutz(false);
 
-      if (error || data.error) {
-        throw new Error(data.error || 'Submission failed');
-      }
-      
-      toast({
-        title: "Nachricht gesendet!",
-        description: "Vielen Dank für Ihre Anfrage. Wir melden uns in Kürze bei Ihnen.",
-      });
-      
-      // Reset form
-      setAnrede('');
-      setVorname('');
-      setNachname('');
-      setEmail('');
-      setTelefon('');
-      setStrasse('');
-      setNummer('');
-      setPlz('');
-      setOrt('');
-      setNachricht('');
-      setDatenschutz(false);
-
-      if (isDialog) {
-        setOpen(false);
-        onClose?.();
-      }
-      
-    } catch (error) {
-      toast({
-        title: "Fehler",
-        description: "Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
+    if (isDialog) {
+      setOpen(false);
+      onClose?.();
     }
-  };
+  } catch (error) {
+    toast({
+      title: "Fehler",
+      description: "Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut.",
+      variant: "destructive"
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Direct JSX without memoization
   const formJsx = (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Message */}
-      <div>
-        <Label htmlFor="nachricht">Ihre Nachricht *</Label>
-        <Textarea
-          id="nachricht"
-          placeholder="Beschreiben Sie Ihr Anliegen..."
-          value={nachricht}
-          onChange={(e) => setNachricht(e.target.value)}
-          required
-          className="min-h-[120px] mt-2"
-        />
-      </div>
-
-      {/* Anrede, Vorname, Nachname */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <Label htmlFor="anrede">Anrede</Label>
-          <Select value={anrede} onValueChange={setAnrede}>
-            <SelectTrigger className="mt-2">
-              <SelectValue placeholder="Bitte wählen" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="herr">Herr</SelectItem>
-              <SelectItem value="frau">Frau</SelectItem>
-              <SelectItem value="divers">Divers</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="vorname">Vorname *</Label>
           <Input
@@ -171,76 +132,79 @@ const SimpleContactForm: React.FC<SimpleContactFormProps> = ({
         </div>
       </div>
 
-      {/* Email & Phone */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="email">E-Mail *</Label>
+          <Label htmlFor="adresse">Adresse *</Label>
           <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="adresse"
+            value={adresse}
+            onChange={(e) => setAdresse(e.target.value)}
             required
             className="mt-2"
           />
         </div>
         <div>
-          <Label htmlFor="telefon">Telefon *</Label>
-          <Input
-            id="telefon"
-            type="tel"
-            value={telefon}
-            onChange={(e) => setTelefon(e.target.value)}
-            required
-            className="mt-2"
-          />
-        </div>
-      </div>
-
-      {/* Address */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="md:col-span-3">
-          <Label htmlFor="strasse">Straße</Label>
-          <Input
-            id="strasse"
-            value={strasse}
-            onChange={(e) => setStrasse(e.target.value)}
-            className="mt-2"
-          />
-        </div>
-        <div>
-          <Label htmlFor="nummer">Nr.</Label>
-          <Input
-            id="nummer"
-            value={nummer}
-            onChange={(e) => setNummer(e.target.value)}
-            className="mt-2"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="plz">PLZ</Label>
+          <Label htmlFor="plz">Postleitzahl *</Label>
           <Input
             id="plz"
             value={plz}
             onChange={(e) => setPlz(e.target.value)}
-            className="mt-2"
-          />
-        </div>
-        <div>
-          <Label htmlFor="ort">Ort</Label>
-          <Input
-            id="ort"
-            value={ort}
-            onChange={(e) => setOrt(e.target.value)}
+            required
             className="mt-2"
           />
         </div>
       </div>
 
-      {/* Privacy Checkbox */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="geburtsort">Geburtsort *</Label>
+          <Input
+            id="geburtsort"
+            value={geburtsort}
+            onChange={(e) => setGeburtsort(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label htmlFor="staatsangehoerigkeit">Staatsangehörigkeit *</Label>
+          <Input
+            id="staatsangehoerigkeit"
+            value={staatsangehoerigkeit}
+            onChange={(e) => setStaatsangehoerigkeit(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="geburtsdatum">Geburtsdatum *</Label>
+          <Input
+            id="geburtsdatum"
+            type="date"
+            value={geburtsdatum}
+            onChange={(e) => setGeburtsdatum(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+          <Input
+            id="nettoeinkommen"
+            type="number"
+            min={0}
+            step="1"
+            value={nettoeinkommen}
+            onChange={(e) => setNettoeinkommen(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+      </div>
+
       <div className="flex items-start space-x-2">
         <Checkbox
           id="datenschutz"
@@ -257,7 +221,6 @@ const SimpleContactForm: React.FC<SimpleContactFormProps> = ({
         </Label>
       </div>
 
-      {/* Submit Button */}
       <Button 
         type="submit" 
         className="w-full" 
