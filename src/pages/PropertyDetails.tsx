@@ -167,7 +167,7 @@ const PropertyDetails = () => {
                   <div className="text-3xl font-bold text-primary">
                     {formatPrice(property.price_monthly)}
                   </div>
-                  <div className="text-sm text-muted-foreground">pro Monat</div>
+                  <div className="text-sm text-muted-foreground">Warmmiete</div>
                 </div>
               </div>
             </div>

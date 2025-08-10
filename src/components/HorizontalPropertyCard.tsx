@@ -108,7 +108,7 @@ export const HorizontalPropertyCard = ({ property }: HorizontalPropertyCardProps
                   <div className="text-2xl font-bold text-foreground">
                     {formatPrice(property.price_monthly)}
                   </div>
-                  <div className="text-sm text-muted-foreground">pro Monat</div>
+                  <div className="text-sm text-muted-foreground">Warmmiete</div>
                 </div>
               </div>
 
