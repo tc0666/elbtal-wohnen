@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/integrations/supabase/client';
@@ -350,9 +350,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Titel *</Label>
                 <Input
-                  id="title"
                   placeholder="Titel *"
                   value={formData.title || ''}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -360,9 +358,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Objektart *</Label>
                 <Select value={formData.property_type_id} onValueChange={(value) => setFormData({ ...formData, property_type_id: value })}>
-                  <SelectTrigger className="mt-2">
+                  <SelectTrigger>
                     <SelectValue placeholder="Objektart auswählen *" />
                   </SelectTrigger>
                   <SelectContent>
@@ -377,21 +374,17 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Beschreibung</Label>
               <Textarea
-                id="description"
                 placeholder="Beschreibung"
                 value={formData.description || ''}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="mt-2"
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Stadt *</Label>
               <Select value={formData.city_id} onValueChange={(value) => setFormData({ ...formData, city_id: value })}>
-                <SelectTrigger className="mt-2">
+                <SelectTrigger>
                   <SelectValue placeholder="Stadt auswählen *" />
                 </SelectTrigger>
                 <SelectContent>
@@ -413,9 +406,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="md:col-span-2 space-y-2">
-                <Label htmlFor="address">Straße und Hausnummer *</Label>
                 <Input
-                  id="address"
                   placeholder="Straße und Hausnummer *"
                   value={formData.address || ''}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
@@ -423,9 +414,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="postal_code">PLZ</Label>
                 <Input
-                  id="postal_code"
                   placeholder="PLZ"
                   value={formData.postal_code || ''}
                   onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
@@ -433,9 +422,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="neighborhood">Stadtteil</Label>
               <Input
-                id="neighborhood"
                 placeholder="Stadtteil"
                 value={formData.neighborhood || ''}
                 onChange={(e) => setFormData({ ...formData, neighborhood: e.target.value })}
@@ -450,9 +437,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="id">ID</Label>
               <Input
-                id="id"
                 placeholder="ID (wird automatisch generiert)"
                 value={property?.id || 'Wird automatisch generiert'}
                 disabled
@@ -461,9 +446,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="price_monthly">Kaltmiete (€) *</Label>
                 <Input
-                  id="price_monthly"
                   placeholder="Kaltmiete (€) *"
                   type="number"
                   value={formData.price_monthly !== null ? formData.price_monthly : ''}
@@ -472,9 +455,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="additional_costs_monthly">Nebenkosten (€)</Label>
                 <Input
-                  id="additional_costs_monthly"
                   placeholder="Nebenkosten (€)"
                   type="number"
                   value={formData.additional_costs_monthly !== null ? formData.additional_costs_monthly : ''}
@@ -482,9 +463,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="warmmiete_monthly">Warmmiete (€)</Label>
                 <Input
-                  id="warmmiete_monthly"
                   placeholder="Warmmiete (€)"
                   type="number"
                   value={formData.warmmiete_monthly !== null ? formData.warmmiete_monthly : ''}
@@ -492,9 +471,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="deposit_months">Kaution (Monate)</Label>
                 <Input
-                  id="deposit_months"
                   placeholder="Kaution (Monate)"
                   type="number"
                   value={formData.deposit_months !== null ? formData.deposit_months : ''}
@@ -512,9 +489,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="area_sqm">Wohnfläche (m²) *</Label>
                 <Input
-                  id="area_sqm"
                   placeholder="Wohnfläche (m²) *"
                   type="number"
                   value={formData.area_sqm || ''}
@@ -523,9 +498,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="rooms">Zimmer * (z.B. 3)</Label>
                 <Input
-                  id="rooms"
                   placeholder="Zimmer * (z.B. 3)"
                   value={formData.rooms || ''}
                   onChange={(e) => setFormData({ ...formData, rooms: e.target.value })}
@@ -533,9 +506,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="floor">Etage</Label>
                 <Input
-                  id="floor"
                   placeholder="Etage"
                   type="number"
                   value={formData.floor !== null ? formData.floor : ''}
@@ -543,9 +514,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="year_built">Baujahr</Label>
                 <Input
-                  id="year_built"
                   placeholder="Baujahr"
                   type="number"
                   value={formData.year_built !== null ? formData.year_built : ''}
@@ -555,9 +524,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="available_from">Verfügbar ab</Label>
               <Input
-                id="available_from"
                 placeholder="Verfügbar ab (YYYY-MM-DD)"
                 type="date"
                 value={formData.available_from || ''}
@@ -573,9 +540,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="total_floors">Etagen gesamt</Label>
               <Input
-                id="total_floors"
                 placeholder="Etagen gesamt"
                 type="number"
                 value={formData.total_floors !== null ? formData.total_floors : ''}
@@ -592,45 +557,35 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="energy_certificate_type">Energieausweis-Typ</Label>
                 <Input
-                  id="energy_certificate_type"
                   placeholder="Energieausweis-Typ (z.B. Verbrauchsausweis)"
                   value={formData.energy_certificate_type}
                   onChange={(e) => setFormData({ ...formData, energy_certificate_type: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="energy_certificate_value">Energiekennwert</Label>
                 <Input
-                  id="energy_certificate_value"
                   placeholder="Energiekennwert (z.B. 120 kWh/(m²·a))"
                   value={formData.energy_certificate_value}
                   onChange={(e) => setFormData({ ...formData, energy_certificate_value: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="heating_type">Heizungsart</Label>
                 <Input
-                  id="heating_type"
                   placeholder="Heizungsart (z.B. Zentralheizung)"
                   value={formData.heating_type}
                   onChange={(e) => setFormData({ ...formData, heating_type: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="heating_energy_source">Energieträger</Label>
                 <Input
-                  id="heating_energy_source"
                   placeholder="Energieträger (z.B. Gas, Öl, Fernwärme)"
                   value={formData.heating_energy_source}
                   onChange={(e) => setFormData({ ...formData, heating_energy_source: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="internet_speed">Internet-Geschwindigkeit</Label>
                 <Input
-                  id="internet_speed"
                   placeholder="Internet-Geschwindigkeit (z.B. 100 Mbit/s)"
                   value={formData.internet_speed}
                   onChange={(e) => setFormData({ ...formData, internet_speed: e.target.value })}
@@ -646,14 +601,11 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardHeader>
           <CardContent className="space-y-4">            
             <div className="space-y-2">
-              <Label htmlFor="features_description">Ausstattungsbeschreibung</Label>
               <Textarea
-                id="features_description"
                 placeholder="Detaillierte Ausstattungsbeschreibung (z.B. Luxuriöse 4-Zimmer Wohnung mit exklusiver Ausstattung. Marmorbäder, Einbauschränke, Klimaanlage und Alarmanlage. Tiefgaragenstellplatz inklusive.)"
                 value={formData.features_description || ''}
                 onChange={(e) => setFormData({ ...formData, features_description: e.target.value })}
                 rows={4}
-                className="mt-2"
               />
             </div>
           </CardContent>
@@ -786,10 +738,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
             {/* Custom Eigenschaften Tags */}
             <div>
               <h4 className="font-medium mb-3">Benutzerdefinierte Eigenschaften Tags</h4>
-              <Label htmlFor="eigenschaften_tag">Neues Tag</Label>
               <div className="flex gap-2 mb-3">
                 <Input
-                  id="eigenschaften_tag"
                   placeholder="Tag hinzufügen (z.B. Klimaanlage, Sauna, etc.)"
                   value={customEigenschaftenTag}
                   onChange={(e) => setCustomEigenschaftenTag(e.target.value)}
@@ -830,14 +780,11 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
             {/* Eigenschaften Description */}
             <div>
               <h4 className="font-medium mb-3">Eigenschaften Beschreibung</h4>
-              <Label htmlFor="eigenschaften_description">Eigenschaften Beschreibung</Label>
               <Textarea
-                id="eigenschaften_description"
                 placeholder="Detaillierte Beschreibung der besonderen Eigenschaften (z.B. Diese Wohnung besticht durch ihre moderne Ausstattung und durchdachte Raumaufteilung...)"
                 value={formData.eigenschaften_description || ''}
                 onChange={(e) => setFormData({ ...formData, eigenschaften_description: e.target.value })}
                 rows={3}
-                className="mt-2"
               />
             </div>
           </CardContent>
@@ -849,14 +796,11 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="additional_description">Weitere Beschreibung</Label>
               <Textarea
-                id="additional_description"
                 placeholder="Weitere Beschreibung (z.B. Exklusives Wohnen in bester Lage. Das Gebäude verfügt über einen Concierge-Service und gepflegte Grünanlagen. Fitnessraum und Gemeinschaftsräume stehen den Bewohnern zur Verfügung.)"
                 value={formData.additional_description || ''}
                 onChange={(e) => setFormData({ ...formData, additional_description: e.target.value })}
                 rows={4}
-                className="mt-2"
               />
             </div>
           </CardContent>
@@ -868,14 +812,11 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="neighborhood_description">Lage & Umgebung</Label>
               <Textarea
-                id="neighborhood_description"
                 placeholder="Lage & Umgebung (z.B. Ruhige Lage in beliebtem Stadtteil. Nahe zu öffentlichen Verkehrsmitteln, Einkaufsmöglichkeiten und Parks. Gute Infrastruktur mit Schulen und Kindergärten in der Nähe.)"
                 value={formData.neighborhood_description || ''}
                 onChange={(e) => setFormData({ ...formData, neighborhood_description: e.target.value })}
                 rows={4}
-                className="mt-2"
               />
             </div>
           </CardContent>

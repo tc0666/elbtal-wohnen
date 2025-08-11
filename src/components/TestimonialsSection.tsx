@@ -12,13 +12,13 @@ export const TestimonialsSection = () => {
       name: "Sarah Mueller",
       city: "Berlin",
       rating: 5,
-      text: "Amiel hat mir dabei geholfen, die perfekte Wohnung in Berlin zu finden. Der Service war ausgezeichnet und die Beratung sehr professionell. Absolut empfehlenswert!",
+      text: "Elbtal hat mir dabei geholfen, die perfekte Wohnung in Berlin zu finden. Der Service war ausgezeichnet und die Beratung sehr professionell. Absolut empfehlenswert!",
     },
     {
       name: "Thomas Weber",
       city: "München",
       rating: 5,
-      text: "Sehr zufrieden mit dem Service von Amiel. Die Wohnungssuche war unkompliziert und das Team war immer erreichbar. Tolle Betreuung vom ersten Kontakt bis zur Schlüsselübergabe.",
+      text: "Sehr zufrieden mit dem Service von Elbtal. Die Wohnungssuche war unkompliziert und das Team war immer erreichbar. Tolle Betreuung vom ersten Kontakt bis zur Schlüsselübergabe.",
     },
     {
       name: "Anna Schmidt",
@@ -30,7 +30,7 @@ export const TestimonialsSection = () => {
       name: "Michael Bauer",
       city: "Frankfurt",
       rating: 5,
-      text: "Die Wohnungsbesichtigung war perfekt organisiert und die Abwicklung sehr professionell. Amiel macht die Wohnungssuche so einfach wie nie zuvor. Absolute Empfehlung!",
+      text: "Die Wohnungsbesichtigung war perfekt organisiert und die Abwicklung sehr professionell. Elbtal macht die Wohnungssuche so einfach wie nie zuvor. Absolute Empfehlung!",
     },
   ];
 

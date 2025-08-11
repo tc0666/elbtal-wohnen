@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
+import { Send } from 'lucide-react';
 
 interface SimpleContactFormProps {
   propertyId?: string;
@@ -230,7 +230,10 @@ const handleSubmit = async (e: React.FormEvent) => {
         {isSubmitting ? (
           "Wird gesendet..."
         ) : (
-          "Kontaktieren"
+          <>
+            <Send className="h-5 w-5 mr-2" />
+            Jetzt Anfrage senden
+          </>
         )}
       </Button>
     </form>

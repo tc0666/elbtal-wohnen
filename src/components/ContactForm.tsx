@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
+import { Send, X } from 'lucide-react';
 
 interface ContactFormData {
   vorname: string;
@@ -254,7 +254,10 @@ const [formData, setFormData] = useState<ContactFormData>({
         {isSubmitting ? (
           "Wird gesendet..."
         ) : (
-          "Kontaktieren"
+          <>
+            <Send className="h-5 w-5 mr-2" />
+            Jetzt Anfrage senden
+          </>
         )}
       </Button>
     </form>
