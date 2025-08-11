@@ -63,7 +63,7 @@ export const TestimonialsSection = () => {
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Überzeugen Sie sich selbst von der Qualität unseres Services. 
-              Hier teilen zufriedene Mieter ihre Erfahrungen mit Elbtal und 
+              Hier teilen zufriedene Mieter ihre Erfahrungen mit Amiel und 
               erzählen, wie wir ihnen beim Finden ihres Traumzuhauses geholfen haben.
             </p>
           </div>
