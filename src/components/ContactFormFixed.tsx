@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Send } from 'lucide-react';
+
 
 interface ContactFormProps {
   propertyId?: string;
@@ -266,10 +266,7 @@ const ContactFormFixed: React.FC<ContactFormProps> = ({
         {isSubmitting ? (
           "Wird gesendet..."
         ) : (
-          <>
-            <Send className="h-5 w-5 mr-2" />
-            Jetzt Anfrage senden
-          </>
+          "Kontaktieren"
         )}
       </Button>
     </form>

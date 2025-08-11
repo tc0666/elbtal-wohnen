@@ -26,7 +26,7 @@ import {
   Phone,
   Mail,
   Clock,
-  MessageSquare,
+  
   ArrowLeft,
   Home,
   Flame,
@@ -393,8 +393,7 @@ const PropertyDetails = () => {
               isDialog={true}
               trigger={
                 <Button className="w-full mb-6" size="lg">
-                  <MessageSquare className="h-5 w-5 mr-2" />
-                  Kontakt aufnehmen
+                  Kontaktieren
                 </Button>
               }
             />
