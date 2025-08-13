@@ -29,6 +29,8 @@ const SimpleContactForm: React.FC<SimpleContactFormProps> = ({
 // Pflichtfelder laut Anforderung
 const [vorname, setVorname] = useState('');
 const [nachname, setNachname] = useState('');
+const [email, setEmail] = useState('');
+const [telefon, setTelefon] = useState('');
 const [adresse, setAdresse] = useState('');
 const [plz, setPlz] = useState('');
 const [geburtsort, setGeburtsort] = useState('');
@@ -59,6 +61,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       propertyId,
       vorname,
       nachname,
+      email,
+      telefon,
       strasse: adresse,
       nummer: '',
       plz,
@@ -83,6 +87,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     // Reset
     setVorname('');
     setNachname('');
+    setEmail('');
+    setTelefon('');
     setAdresse('');
     setPlz('');
     setGeburtsort('');
@@ -126,6 +132,31 @@ const handleSubmit = async (e: React.FormEvent) => {
             id="nachname"
             value={nachname}
             onChange={(e) => setNachname(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="email">E-Mail Adresse *</Label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label htmlFor="telefon">Telefonnummer *</Label>
+          <Input
+            id="telefon"
+            type="tel"
+            value={telefon}
+            onChange={(e) => setTelefon(e.target.value)}
             required
             className="mt-2"
           />
