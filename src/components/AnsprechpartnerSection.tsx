@@ -58,7 +58,7 @@ export const AnsprechpartnerSection = () => {
                 <div className="flex items-center justify-center mx-auto mb-2">
                   <img
                     src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png"
-                    alt="ELBTAL Logo"
+                    alt="Amiel Logo"
                     className="w-56 h-auto object-contain block"
                   />
                 </div>

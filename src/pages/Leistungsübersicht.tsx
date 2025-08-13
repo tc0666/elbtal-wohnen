@@ -252,7 +252,7 @@ const Leistungsübersicht = () => {
 
         {/* Advantages */}
         <div className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12">Warum Elbtal Immobilienverwaltung?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Warum Amiel Immobilienverwaltung?</h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {advantages.map((advantage, index) => (
@@ -298,7 +298,7 @@ const Leistungsübersicht = () => {
               </Button>
               <Button size="lg" variant="outline">
                 <Mail className="h-5 w-5 mr-2" />
-                info@elbtal-immobilien.de
+                info@amiel-immobilienverwaltung.de
               </Button>
             </div>
           </CardContent>

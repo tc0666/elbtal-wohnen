@@ -32,7 +32,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: "E-Mail",
-      details: ["info@elbtal-immobilien.de"],
+      details: ["info@amiel-immobilienverwaltung.de"],
       description: "Wir antworten innerhalb von 24 Stunden"
     },
     {

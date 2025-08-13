@@ -352,7 +352,7 @@ const PropertyDetails = () => {
                   <div className="flex items-center">
                     <Mail className="h-5 w-5 mr-3 text-primary" />
                     <div>
-                      <div className="font-medium">info@elbtal-immobilien.de</div>
+                      <div className="font-medium">info@amiel-immobilienverwaltung.de</div>
                       <div className="text-sm text-muted-foreground">E-Mail</div>
                     </div>
                   </div>

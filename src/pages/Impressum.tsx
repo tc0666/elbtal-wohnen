@@ -36,7 +36,7 @@ const Impressum = () => {
                 <div>
                   <h3 className="font-semibold mb-2">Firmenname</h3>
                   <p className="text-muted-foreground">
-                    Elbtal Immobilienverwaltung GmbH
+                    Amiel Immobilienverwaltung GmbH
                   </p>
                 </div>
                 
@@ -72,7 +72,7 @@ const Impressum = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <p className="font-medium">Elbtal Immobilienverwaltung GmbH</p>
+                  <p className="font-medium">Amiel Immobilienverwaltung GmbH</p>
                   <p className="text-muted-foreground">Hauptstraße 123</p>
                   <p className="text-muted-foreground">01069 Dresden</p>
                   <p className="text-muted-foreground">Deutschland</p>
@@ -97,7 +97,7 @@ const Impressum = () => {
 
                 <div>
                   <p className="font-medium">E-Mail</p>
-                  <p className="text-muted-foreground">info@elbtal-immobilien.de</p>
+                  <p className="text-muted-foreground">info@amiel-immobilienverwaltung.de</p>
                 </div>
               </CardContent>
             </Card>

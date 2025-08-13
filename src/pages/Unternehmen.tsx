@@ -154,7 +154,7 @@ const Unternehmen = () => {
             Unternehmen
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Elbtal Immobilienverwaltung
+            Amiel Immobilienverwaltung
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Seit 1988 Ihr vertrauensvoller Partner für Immobilienverwaltung in Dresden und Umgebung. 
@@ -180,7 +180,7 @@ const Unternehmen = () => {
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Geschichte</h2>
           <div className="space-y-4 text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center mb-12">
             <p>
-              Die Elbtal Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
+              Die Amiel Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
               über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
               in der Region entwickelt.
             </p>
@@ -296,7 +296,7 @@ const Unternehmen = () => {
           <CardContent className="p-12">
             <div className="text-center mb-8">
               <Home className="h-16 w-16 text-primary mx-auto mb-6" />
-              <h2 className="text-3xl font-bold mb-4">Warum Elbtal Immobilienverwaltung?</h2>
+              <h2 className="text-3xl font-bold mb-4">Warum Amiel Immobilienverwaltung?</h2>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
@@ -342,7 +342,7 @@ const Unternehmen = () => {
                 </Button>
                 <Button size="lg" variant="outline">
                   <Mail className="h-5 w-5 mr-2" />
-                  info@elbtal-immobilien.de
+                  info@amiel-immobilienverwaltung.de
                 </Button>
               </div>
               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">

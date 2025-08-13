@@ -19,7 +19,7 @@ const AGB = () => {
             Allgemeine Geschäftsbedingungen
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Gültig ab 01.01.2025 für alle Dienstleistungen der Elbtal Immobilienverwaltung GmbH
+            Gültig ab 01.01.2025 für alle Dienstleistungen der Amiel Immobilienverwaltung GmbH
           </p>
         </div>
 
@@ -35,7 +35,7 @@ const AGB = () => {
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen der 
-                  Elbtal Immobilienverwaltung GmbH (nachfolgend "Auftragnehmer") und ihren Auftraggebern 
+                  Amiel Immobilienverwaltung GmbH (nachfolgend "Auftragnehmer") und ihren Auftraggebern 
                   (nachfolgend "Auftraggeber") über die Erbringung von Immobilienverwaltungsleistungen.
                 </p>
                 <p>
@@ -264,7 +264,7 @@ const AGB = () => {
                 <div className="border-t pt-4 mt-6">
                   <p className="text-sm">
                     <strong>Stand:</strong> Januar 2025<br />
-                    <strong>Elbtal Immobilienverwaltung GmbH</strong><br />
+                    <strong>Amiel Immobilienverwaltung GmbH</strong><br />
                     Hauptstraße 123, 01069 Dresden
                   </p>
                 </div>

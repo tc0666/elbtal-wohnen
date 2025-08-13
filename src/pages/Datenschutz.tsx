@@ -36,10 +36,10 @@ const Datenschutz = () => {
                 Verantwortlicher für die Datenverarbeitung auf dieser Website ist:
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
-                <p className="font-medium">Elbtal Immobilienverwaltung GmbH</p>
+                <p className="font-medium">Amiel Immobilienverwaltung GmbH</p>
                 <p className="text-muted-foreground">Hauptstraße 123, 01069 Dresden</p>
                 <p className="text-muted-foreground">Telefon: +49 351 123 456 789</p>
-                <p className="text-muted-foreground">E-Mail: info@elbtal-immobilien.de</p>
+                <p className="text-muted-foreground">E-Mail: info@amiel-immobilienverwaltung.de</p>
               </div>
             </CardContent>
           </Card>
@@ -228,7 +228,7 @@ const Datenschutz = () => {
                 Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte wenden Sie sich bitte an:
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
-                <p className="font-medium">Elbtal Immobilienverwaltung GmbH</p>
+                <p className="font-medium">Amiel Immobilienverwaltung GmbH</p>
                 <p className="text-muted-foreground">Datenschutz</p>
                 <p className="text-muted-foreground">Hauptstraße 123, 01069 Dresden</p>
                 <p className="text-muted-foreground">E-Mail: datenschutz@elbtal-immobilien.de</p>
