@@ -43,20 +43,16 @@ export const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-semibold text-foreground">Kontakt</h4>
             <div className="space-y-3 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+              <div>
                 <span>Hauptstraße 123<br />01069 Dresden</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-primary flex-shrink-0" />
+              <div>
                 <span>+49 351 123 456 789</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-primary flex-shrink-0" />
+              <div>
                 <span>info@amiel-immobilienverwaltung.de</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-primary flex-shrink-0" />
+              <div>
                 <span>Mo-Fr: 9:00-18:00 Uhr</span>
               </div>
             </div>
