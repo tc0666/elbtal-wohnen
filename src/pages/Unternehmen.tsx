@@ -128,11 +128,8 @@ const Unternehmen = () => {
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Geschichte</h2>
           <div className="space-y-4 text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center mb-12">
             <p>Die Amiel Immobilienverwaltung wurde 1988 in München gegründet und hat sich über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister in der Region entwickelt.</p>
-            <p>
-              Was als kleine Hausverwaltung begann, ist heute ein modernes Unternehmen mit 
-              einem umfassenden Serviceangebot. Wir betreuen über 2.000 Wohneinheiten und 
-              haben bereits mehr als 10.000 Kunden bei ihren Immobilienangelegenheiten unterstützt.
-            </p>
+            <p>Was als kleine Hausverwaltung begann, ist heute ein Unternehmen mit einem umfassenden Serviceangebot. Wir betreuen über 300 Wohneinheiten und haben bereits mehr als 4.000 Kunden bei ihren Immobilienangelegenheiten unterstützt.
+          </p>
             <p>
               Unser Erfolgsgeheimnis: Die Kombination aus langjähriger Erfahrung, modernster 
               Technik und dem persönlichen Kontakt zu unseren Kunden. Jeder Kunde erhält bei 
