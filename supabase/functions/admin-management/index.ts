@@ -415,6 +415,48 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'create_contact_request': {
+        // Validate required fields
+        const required = ['vorname','nachname','email','telefon','nachricht']
+        for (const key of required) {
+          if (!data[key] || String(data[key]).trim() === '') {
+            return new Response(
+              JSON.stringify({ error: `Field '${key}' is required` }),
+              { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+            )
+          }
+        }
+
+        const payload = {
+          anrede: data.anrede ? String(data.anrede).toLowerCase() : null,
+          vorname: String(data.vorname).trim(),
+          nachname: String(data.nachname).trim(),
+          email: String(data.email).trim(),
+          telefon: String(data.telefon).trim(),
+          nachricht: String(data.nachricht).trim(),
+          strasse: data.strasse ? String(data.strasse).trim() : null,
+          nummer: data.nummer ? String(data.nummer).trim() : null,
+          plz: data.plz ? String(data.plz).trim() : null,
+          ort: data.ort ? String(data.ort).trim() : null,
+          property_id: data.property_id || null,
+          lead_label: data.lead_label ?? null,
+          status: data.status ? String(data.status).trim() : 'new',
+        }
+
+        const { data: newRequest, error: insertErr } = await supabase
+          .from('contact_requests')
+          .insert([payload])
+          .select()
+          .single()
+
+        if (insertErr) throw insertErr
+
+        return new Response(
+          JSON.stringify({ request: newRequest }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 201 }
+        )
+      }
+
       case 'update_city':
         const { cityId, city: cityUpdateData } = data
         

@@ -10,9 +10,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar as CalendarUI } from '@/components/ui/calendar';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar, Eye, Mail, Phone, Tag } from 'lucide-react';
+import { Calendar, Eye, Mail, Phone, Tag, Plus } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import LeadLabelBadge from '@/components/LeadLabelBadge';
+import AddLeadDialog from '@/components/AddLeadDialog';
 
 interface Lead {
   id: string;
@@ -44,6 +45,7 @@ const LeadsManagement: React.FC = () => {
 const { toast } = useToast();
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
+  const [openAdd, setOpenAdd] = useState(false);
 
   const fetchLeads = async () => {
     try {
@@ -237,6 +239,7 @@ const { toast } = useToast();
           <div className="flex gap-2">
             <Button variant="secondary" onClick={handleExportCSV} className="hover-scale">Export CSV</Button>
             <Button variant="outline" onClick={handleExportXLSX} className="hover-scale">Export XLSX</Button>
+            <Button onClick={() => setOpenAdd(true)} className="hover-scale"><Plus className="h-4 w-4 mr-1" /> Lead hinzufügen</Button>
           </div>
         </div>
       </div>
@@ -368,6 +371,13 @@ const { toast } = useToast();
           )}
         </DialogContent>
       </Dialog>
+
+      <AddLeadDialog
+        open={openAdd}
+        onOpenChange={setOpenAdd}
+        availableLabels={Array.from(new Set([...DEFAULT_LABELS, ...uniqueLabels]))}
+        onCreated={fetchLeads}
+      />
     </div>
   );
 };

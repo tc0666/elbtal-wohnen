@@ -6,15 +6,9 @@ interface LeadLabelBadgeProps {
   className?: string;
 }
 
-// Maps known labels to themed styles using design tokens
+// Only VIP is colored; others remain neutral outline
 const labelClassMap: Record<string, string> = {
   "VIP": "bg-primary text-primary-foreground border-transparent",
-  "Hot Lead": "bg-destructive text-destructive-foreground border-transparent",
-  "Warm": "bg-accent text-accent-foreground border-transparent",
-  "Cold": "bg-muted text-muted-foreground border-transparent",
-  "Follow-Up": "bg-secondary text-secondary-foreground border-transparent",
-  "Unqualified": "bg-muted text-muted-foreground border-transparent",
-  "Converted": "bg-primary/10 text-primary border border-primary/20",
 };
 
 const LeadLabelBadge: React.FC<LeadLabelBadgeProps> = ({ label, className }) => {
@@ -22,7 +16,7 @@ const LeadLabelBadge: React.FC<LeadLabelBadgeProps> = ({ label, className }) => 
     return <Badge variant="outline" className={className}>Ohne Label</Badge>;
   }
 
-  const themed = labelClassMap[label] || "bg-secondary text-secondary-foreground border-transparent";
+  const themed = labelClassMap[label] || "";
 
   return (
     <Badge variant="outline" className={["px-2 py-0.5", themed, className].filter(Boolean).join(" ")}>{label}</Badge>
