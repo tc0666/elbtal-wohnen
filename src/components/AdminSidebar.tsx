@@ -17,8 +17,7 @@ import {
   MapPin,
   BarChart3,
   User,
-  LogOut,
-  Tags
+  LogOut
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
@@ -55,11 +54,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, onTabChange, adm
       id: 'contacts',
       label: 'Anfragen',
       icon: MessageSquare,
-    },
-    {
-      id: 'leads',
-      label: 'Leads',
-      icon: Tags,
     },
     {
       id: 'cities',
