@@ -400,6 +400,21 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'update_contact_request_lead_label':
+        const { data: updatedLead, error: leadError } = await supabase
+          .from('contact_requests')
+          .update({ lead_label: data.lead_label })
+          .eq('id', data.id)
+          .select()
+          .single()
+
+        if (leadError) throw leadError
+
+        return new Response(
+          JSON.stringify({ request: updatedLead }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+
       case 'update_city':
         const { cityId, city: cityUpdateData } = data
         

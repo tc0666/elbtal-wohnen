@@ -115,6 +115,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          lead_label: string | null
           nachname: string
           nachricht: string
           nummer: string | null
@@ -132,6 +133,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          lead_label?: string | null
           nachname: string
           nachricht: string
           nummer?: string | null
@@ -149,6 +151,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          lead_label?: string | null
           nachname?: string
           nachricht?: string
           nummer?: string | null
