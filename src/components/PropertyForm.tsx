@@ -255,15 +255,21 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
 
       console.log('Request body:', requestBody);
 
-      const { data, error } = await supabase.functions.invoke('simple-property-create', {
-        body: { propertyData }
-      });
+      // Call the appropriate function based on action
+      const { data, error } = property 
+        ? await supabase.functions.invoke('admin-management', {
+            body: { action: 'update_property', token, id: property.id, property: propertyData }
+          })
+        : await supabase.functions.invoke('simple-property-create', {
+            body: { propertyData }
+          });
 
       console.log('Response data:', data);
       console.log('Response error:', error);
 
       if (data?.property) {
         console.log('Success! Property created/updated:', data.property);
+        console.log('Updated Warmmiete:', data.property.warmmiete_monthly);
         toast({
           title: "Erfolgreich",
           description: `Immobilie wurde ${property ? 'aktualisiert' : 'erstellt'}.`,
