@@ -8,7 +8,7 @@ const ansprechpartner = [
     title: "Ihr Verwalter",
     name: "Thomas Müller",
     phone: "+49 30 123456789",
-    email: "t.mueller@elbtal.de",
+    email: "info@amiel-immobilienverwaltung.de",
     description: "Allgemeine Verwaltungsangelegenheiten",
     image: "/lovable-uploads/794cf7ca-0c21-48b6-8856-3f24fa932c56.png"
   },
@@ -17,7 +17,7 @@ const ansprechpartner = [
     title: "Ihr Techniker", 
     name: "Stefan Weber",
     phone: "+49 30 987654321",
-    email: "s.weber@elbtal.de",
+    email: "info@amiel-immobilienverwaltung.de",
     description: "Technische Angelegenheiten & Schadensmeldungen",
     image: "/lovable-uploads/d6fb0e5c-3998-42cf-b2fc-b5915b06d762.png"
   },
@@ -26,7 +26,7 @@ const ansprechpartner = [
     title: "Schadensbearbeitung",
     name: "Marina Schmidt",
     phone: "+49 30 555123456",
-    email: "schaeden@elbtal.de", 
+    email: "info@amiel-immobilienverwaltung.de", 
     description: "Schadensmeldungen & Versicherungsangelegenheiten",
     image: "/lovable-uploads/37f77204-1324-4ab1-bae3-696640f6ce97.png"
   },
@@ -35,7 +35,7 @@ const ansprechpartner = [
     title: "Buchhaltung",
     name: "Andrea Klein",
     phone: "+49 30 444987654",
-    email: "buchhaltung@elbtal.de",
+    email: "info@amiel-immobilienverwaltung.de",
     description: "Abrechnungen & finanzielle Angelegenheiten",
     image: "/lovable-uploads/264784dc-8e41-42aa-9e8e-8e42c707c9fb.png"
   }
@@ -59,7 +59,7 @@ export const AnsprechpartnerSection = () => {
           {ansprechpartner.map((person) => (
             <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
               <CardHeader className="text-center p-0">
-                <div className="w-full h-[500px] overflow-hidden">
+                <div className="w-full aspect-square overflow-hidden">
                   <img
                     src={person.image}
                     alt={`${person.name} - ${person.title}`}
