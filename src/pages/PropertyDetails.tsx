@@ -178,9 +178,11 @@ const PropertyDetails = () => {
                 <CardTitle>Objektbeschreibung</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {property.description}
-                </p>
+                <div className="text-muted-foreground leading-relaxed mb-6">
+                  <div dangerouslySetInnerHTML={{
+                    __html: property.description.replace(/\n/g, '<br />')
+                  }} />
+                </div>
 
                 {/* Eigenschaften Tags */}
                 {(property as any).eigenschaften_tags && (property as any).eigenschaften_tags.length > 0 && (
@@ -205,9 +207,11 @@ const PropertyDetails = () => {
                   <>
                     <div className="mb-6">
                       <CardTitle className="mb-3">Ausstattung</CardTitle>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {property.features_description}
-                      </p>
+                      <div className="text-muted-foreground leading-relaxed">
+                        <div dangerouslySetInnerHTML={{
+                          __html: property.features_description.replace(/\n/g, '<br />')
+                        }} />
+                      </div>
                     </div>
                     <Separator className="my-6" />
                   </>
