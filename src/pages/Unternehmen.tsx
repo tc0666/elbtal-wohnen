@@ -4,147 +4,97 @@ import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Building, 
-  Users, 
-  Award, 
-  Target, 
-  Heart, 
-  Shield,
-  TrendingUp,
-  Clock,
-  Star,
-  CheckCircle,
-  Phone,
-  Mail,
-  Calendar,
-  MapPin,
-  HeartHandshake,
-  Lightbulb,
-  Handshake,
-  Home,
-  Trophy
-} from 'lucide-react';
-
+import { Building, Users, Award, Target, Heart, Shield, TrendingUp, Clock, Star, CheckCircle, Phone, Mail, Calendar, MapPin, HeartHandshake, Lightbulb, Handshake, Home, Trophy } from 'lucide-react';
 const Unternehmen = () => {
-  const milestones = [
-    {
-      year: "1988",
-      title: "Gründung in Dresden",
-      description: "Start als kleine Immobilienverwaltung mit Fokus auf persönlichen Service"
-    },
-    {
-      year: "1995",
-      title: "Erste Expansion",
-      description: "Erweiterung des Portfolios auf über 500 verwaltete Einheiten"
-    },
-    {
-      year: "2005",
-      title: "Modernisierung",
-      description: "Einführung digitaler Verwaltungssysteme und Online-Services"
-    },
-    {
-      year: "2015",
-      title: "Regionale Expansion",
-      description: "Ausweitung der Services auf ganz Sachsen und angrenzende Regionen"
-    },
-    {
-      year: "2020",
-      title: "Digitale Transformation",
-      description: "Vollständige Digitalisierung aller Prozesse und Launch der Online-Plattform"
-    },
-    {
-      year: "2025",
-      title: "37 Jahre Erfahrung",
-      description: "Über 2.000 verwaltete Einheiten und 10.000 zufriedene Kunden"
-    }
-  ];
-
-  const values = [
-    {
-      icon: Heart,
-      title: "Kundenorientierung",
-      description: "Ihre Zufriedenheit steht im Mittelpunkt unseres Handelns. Wir hören zu und finden maßgeschneiderte Lösungen."
-    },
-    {
-      icon: Shield,
-      title: "Vertrauen & Zuverlässigkeit",
-      description: "Über 35 Jahre Erfahrung sprechen für sich. Auf uns können Sie sich verlassen."
-    },
-    {
-      icon: Lightbulb,
-      title: "Innovation",
-      description: "Wir nutzen modernste Technologien, um Ihnen den bestmöglichen Service zu bieten."
-    },
-    {
-      icon: Handshake,
-      title: "Partnerschaftlichkeit",
-      description: "Wir sehen uns als Ihr langfristiger Partner, nicht nur als Dienstleister."
-    },
-    {
-      icon: Target,
-      title: "Qualität",
-      description: "Höchste Standards in allen Bereichen - von der Beratung bis zur Ausführung."
-    },
-    {
-      icon: Users,
-      title: "Teamgeist",
-      description: "Unser erfahrenes Team arbeitet Hand in Hand für Ihren Erfolg."
-    }
-  ];
-
-  const team = [
-    {
-      name: "Dr. Michael Schmidt",
-      position: "Geschäftsführer",
-      experience: "25 Jahre Erfahrung",
-      specialization: "Immobilienrecht & Unternehmensstrategie"
-    },
-    {
-      name: "Sarah Müller",
-      position: "Leiterin Hausverwaltung",
-      experience: "18 Jahre Erfahrung", 
-      specialization: "Technische & kaufmännische Verwaltung"
-    },
-    {
-      name: "Thomas Weber",
-      position: "Leiter Vermietung",
-      experience: "15 Jahre Erfahrung",
-      specialization: "Mieterbetreuung & Objektvermarktung"
-    },
-    {
-      name: "Lisa Hoffmann",
-      position: "Leiterin Finanzen",
-      experience: "12 Jahre Erfahrung",
-      specialization: "Nebenkostenabrechnung & Controlling"
-    }
-  ];
-
-  const achievements = [
-    {
-      icon: Trophy,
-      number: "37+",
-      label: "Jahre Erfahrung"
-    },
-    {
-      icon: Building,
-      number: "2.000+",
-      label: "Verwaltete Einheiten"
-    },
-    {
-      icon: Users,
-      number: "10.000+",
-      label: "Zufriedene Kunden"
-    },
-    {
-      icon: Star,
-      number: "4.8/5",
-      label: "Kundenbewertung"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+  const milestones = [{
+    year: "1988",
+    title: "Gründung in Dresden",
+    description: "Start als kleine Immobilienverwaltung mit Fokus auf persönlichen Service"
+  }, {
+    year: "1995",
+    title: "Erste Expansion",
+    description: "Erweiterung des Portfolios auf über 500 verwaltete Einheiten"
+  }, {
+    year: "2005",
+    title: "Modernisierung",
+    description: "Einführung digitaler Verwaltungssysteme und Online-Services"
+  }, {
+    year: "2015",
+    title: "Regionale Expansion",
+    description: "Ausweitung der Services auf ganz Sachsen und angrenzende Regionen"
+  }, {
+    year: "2020",
+    title: "Digitale Transformation",
+    description: "Vollständige Digitalisierung aller Prozesse und Launch der Online-Plattform"
+  }, {
+    year: "2025",
+    title: "37 Jahre Erfahrung",
+    description: "Über 2.000 verwaltete Einheiten und 10.000 zufriedene Kunden"
+  }];
+  const values = [{
+    icon: Heart,
+    title: "Kundenorientierung",
+    description: "Ihre Zufriedenheit steht im Mittelpunkt unseres Handelns. Wir hören zu und finden maßgeschneiderte Lösungen."
+  }, {
+    icon: Shield,
+    title: "Vertrauen & Zuverlässigkeit",
+    description: "Über 35 Jahre Erfahrung sprechen für sich. Auf uns können Sie sich verlassen."
+  }, {
+    icon: Lightbulb,
+    title: "Innovation",
+    description: "Wir nutzen modernste Technologien, um Ihnen den bestmöglichen Service zu bieten."
+  }, {
+    icon: Handshake,
+    title: "Partnerschaftlichkeit",
+    description: "Wir sehen uns als Ihr langfristiger Partner, nicht nur als Dienstleister."
+  }, {
+    icon: Target,
+    title: "Qualität",
+    description: "Höchste Standards in allen Bereichen - von der Beratung bis zur Ausführung."
+  }, {
+    icon: Users,
+    title: "Teamgeist",
+    description: "Unser erfahrenes Team arbeitet Hand in Hand für Ihren Erfolg."
+  }];
+  const team = [{
+    name: "Dr. Michael Schmidt",
+    position: "Geschäftsführer",
+    experience: "25 Jahre Erfahrung",
+    specialization: "Immobilienrecht & Unternehmensstrategie"
+  }, {
+    name: "Sarah Müller",
+    position: "Leiterin Hausverwaltung",
+    experience: "18 Jahre Erfahrung",
+    specialization: "Technische & kaufmännische Verwaltung"
+  }, {
+    name: "Thomas Weber",
+    position: "Leiter Vermietung",
+    experience: "15 Jahre Erfahrung",
+    specialization: "Mieterbetreuung & Objektvermarktung"
+  }, {
+    name: "Lisa Hoffmann",
+    position: "Leiterin Finanzen",
+    experience: "12 Jahre Erfahrung",
+    specialization: "Nebenkostenabrechnung & Controlling"
+  }];
+  const achievements = [{
+    icon: Trophy,
+    number: "37+",
+    label: "Jahre Erfahrung"
+  }, {
+    icon: Building,
+    number: "2.000+",
+    label: "Verwaltete Einheiten"
+  }, {
+    icon: Users,
+    number: "10.000+",
+    label: "Zufriedene Kunden"
+  }, {
+    icon: Star,
+    number: "4.8/5",
+    label: "Kundenbewertung"
+  }];
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <div className="container mx-auto px-4 py-16">
@@ -165,13 +115,11 @@ const Unternehmen = () => {
         {/* Achievements */}
         <div className="mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {achievements.map((achievement, index) => (
-              <Card key={index} className="text-center p-6">
+            {achievements.map((achievement, index) => <Card key={index} className="text-center p-6">
                 <achievement.icon className="h-12 w-12 text-primary mx-auto mb-4" />
                 <div className="text-3xl font-bold text-primary mb-2">{achievement.number}</div>
                 <div className="text-sm text-muted-foreground">{achievement.label}</div>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
 
@@ -179,11 +127,7 @@ const Unternehmen = () => {
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-12">Unsere Geschichte</h2>
           <div className="space-y-4 text-muted-foreground leading-relaxed max-w-4xl mx-auto text-center mb-12">
-            <p>
-              Die Amiel Immobilienverwaltung wurde 1988 in Dresden gegründet und hat sich 
-              über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister 
-              in der Region entwickelt.
-            </p>
+            <p>Die Amiel Immobilienverwaltung wurde 1988 in München gegründet und hat sich über mehr als drei Jahrzehnte zu einem der führenden Immobiliendienstleister in der Region entwickelt.</p>
             <p>
               Was als kleine Hausverwaltung begann, ist heute ein modernes Unternehmen mit 
               einem umfassenden Serviceangebot. Wir betreuen über 2.000 Wohneinheiten und 
@@ -220,8 +164,7 @@ const Unternehmen = () => {
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border"></div>
             
             <div className="space-y-12">
-              {milestones.map((milestone, index) => (
-                <div key={index} className="relative flex items-start gap-8">
+              {milestones.map((milestone, index) => <div key={index} className="relative flex items-start gap-8">
                   {/* Timeline dot */}
                   <div className="relative z-10 flex-shrink-0">
                     <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg border-4 border-background">
@@ -236,8 +179,7 @@ const Unternehmen = () => {
                       <p className="text-muted-foreground">{milestone.description}</p>
                     </CardContent>
                   </Card>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -256,13 +198,11 @@ const Unternehmen = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {values.map((value, index) => (
-              <Card key={index} className="text-center p-6 h-full">
+            {values.map((value, index) => <Card key={index} className="text-center p-6 h-full">
                 <value.icon className="h-12 w-12 text-primary mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
                 <p className="text-muted-foreground text-sm">{value.description}</p>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
 
@@ -271,8 +211,7 @@ const Unternehmen = () => {
           <h2 className="text-3xl font-bold text-center mb-12">Unser Führungsteam</h2>
           
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {team.map((member, index) => (
-              <Card key={index}>
+            {team.map((member, index) => <Card key={index}>
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -286,8 +225,7 @@ const Unternehmen = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
 
@@ -355,8 +293,6 @@ const Unternehmen = () => {
       </div>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Unternehmen;
