@@ -183,14 +183,14 @@ const LeadsManagement: React.FC = () => {
                             <Badge variant="outline">Ohne Label</Badge>
                           )}
                           <Select
-                            value={lead.lead_label || ''}
-                            onValueChange={(v) => updateLabel(lead.id, v)}
+                            value={lead.lead_label ?? 'none'}
+                            onValueChange={(v) => updateLabel(lead.id, v === 'none' ? null : v)}
                           >
                             <SelectTrigger className="w-36 text-xs">
                               <SelectValue placeholder="Label setzen" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">Ohne Label</SelectItem>
+                              <SelectItem value="none">Ohne Label</SelectItem>
                               {Array.from(new Set([...DEFAULT_LABELS, ...uniqueLabels])).map(l => (
                                 <SelectItem key={l} value={l}>{l}</SelectItem>
                               ))}
