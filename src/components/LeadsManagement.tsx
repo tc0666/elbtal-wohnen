@@ -116,6 +116,20 @@ const { toast } = useToast();
     });
   }, [leads, labelFilter, search, fromDate, toDate]);
 
+  const extractDetails = (msg?: string) => {
+    const res: Record<string, string> = {};
+    if (!msg) return res;
+    msg.split('\n').forEach((line) => {
+      const idx = line.indexOf(':');
+      if (idx > -1) {
+        const key = line.slice(0, idx).trim();
+        const val = line.slice(idx + 1).trim();
+        if (key && val) res[key] = val;
+      }
+    });
+    return res;
+  };
+
   const handleExportCSV = () => {
     const items = selectedIds.size ? filtered.filter(l => selectedIds.has(l.id)) : filtered;
     const headers = [
@@ -427,6 +441,14 @@ const { toast } = useToast();
                   <div><strong>Datum:</strong> {new Date(selected.created_at).toLocaleString('de-DE')}</div>
                   <div><strong>Immobilie:</strong> {selected.property?.title || 'Allgemein'}</div>
                   <div className="flex items-center gap-2"><strong>Label:</strong> <LeadLabelBadge label={selected.lead_label} /></div>
+                  {(() => { const det = extractDetails(selected.nachricht); return (
+                    <>
+                      {det['Geburtsdatum'] && <div><strong>Geburtsdatum:</strong> {det['Geburtsdatum']}</div>}
+                      {det['Nettoeinkommen'] && <div><strong>Nettoeinkommen:</strong> {det['Nettoeinkommen']} €</div>}
+                      {det['Geburtsort'] && <div><strong>Geburtsort:</strong> {det['Geburtsort']}</div>}
+                      {det['Staatsangehörigkeit'] && <div><strong>Staatsangehörigkeit:</strong> {det['Staatsangehörigkeit']}</div>}
+                    </>
+                  ); })()}
                 </div>
               </div>
               {selected.nachricht && (

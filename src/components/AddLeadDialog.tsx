@@ -29,12 +29,16 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
   const [nachname, setNachname] = useState('');
   const [email, setEmail] = useState('');
   const [telefon, setTelefon] = useState('');
-  const [nachricht, setNachricht] = useState('');
   const [strasse, setStrasse] = useState('');
   const [nummer, setNummer] = useState('');
   const [plz, setPlz] = useState('');
   const [ort, setOrt] = useState('');
+  const [geburtsort, setGeburtsort] = useState('');
+  const [staatsangehoerigkeit, setStaatsangehoerigkeit] = useState('');
+  const [geburtsdatum, setGeburtsdatum] = useState(''); // yyyy-mm-dd
+  const [nettoeinkommen, setNettoeinkommen] = useState('');
   const [leadLabel, setLeadLabel] = useState<string>('none');
+  const [freieNachricht, setFreieNachricht] = useState('');
 
   const labels = useMemo(() => Array.from(new Set(availableLabels)), [availableLabels]);
 
@@ -44,12 +48,16 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
     setNachname('');
     setEmail('');
     setTelefon('');
-    setNachricht('');
     setStrasse('');
     setNummer('');
     setPlz('');
     setOrt('');
+    setGeburtsort('');
+    setStaatsangehoerigkeit('');
+    setGeburtsdatum('');
+    setNettoeinkommen('');
     setLeadLabel('none');
+    setFreieNachricht('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,6 +67,8 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
       const token = localStorage.getItem('adminToken');
       if (!token) throw new Error('Kein Admin-Token gefunden');
 
+      const combinedNachricht = `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nNettoeinkommen: ${nettoeinkommen}${freieNachricht ? `\n\n${freieNachricht}` : ''}`;
+
       const payload = {
         action: 'create_contact_request',
         token,
@@ -67,7 +77,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
         nachname,
         email,
         telefon,
-        nachricht,
+        nachricht: combinedNachricht,
         strasse: strasse || null,
         nummer: nummer || null,
         plz: plz || null,
@@ -142,7 +152,17 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
             <Input placeholder="Ort" value={ort} onChange={(e) => setOrt(e.target.value)} />
           </div>
 
-          <Textarea placeholder="Nachricht" value={nachricht} onChange={(e) => setNachricht(e.target.value)} required rows={5} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input placeholder="Geburtsort" value={geburtsort} onChange={(e) => setGeburtsort(e.target.value)} required />
+            <Input placeholder="Staatsangehörigkeit" value={staatsangehoerigkeit} onChange={(e) => setStaatsangehoerigkeit(e.target.value)} required />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input type="date" placeholder="Geburtsdatum" value={geburtsdatum} onChange={(e) => setGeburtsdatum(e.target.value)} required />
+            <Input type="number" min={0} step="1" placeholder="Nettoeinkommen (€/Monat)" value={nettoeinkommen} onChange={(e) => setNettoeinkommen(e.target.value)} required />
+          </div>
+
+          <Textarea placeholder="Freitext (optional)" value={freieNachricht} onChange={(e) => setFreieNachricht(e.target.value)} rows={5} />
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => { reset(); onOpenChange(false); }}>Abbrechen</Button>
