@@ -122,7 +122,7 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                       </div>
                       <div className="flex items-center">
                         <div>
-                          <div className="font-bold text-base text-foreground">{formatPrice(property.price_monthly)}</div>
+                          <div className="font-bold text-lg text-foreground">{formatPrice(property.price_monthly)}</div>
                           <div className="text-xs text-muted-foreground">Warmmiete</div>
                         </div>
                       </div>
