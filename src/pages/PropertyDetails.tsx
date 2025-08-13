@@ -336,7 +336,7 @@ const PropertyDetails = () => {
           {/* Right Column - 40% */}
           <div className="lg:col-span-2">
             {/* Contact Details */}
-            <Card className="mb-6">
+            <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <CardHeader>
                 <CardTitle>Kontakt</CardTitle>
               </CardHeader>
@@ -361,7 +361,7 @@ const PropertyDetails = () => {
             </Card>
 
             {/* Operation Hours */}
-            <Card className="mb-6">
+            <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Clock className="h-5 w-5 mr-2" />
@@ -400,7 +400,7 @@ const PropertyDetails = () => {
             />
 
             {/* Location */}
-            <Card>
+            <Card className="border-0 shadow-sm rounded-xl bg-muted/40 overflow-hidden">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <MapPin className="h-5 w-5 mr-2" />
