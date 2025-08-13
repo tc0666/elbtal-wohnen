@@ -66,9 +66,7 @@ export const Footer = () => {
         <Separator className="my-8" />
 
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-muted-foreground">
-          <div>
-            © 2025 ELBTAL Immobilien. Alle Rechte vorbehalten.
-          </div>
+          <div>© 2025 Amiel Immobilienverwaltung. Alle Rechte vorbehalten.</div>
           <div className="flex space-x-6">
             <Link to="/impressum" className="hover:text-primary transition-colors">Impressum</Link>
             <Link to="/datenschutz" className="hover:text-primary transition-colors">Datenschutz</Link>
