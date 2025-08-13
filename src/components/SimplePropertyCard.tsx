@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+
 import { Link } from "react-router-dom";
 import { 
   MapPin 
@@ -49,7 +49,7 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
         <div className="flex flex-col sm:flex-row h-full">
           {/* Image */}
           <Link to={`/immobilie/${property.id}`} className="block overflow-hidden">
-            <div className="relative w-full sm:w-48 lg:w-56 sm:flex-shrink-0 h-48 sm:h-40">
+            <div className="relative w-full sm:w-60 lg:w-72 sm:flex-shrink-0 h-56 sm:h-48">
               <div className="w-full h-full overflow-hidden cursor-pointer">
                 <img
                   src={property.images[0] || '/placeholder.svg'}
@@ -111,8 +111,8 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                   </div>
                 </div>
 
-                {/* Desktop: Size, Rooms, and Details Button in same row */}
-                <div className="hidden sm:flex sm:items-center sm:justify-between sm:gap-6">
+                {/* Desktop: Size and Rooms in same row */}
+                <div className="hidden sm:flex sm:items-center sm:gap-6">
                     <div className="flex items-center gap-6">
                       <div className="flex items-center">
                         <div>
@@ -127,29 +127,10 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                         </div>
                       </div>
                     </div>
-                  <Link to={`/immobilie/${property.id}`}>
-                    <Button 
-                      variant="outline" 
-                      className="px-6 hover:bg-primary hover:text-primary-foreground transition-colors flex-shrink-0"
-                    >
-                      Details ansehen
-                    </Button>
-                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Mobile Button */}
-            <div className="mt-4 pt-3 border-t border-border/50 sm:hidden">
-              <Link to={`/immobilie/${property.id}`} className="block">
-                <Button 
-                  variant="outline" 
-                  className="w-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  Details ansehen
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </CardContent>
