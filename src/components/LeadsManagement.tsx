@@ -6,9 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarUI } from '@/components/ui/calendar';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar, Eye, Mail, Phone, Tag } from 'lucide-react';
+import * as XLSX from 'xlsx';
+import LeadLabelBadge from '@/components/LeadLabelBadge';
 
 interface Lead {
   id: string;
@@ -37,7 +41,9 @@ const LeadsManagement: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Lead | null>(null);
   const [open, setOpen] = useState(false);
-  const { toast } = useToast();
+const { toast } = useToast();
+  const [fromDate, setFromDate] = useState<Date | undefined>();
+  const [toDate, setToDate] = useState<Date | undefined>();
 
   const fetchLeads = async () => {
     try {
@@ -68,13 +74,76 @@ const LeadsManagement: React.FC = () => {
   const filtered = useMemo(() => {
     const s = search.trim().toLowerCase();
     return leads.filter(l => {
-      const matchesLabel = labelFilter === 'all' ? true : (l.lead_label || '') === labelFilter;
+      const matchesLabel =
+        labelFilter === 'all'
+          ? true
+          : labelFilter === '__none__'
+            ? !l.lead_label
+            : (l.lead_label || '') === labelFilter;
+
       const matchesSearch = !s ? true : [
         l.vorname, l.nachname, l.email, l.telefon, l.property?.title
       ].filter(Boolean).some(v => String(v).toLowerCase().includes(s));
-      return matchesLabel && matchesSearch;
+
+      const created = new Date(l.created_at);
+      const fromOk = !fromDate || created >= new Date(new Date(fromDate).setHours(0, 0, 0, 0));
+      const toOk = !toDate || created <= new Date(new Date(toDate).setHours(23, 59, 59, 999));
+
+      return matchesLabel && matchesSearch && fromOk && toOk;
     });
-  }, [leads, labelFilter, search]);
+  }, [leads, labelFilter, search, fromDate, toDate]);
+
+  const handleExportCSV = () => {
+    const headers = [
+      'Datum', 'Anrede', 'Vorname', 'Nachname', 'E-Mail', 'Telefon', 'Immobilie', 'Label', 'Nachricht'
+    ];
+    const rows = filtered.map(l => [
+      new Date(l.created_at).toLocaleString('de-DE'),
+      l.anrede ?? '',
+      l.vorname,
+      l.nachname,
+      l.email,
+      l.telefon,
+      l.property?.title || 'Allgemein',
+      l.lead_label || '',
+      (l.nachricht || '').replace(/\n/g, ' ')
+    ]);
+    const csvContent = [headers, ...rows]
+      .map(r => r.map(val => {
+        const s = String(val ?? '');
+        const needsQuotes = /[";,\n]/.test(s);
+        return needsQuotes ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }).join(';'))
+      .join('\n');
+
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'leads.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: 'Export erfolgreich', description: `${rows.length} Zeilen als CSV exportiert.` });
+  };
+
+  const handleExportXLSX = () => {
+    const data = filtered.map(l => ({
+      Datum: new Date(l.created_at).toLocaleString('de-DE'),
+      Anrede: l.anrede ?? '',
+      Vorname: l.vorname,
+      Nachname: l.nachname,
+      EMail: l.email,
+      Telefon: l.telefon,
+      Immobilie: l.property?.title || 'Allgemein',
+      Label: l.lead_label || '',
+      Nachricht: l.nachricht || ''
+    }));
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Leads');
+    XLSX.writeFile(wb, 'leads.xlsx');
+    toast({ title: 'Export erfolgreich', description: `${data.length} Zeilen als XLSX exportiert.` });
+  };
 
   const updateLabel = async (leadId: string, newLabel: string | null) => {
     try {
@@ -115,7 +184,7 @@ const LeadsManagement: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <h1 className="text-3xl font-bold">Leads</h1>
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <div className="flex flex-col lg:flex-row gap-3 w-full md:w-auto">
           <div className="flex-1 sm:w-72">
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Suchen (Name, E‑Mail, Telefon, Immobilie)" />
           </div>
@@ -125,11 +194,50 @@ const LeadsManagement: React.FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Alle Labels</SelectItem>
+              <SelectItem value="__none__">Ohne Label</SelectItem>
               {uniqueLabels.map(l => (
                 <SelectItem key={l} value={l}>{l}</SelectItem>
               ))}
             </SelectContent>
           </Select>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-36 justify-start">
+                <Calendar className="mr-2 h-4 w-4" />
+                {fromDate ? fromDate.toLocaleDateString('de-DE') : 'Von'}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarUI
+                mode="single"
+                selected={fromDate}
+                onSelect={setFromDate}
+                initialFocus
+                className="p-3 pointer-events-auto"
+              />
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-36 justify-start">
+                <Calendar className="mr-2 h-4 w-4" />
+                {toDate ? toDate.toLocaleDateString('de-DE') : 'Bis'}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarUI
+                mode="single"
+                selected={toDate}
+                onSelect={setToDate}
+                initialFocus
+                className="p-3 pointer-events-auto"
+              />
+            </PopoverContent>
+          </Popover>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={handleExportCSV} className="hover-scale">Export CSV</Button>
+            <Button variant="outline" onClick={handleExportXLSX} className="hover-scale">Export XLSX</Button>
+          </div>
         </div>
       </div>
 
@@ -177,11 +285,7 @@ const LeadsManagement: React.FC = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          {lead.lead_label ? (
-                            <Badge variant="secondary">{lead.lead_label}</Badge>
-                          ) : (
-                            <Badge variant="outline">Ohne Label</Badge>
-                          )}
+                          <LeadLabelBadge label={lead.lead_label} />
                           <Select
                             value={lead.lead_label ?? 'none'}
                             onValueChange={(v) => updateLabel(lead.id, v === 'none' ? null : v)}
@@ -251,7 +355,7 @@ const LeadsManagement: React.FC = () => {
                 <div className="space-y-2">
                   <div><strong>Datum:</strong> {new Date(selected.created_at).toLocaleString('de-DE')}</div>
                   <div><strong>Immobilie:</strong> {selected.property?.title || 'Allgemein'}</div>
-                  <div className="flex items-center gap-2"><strong>Label:</strong> {selected.lead_label ? <Badge variant="secondary">{selected.lead_label}</Badge> : <Badge variant="outline">Ohne Label</Badge>}</div>
+                  <div className="flex items-center gap-2"><strong>Label:</strong> <LeadLabelBadge label={selected.lead_label} /></div>
                 </div>
               </div>
               {selected.nachricht && (
