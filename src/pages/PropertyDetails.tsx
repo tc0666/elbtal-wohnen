@@ -23,8 +23,6 @@ import {
   Star,
   CheckCircle,
   Share2,
-  Phone,
-  Mail,
   Clock,
   MessageSquare,
   ArrowLeft,
@@ -341,20 +339,14 @@ const PropertyDetails = () => {
                 <CardTitle>Kontakt</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <Phone className="h-5 w-5 mr-3 text-primary" />
-                    <div>
-                      <div className="font-medium">+49 351 123 456 789</div>
-                      <div className="text-sm text-muted-foreground">Telefon</div>
-                    </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Telefon:</span>
+                    <span className="font-medium">+49 351 123 456 789</span>
                   </div>
-                  <div className="flex items-center">
-                    <Mail className="h-5 w-5 mr-3 text-primary" />
-                    <div>
-                      <div className="font-medium">info@amiel-immobilienverwaltung.de</div>
-                      <div className="text-sm text-muted-foreground">E-Mail</div>
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">E-Mail:</span>
+                    <span className="font-medium break-all">info@amiel-immobilienverwaltung.de</span>
                   </div>
                 </div>
               </CardContent>
