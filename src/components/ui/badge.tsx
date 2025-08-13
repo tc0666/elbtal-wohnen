@@ -15,6 +15,17 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        // Extended semantic variants using design tokens
+        info:
+          "border-transparent bg-[hsl(var(--info))] text-[hsl(var(--info-foreground))] hover:bg-[hsl(var(--info)/0.9)]",
+        success:
+          "border-transparent bg-[hsl(var(--success))] text-[hsl(var(--success-foreground))] hover:bg-[hsl(var(--success)/0.9)]",
+        warning:
+          "border-transparent bg-[hsl(var(--warning))] text-[hsl(var(--warning-foreground))] hover:bg-[hsl(var(--warning)/0.9)]",
+        orange:
+          "border-transparent bg-[hsl(var(--orange))] text-[hsl(var(--orange-foreground))] hover:bg-[hsl(var(--orange)/0.9)]",
+        purple:
+          "border-transparent bg-[hsl(var(--purple))] text-[hsl(var(--purple-foreground))] hover:bg-[hsl(var(--purple)/0.9)]",
       },
     },
     defaultVariants: {

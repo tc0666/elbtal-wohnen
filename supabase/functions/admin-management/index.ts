@@ -488,6 +488,28 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 
+      case 'delete_contact_requests': {
+        const ids: string[] = Array.isArray(data.ids) ? data.ids : []
+        if (!ids.length) {
+          return new Response(
+            JSON.stringify({ error: 'No ids provided' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+          )
+        }
+
+        const { error: delErr } = await supabase
+          .from('contact_requests')
+          .delete()
+          .in('id', ids)
+
+        if (delErr) throw delErr
+
+        return new Response(
+          JSON.stringify({ success: true, deleted: ids.length }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
       case 'delete_city':
         const { cityId: deleteId } = data
         

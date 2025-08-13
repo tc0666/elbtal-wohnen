@@ -10,10 +10,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar as CalendarUI } from '@/components/ui/calendar';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar, Eye, Mail, Phone, Tag, Plus } from 'lucide-react';
+import { Calendar, Eye, Mail, Phone, Tag, Plus, Trash2 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import LeadLabelBadge from '@/components/LeadLabelBadge';
 import AddLeadDialog from '@/components/AddLeadDialog';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface Lead {
   id: string;
@@ -46,6 +47,7 @@ const { toast } = useToast();
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [openAdd, setOpenAdd] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const fetchLeads = async () => {
     try {
@@ -66,6 +68,25 @@ const { toast } = useToast();
   };
 
   useEffect(() => { fetchLeads(); }, []);
+
+  // selection helpers
+  const isSelected = (id: string) => selectedIds.has(id);
+  const toggleSelect = (id: string, checked: boolean) => {
+    setSelectedIds(prev => {
+      const copy = new Set(prev);
+      if (checked) copy.add(id); else copy.delete(id);
+      return copy;
+    });
+  };
+  const selectAllFiltered = (checked: boolean) => {
+    setSelectedIds(prev => {
+      if (!checked) return new Set(filtered.map(l => l.id));
+      // if header checkbox was checked -> uncheck all
+      const next = new Set(prev);
+      filtered.forEach(l => next.delete(l.id));
+      return next;
+    });
+  };
 
   const uniqueLabels = useMemo(() => {
     const set = new Set<string>();
@@ -96,10 +117,11 @@ const { toast } = useToast();
   }, [leads, labelFilter, search, fromDate, toDate]);
 
   const handleExportCSV = () => {
+    const items = selectedIds.size ? filtered.filter(l => selectedIds.has(l.id)) : filtered;
     const headers = [
       'Datum', 'Anrede', 'Vorname', 'Nachname', 'E-Mail', 'Telefon', 'Immobilie', 'Label', 'Nachricht'
     ];
-    const rows = filtered.map(l => [
+    const rows = items.map(l => [
       new Date(l.created_at).toLocaleString('de-DE'),
       l.anrede ?? '',
       l.vorname,
@@ -122,14 +144,15 @@ const { toast } = useToast();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'leads.csv';
+    a.download = selectedIds.size ? 'leads-auswahl.csv' : 'leads.csv';
     a.click();
     URL.revokeObjectURL(url);
     toast({ title: 'Export erfolgreich', description: `${rows.length} Zeilen als CSV exportiert.` });
   };
 
   const handleExportXLSX = () => {
-    const data = filtered.map(l => ({
+    const items = selectedIds.size ? filtered.filter(l => selectedIds.has(l.id)) : filtered;
+    const data = items.map(l => ({
       Datum: new Date(l.created_at).toLocaleString('de-DE'),
       Anrede: l.anrede ?? '',
       Vorname: l.vorname,
@@ -143,7 +166,7 @@ const { toast } = useToast();
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-    XLSX.writeFile(wb, 'leads.xlsx');
+    XLSX.writeFile(wb, selectedIds.size ? 'leads-auswahl.xlsx' : 'leads.xlsx');
     toast({ title: 'Export erfolgreich', description: `${data.length} Zeilen als XLSX exportiert.` });
   };
 
@@ -155,11 +178,29 @@ const { toast } = useToast();
       });
       if (error) throw error;
       toast({ title: 'Label aktualisiert', description: 'Lead-Label wurde gespeichert.' });
-      // Update local state optimistically
       setLeads(prev => prev.map(l => (l.id === leadId ? { ...l, lead_label: data?.request?.lead_label ?? newLabel } : l)));
     } catch (e) {
       console.error('Error updating label:', e);
       toast({ title: 'Fehler', description: 'Label konnte nicht aktualisiert werden.', variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    const ids = Array.from(selectedIds);
+    if (!ids.length) return;
+    if (!confirm(`Möchtest du ${ids.length} Lead(s) löschen?`)) return;
+    try {
+      const token = localStorage.getItem('adminToken');
+      const { data, error } = await supabase.functions.invoke('admin-management', {
+        body: { action: 'delete_contact_requests', token, ids }
+      });
+      if (error) throw error;
+      setLeads(prev => prev.filter(l => !selectedIds.has(l.id)));
+      setSelectedIds(new Set());
+      toast({ title: 'Gelöscht', description: `${ids.length} Lead(s) wurden gelöscht.` });
+    } catch (e) {
+      console.error('Delete leads error:', e);
+      toast({ title: 'Fehler', description: 'Leads konnten nicht gelöscht werden.', variant: 'destructive' });
     }
   };
 
@@ -236,7 +277,13 @@ const { toast } = useToast();
               />
             </PopoverContent>
           </Popover>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
+            {selectedIds.size > 0 && (
+              <>
+                <span className="text-sm text-muted-foreground">{selectedIds.size} ausgewählt</span>
+                <Button variant="destructive" onClick={handleDeleteSelected} className="hover-scale"><Trash2 className="h-4 w-4 mr-1" /> Löschen</Button>
+              </>
+            )}
             <Button variant="secondary" onClick={handleExportCSV} className="hover-scale">Export CSV</Button>
             <Button variant="outline" onClick={handleExportXLSX} className="hover-scale">Export XLSX</Button>
             <Button onClick={() => setOpenAdd(true)} className="hover-scale"><Plus className="h-4 w-4 mr-1" /> Lead hinzufügen</Button>
@@ -256,6 +303,17 @@ const { toast } = useToast();
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-10">
+                      <Checkbox
+                        checked={filtered.length > 0 && filtered.every(l => selectedIds.has(l.id))}
+                        onCheckedChange={(v) => {
+                          const allIds = new Set(filtered.map(l => l.id));
+                          const isAllSelected = filtered.every(l => selectedIds.has(l.id));
+                          setSelectedIds(isAllSelected ? new Set() : allIds);
+                        }}
+                        aria-label="Alle auswählen"
+                      />
+                    </TableHead>
                     <TableHead className="min-w-[160px]">Name</TableHead>
                     <TableHead className="min-w-[200px]">Kontakt</TableHead>
                     <TableHead className="min-w-[160px]">Label</TableHead>
@@ -266,13 +324,23 @@ const { toast } = useToast();
                 </TableHeader>
                 <TableBody>
                   {filtered.map((lead) => (
-                    <TableRow key={lead.id}>
+                    <TableRow key={lead.id} className={isSelected(lead.id) ? 'bg-muted/40' : ''}>
+                      <TableCell className="w-10">
+                        <Checkbox
+                          checked={isSelected(lead.id)}
+                          onCheckedChange={(v) => toggleSelect(lead.id, Boolean(v))}
+                          aria-label="Lead auswählen"
+                        />
+                      </TableCell>
                       <TableCell>
                         <div className="font-medium text-sm">
                           {lead.anrede && (lead.anrede === 'herr' ? 'Hr.' : lead.anrede === 'frau' ? 'Fr.' : 'Divers')}{' '}
                           {lead.vorname} {lead.nachname}
                         </div>
                         <div className="text-xs text-muted-foreground truncate max-w-[220px]">{lead.nachricht}</div>
+                        {(lead.plz || lead.ort) && (
+                          <div className="text-xs text-muted-foreground">{lead.plz} {lead.ort}</div>
+                        )}
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1">

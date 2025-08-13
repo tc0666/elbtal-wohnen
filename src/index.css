@@ -34,6 +34,18 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
+    /* Extended semantic colors for badges & UI states */
+    --info: 213 85% 45%;
+    --info-foreground: 0 0% 100%;
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 10%;
+    --warning: 45 95% 50%;
+    --warning-foreground: 0 0% 10%;
+    --orange: 32 95% 55%;
+    --orange-foreground: 0 0% 10%;
+    --purple: 262 65% 55%;
+    --purple-foreground: 0 0% 100%;
+
     /* Clean Borders & Inputs */
     --border: 213 20% 90%;
     --input: 213 20% 95%;
@@ -85,6 +97,18 @@
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+
+    /* Extended semantic colors (dark) */
+    --info: 213 70% 55%;
+    --info-foreground: 0 0% 100%;
+    --success: 142 50% 40%;
+    --success-foreground: 210 40% 98%;
+    --warning: 45 80% 55%;
+    --warning-foreground: 222.2 47.4% 11.2%;
+    --orange: 32 85% 55%;
+    --orange-foreground: 222.2 47.4% 11.2%;
+    --purple: 262 60% 60%;
+    --purple-foreground: 0 0% 100%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;

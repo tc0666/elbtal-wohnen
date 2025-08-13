@@ -1,14 +1,20 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
+import { Badge, type BadgeProps } from "@/components/ui/badge";
 
 interface LeadLabelBadgeProps {
   label: string | null | undefined;
   className?: string;
 }
 
-// Only VIP is colored; others remain neutral outline
-const labelClassMap: Record<string, string> = {
-  "VIP": "bg-primary text-primary-foreground border-transparent",
+// Map labels to semantic badge variants using design tokens
+const labelVariantMap: Record<string, BadgeProps["variant"]> = {
+  "Cold": "info",            // blue
+  "Hot Lead": "destructive",  // red
+  "Warm": "warning",          // yellow
+  "VIP": "orange",            // orange
+  "Converted": "success",     // green
+  "Follow-Up": "purple",      // purple
+  "Unqualified": "secondary", // neutral
 };
 
 const LeadLabelBadge: React.FC<LeadLabelBadgeProps> = ({ label, className }) => {
@@ -16,10 +22,10 @@ const LeadLabelBadge: React.FC<LeadLabelBadgeProps> = ({ label, className }) => 
     return <Badge variant="outline" className={className}>Ohne Label</Badge>;
   }
 
-  const themed = labelClassMap[label] || "";
+  const variant = labelVariantMap[label] || "secondary";
 
   return (
-    <Badge variant="outline" className={["px-2 py-0.5", themed, className].filter(Boolean).join(" ")}>{label}</Badge>
+    <Badge variant={variant} className={["px-2 py-0.5", className].filter(Boolean).join(" ")}>{label}</Badge>
   );
 };
 
