@@ -162,11 +162,12 @@ const PropertyDetails = () => {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-primary">
-                    {property.warmmiete_monthly ? formatPrice(property.warmmiete_monthly) : formatPrice(property.price_monthly)}
+                    {property.warmmiete_monthly 
+                      ? formatPrice(property.warmmiete_monthly) 
+                      : formatPrice(property.price_monthly + (property.additional_costs_monthly || 0))
+                    }
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {property.warmmiete_monthly ? 'Warmmiete' : 'Kaltmiete'}
-                  </div>
+                  <div className="text-sm text-muted-foreground">Warmmiete</div>
                 </div>
               </div>
             </div>
@@ -230,7 +231,12 @@ const PropertyDetails = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Warmmiete:</span>
-                        <span className="font-medium">{property.warmmiete_monthly ? formatPrice(property.warmmiete_monthly) : 'Nicht angegeben'}</span>
+                        <span className="font-medium">
+                          {property.warmmiete_monthly 
+                            ? formatPrice(property.warmmiete_monthly) 
+                            : formatPrice(property.price_monthly + (property.additional_costs_monthly || 0))
+                          }
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Kaution:</span>
