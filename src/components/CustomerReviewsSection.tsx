@@ -7,14 +7,14 @@ const reviews = [
     name: "Familie Schmidt",
     location: "Berlin-Mitte",
     rating: 5,
-    text: "Seit 3 Jahren sind wir sehr zufrieden mit der Betreuung durch ELBTAL. Schnelle Hilfe bei Problemen und immer freundliche Ansprechpartner. Die Verwaltung unserer Wohnung läuft reibungslos."
+    text: "Seit 3 Jahren sind wir sehr zufrieden mit der Betreuung durch Amiel. Schnelle Hilfe bei Problemen und immer freundliche Ansprechpartner. Die Verwaltung unserer Wohnung läuft reibungslos."
   },
   {
     id: 2,
     name: "Michael Krause", 
     location: "Hamburg",
     rating: 5,
-    text: "Als Vermieter kann ich ELBTAL nur empfehlen. Die professionelle Verwaltung meiner Immobilien und die transparente Kommunikation haben meine Erwartungen übertroffen. Sehr kompetentes Team!"
+    text: "Als Vermieter kann ich Amiel nur empfehlen. Die professionelle Verwaltung meiner Immobilien und die transparente Kommunikation haben meine Erwartungen übertroffen. Sehr kompetentes Team!"
   },
   {
     id: 3,
@@ -35,14 +35,14 @@ const reviews = [
     name: "Thomas Weber",
     location: "Potsdam", 
     rating: 5,
-    text: "Nach dem Wechsel zu ELBTAL läuft alles viel besser. Die digitalen Services sind sehr praktisch und der persönliche Kontakt stimmt. Bin sehr froh über diese Entscheidung."
+    text: "Nach dem Wechsel zu Amiel läuft alles viel besser. Die digitalen Services sind sehr praktisch und der persönliche Kontakt stimmt. Bin sehr froh über diese Entscheidung."
   },
   {
     id: 6,
     name: "Möbel Zentrale GmbH",
     location: "Berlin",
     rating: 5,
-    text: "Unsere Einzelhandelsflächen werden professionell und zuverlässig betreut. Das Team von ELBTAL denkt mit und findet immer passende Lösungen. Sehr zu empfehlen!"
+    text: "Unsere Einzelhandelsflächen werden professionell und zuverlässig betreut. Das Team von Amiel denkt mit und findet immer passende Lösungen. Sehr zu empfehlen!"
   }
 ];
 
