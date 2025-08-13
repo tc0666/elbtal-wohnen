@@ -67,7 +67,7 @@ export const AnsprechpartnerSection = () => {
                   />
                 </div>
               </CardHeader>
-              <CardContent className="text-center space-y-4">
+              <CardContent className="text-center space-y-4 pt-6">
                 <div>
                   <h4 className="font-semibold text-xl text-foreground">{person.name}</h4>
                 </div>
@@ -90,7 +90,7 @@ export const AnsprechpartnerSection = () => {
                     onClick={() => window.location.href = `mailto:${person.email}`}
                   >
                     <Mail className="h-4 w-4 mr-2" />
-                    {person.email}
+                    E-Mail
                   </Button>
                 </div>
               </CardContent>
