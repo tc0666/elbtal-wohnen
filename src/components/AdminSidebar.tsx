@@ -14,6 +14,7 @@ import {
   LayoutDashboard, 
   Building2, 
   MessageSquare, 
+  Tag,
   MapPin,
   BarChart3,
   User,
@@ -54,6 +55,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, onTabChange, adm
       id: 'contacts',
       label: 'Anfragen',
       icon: MessageSquare,
+    },
+    {
+      id: 'leads',
+      label: 'Leads',
+      icon: Tag,
     },
     {
       id: 'cities',
