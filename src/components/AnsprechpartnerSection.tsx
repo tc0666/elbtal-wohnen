@@ -9,7 +9,8 @@ const ansprechpartner = [
     name: "Thomas Müller",
     phone: "+49 30 123456789",
     email: "t.mueller@elbtal.de",
-    description: "Allgemeine Verwaltungsangelegenheiten"
+    description: "Allgemeine Verwaltungsangelegenheiten",
+    image: "/lovable-uploads/794cf7ca-0c21-48b6-8856-3f24fa932c56.png"
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ const ansprechpartner = [
     name: "Stefan Weber",
     phone: "+49 30 987654321",
     email: "s.weber@elbtal.de",
-    description: "Technische Angelegenheiten & Schadensmeldungen"
+    description: "Technische Angelegenheiten & Schadensmeldungen",
+    image: "/lovable-uploads/d6fb0e5c-3998-42cf-b2fc-b5915b06d762.png"
   },
   {
     id: 3,
@@ -25,7 +27,8 @@ const ansprechpartner = [
     name: "Marina Schmidt",
     phone: "+49 30 555123456",
     email: "schaeden@elbtal.de", 
-    description: "Schadensmeldungen & Versicherungsangelegenheiten"
+    description: "Schadensmeldungen & Versicherungsangelegenheiten",
+    image: "/lovable-uploads/37f77204-1324-4ab1-bae3-696640f6ce97.png"
   },
   {
     id: 4,
@@ -33,7 +36,8 @@ const ansprechpartner = [
     name: "Andrea Klein",
     phone: "+49 30 444987654",
     email: "buchhaltung@elbtal.de",
-    description: "Abrechnungen & finanzielle Angelegenheiten"
+    description: "Abrechnungen & finanzielle Angelegenheiten",
+    image: "/lovable-uploads/264784dc-8e41-42aa-9e8e-8e42c707c9fb.png"
   }
 ];
 
@@ -54,13 +58,16 @@ export const AnsprechpartnerSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {ansprechpartner.map((person) => (
             <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
-              <CardHeader className="text-center pt-12 pb-6">
-                <div className="flex items-center justify-center mx-auto mb-2">
+              <CardHeader className="text-center pt-8 pb-4">
+                <div className="flex items-center justify-center mx-auto mb-4">
                   <img
-                    src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png"
-                    alt="Amiel Logo"
-                    className="w-56 h-auto object-contain block"
+                    src={person.image}
+                    alt={`${person.name} - ${person.title}`}
+                    className="w-24 h-24 object-cover rounded-full border-2 border-border/20"
                   />
+                </div>
+                <div className="text-sm text-muted-foreground font-medium">
+                  {person.title}
                 </div>
               </CardHeader>
               <CardContent className="text-center space-y-4">
