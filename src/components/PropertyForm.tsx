@@ -43,7 +43,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
     internet_speed: '',
     features_description: '',
     additional_description: '',
-    neighborhood_description: '',
     eigenschaften_description: '',
     eigenschaften_tags: [],
     is_featured: false,
@@ -119,7 +118,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
         internet_speed: property.internet_speed || '',
         features_description: property.features_description || '',
         additional_description: property.additional_description || '',
-        neighborhood_description: property.neighborhood_description || '',
         eigenschaften_description: property.eigenschaften_description || '',
         eigenschaften_tags: property.eigenschaften_tags || [],
         is_featured: property.is_featured || false,
@@ -237,13 +235,36 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
       console.log('Action:', action);
       
       const propertyData = {
-        ...formData,
-        // Ensure required numeric fields have valid values
+        // Only include valid database fields
+        title: formData.title,
+        description: formData.description,
+        address: formData.address,
+        postal_code: formData.postal_code,
+        neighborhood: formData.neighborhood,
+        rooms: formData.rooms,
         area_sqm: formData.area_sqm && formData.area_sqm > 0 ? formData.area_sqm : 0,
         price_monthly: formData.price_monthly && formData.price_monthly > 0 ? formData.price_monthly : 0,
-        images: allImages,
+        warmmiete_monthly: formData.warmmiete_monthly || null,
+        additional_costs_monthly: formData.additional_costs_monthly || null,
+        property_type_id: formData.property_type_id,
+        city_id: formData.city_id,
+        floor: formData.floor || null,
+        total_floors: formData.total_floors || null,
+        year_built: formData.year_built || null,
         available_from: formData.available_from || null,
+        deposit_months: formData.deposit_months || 3,
+        energy_certificate_type: formData.energy_certificate_type,
+        energy_certificate_value: formData.energy_certificate_value,
+        heating_type: formData.heating_type,
+        heating_energy_source: formData.heating_energy_source,
+        internet_speed: formData.internet_speed,
+        features_description: formData.features_description,
+        additional_description: formData.additional_description,
+        eigenschaften_description: formData.eigenschaften_description,
         eigenschaften_tags: eigenschaftenTags,
+        is_featured: formData.is_featured,
+        is_active: formData.is_active,
+        images: allImages,
         ...featureCheckboxes
       };
 
@@ -863,23 +884,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Lage</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="neighborhood_description">Lage & Umgebung</Label>
-              <Textarea
-                id="neighborhood_description"
-                placeholder="Lage & Umgebung (z.B. Ruhige Lage in beliebtem Stadtteil. Nahe zu öffentlichen Verkehrsmitteln, Einkaufsmöglichkeiten und Parks. Gute Infrastruktur mit Schulen und Kindergärten in der Nähe.)"
-                value={formData.neighborhood_description || ''}
-                onChange={(e) => setFormData({ ...formData, neighborhood_description: e.target.value })}
-                rows={4}
-              />
-            </div>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader>
