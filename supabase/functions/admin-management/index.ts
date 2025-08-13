@@ -513,6 +513,23 @@ serve(async (req) => {
       case 'delete_city':
         const { cityId: deleteId } = data
         
+        // First delete all properties related to this city
+        const { error: deletePropertiesError } = await supabase
+          .from('properties')
+          .delete()
+          .eq('city_id', deleteId)
+        
+        if (deletePropertiesError) {
+          return new Response(
+            JSON.stringify({ error: 'Failed to delete related properties', details: deletePropertiesError.message }),
+            { 
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+              status: 400 
+            }
+          )
+        }
+        
+        // Then delete the city
         const { error: deleteCityError } = await supabase
           .from('cities')
           .delete()
@@ -529,7 +546,7 @@ serve(async (req) => {
         }
         
         return new Response(
-          JSON.stringify({ success: true }),
+          JSON.stringify({ success: true, message: 'City and related properties deleted successfully' }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 

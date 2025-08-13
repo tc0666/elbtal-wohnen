@@ -26,7 +26,6 @@ import {
   Clock,
   MessageSquare,
   ArrowLeft,
-  Home,
   Flame,
   Zap
 } from "lucide-react";
@@ -355,10 +354,7 @@ const PropertyDetails = () => {
             {/* Operation Hours */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  Öffnungszeiten
-                </CardTitle>
+                <CardTitle>Öffnungszeiten</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
@@ -394,10 +390,7 @@ const PropertyDetails = () => {
             {/* Location */}
             <Card className="border-0 shadow-sm rounded-xl bg-muted/40 overflow-hidden">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <MapPin className="h-5 w-5 mr-2" />
-                  Lage
-                </CardTitle>
+                <CardTitle>Lage</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <SimpleLocationDisplay 
