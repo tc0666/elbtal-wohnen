@@ -59,17 +59,12 @@ export const AnsprechpartnerSection = () => {
           {ansprechpartner.map((person) => (
             <Card key={person.id} className="h-full hover:shadow-md transition-all border border-border/60">
               <CardHeader className="text-center p-0">
-                <div className="w-full h-48 overflow-hidden">
+                <div className="w-full h-[500px] overflow-hidden">
                   <img
                     src={person.image}
                     alt={`${person.name} - ${person.title}`}
                     className="w-full h-full object-cover"
                   />
-                </div>
-                <div className="p-4 pb-2">
-                  <div className="text-sm text-muted-foreground font-medium mb-2">
-                    {person.title}
-                  </div>
                 </div>
               </CardHeader>
               <CardContent className="text-center space-y-4">
