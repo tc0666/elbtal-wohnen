@@ -36,6 +36,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
   const [geburtsort, setGeburtsort] = useState('');
   const [staatsangehoerigkeit, setStaatsangehoerigkeit] = useState('');
   const [geburtsdatum, setGeburtsdatum] = useState(''); // yyyy-mm-dd
+  const [einzugsdatum, setEinzugsdatum] = useState(''); // yyyy-mm-dd
   const [nettoeinkommen, setNettoeinkommen] = useState('');
   const [leadLabel, setLeadLabel] = useState<string>('none');
   const [freieNachricht, setFreieNachricht] = useState('');
@@ -55,6 +56,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
     setGeburtsort('');
     setStaatsangehoerigkeit('');
     setGeburtsdatum('');
+    setEinzugsdatum('');
     setNettoeinkommen('');
     setLeadLabel('none');
     setFreieNachricht('');
@@ -67,7 +69,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
       const token = localStorage.getItem('adminToken');
       if (!token) throw new Error('Kein Admin-Token gefunden');
 
-      const combinedNachricht = `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nNettoeinkommen: ${nettoeinkommen}${freieNachricht ? `\n\n${freieNachricht}` : ''}`;
+      const combinedNachricht = `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nEinzugsdatum: ${einzugsdatum}\nNettoeinkommen: ${nettoeinkommen}${freieNachricht ? `\n\n${freieNachricht}` : ''}`;
 
       const payload = {
         action: 'create_contact_request',
@@ -157,8 +159,9 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
             <Input placeholder="Staatsangehörigkeit" value={staatsangehoerigkeit} onChange={(e) => setStaatsangehoerigkeit(e.target.value)} required />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input type="date" placeholder="Geburtsdatum" value={geburtsdatum} onChange={(e) => setGeburtsdatum(e.target.value)} required />
+            <Input type="date" placeholder="Einzugsdatum" value={einzugsdatum} onChange={(e) => setEinzugsdatum(e.target.value)} required />
             <Input type="number" min={0} step="1" placeholder="Nettoeinkommen (€/Monat)" value={nettoeinkommen} onChange={(e) => setNettoeinkommen(e.target.value)} required />
           </div>
 

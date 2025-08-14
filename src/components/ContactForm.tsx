@@ -17,6 +17,7 @@ interface ContactFormData {
   geburtsort: string;
   staatsangehoerigkeit: string;
   geburtsdatum: string;
+  einzugsdatum: string;
   nettoeinkommen: string;
   datenschutz: boolean;
   propertyId?: string;
@@ -46,6 +47,7 @@ const [formData, setFormData] = useState<ContactFormData>({
   geburtsort: '',
   staatsangehoerigkeit: '',
   geburtsdatum: '',
+  einzugsdatum: '',
   nettoeinkommen: '',
   datenschutz: false,
   propertyId: propertyId
@@ -76,7 +78,7 @@ const [formData, setFormData] = useState<ContactFormData>({
         nummer: '',
         plz: formData.plz,
         ort: '',
-        nachricht: `Geburtsort: ${formData.geburtsort}\nStaatsangehörigkeit: ${formData.staatsangehoerigkeit}\nGeburtsdatum: ${formData.geburtsdatum}\nNettoeinkommen: ${formData.nettoeinkommen}`,
+        nachricht: `Geburtsort: ${formData.geburtsort}\nStaatsangehörigkeit: ${formData.staatsangehoerigkeit}\nGeburtsdatum: ${formData.geburtsdatum}\nEinzugsdatum: ${formData.einzugsdatum}\nNettoeinkommen: ${formData.nettoeinkommen}`,
         datenschutz: true
       };
 
@@ -102,6 +104,7 @@ const [formData, setFormData] = useState<ContactFormData>({
         geburtsort: '',
         staatsangehoerigkeit: '',
         geburtsdatum: '',
+        einzugsdatum: '',
         nettoeinkommen: '',
         datenschutz: false,
         propertyId: propertyId
@@ -207,18 +210,30 @@ const [formData, setFormData] = useState<ContactFormData>({
           />
         </div>
         <div>
-          <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+          <Label htmlFor="einzugsdatum">Einzugsdatum *</Label>
           <Input
-            id="nettoeinkommen"
-            type="number"
-            min={0}
-            step="1"
-            value={formData.nettoeinkommen}
-            onChange={(e) => handleInputChange('nettoeinkommen', e.target.value)}
+            id="einzugsdatum"
+            type="date"
+            value={formData.einzugsdatum}
+            onChange={(e) => handleInputChange('einzugsdatum', e.target.value)}
             required
             className="mt-2"
           />
         </div>
+      </div>
+
+      <div>
+        <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+        <Input
+          id="nettoeinkommen"
+          type="number"
+          min={0}
+          step="1"
+          value={formData.nettoeinkommen}
+          onChange={(e) => handleInputChange('nettoeinkommen', e.target.value)}
+          required
+          className="mt-2"
+        />
       </div>
 
       <div className="text-sm leading-relaxed">

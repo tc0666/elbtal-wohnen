@@ -444,6 +444,7 @@ const { toast } = useToast();
                   {(() => { const det = extractDetails(selected.nachricht); return (
                     <>
                       {det['Geburtsdatum'] && <div><strong>Geburtsdatum:</strong> {det['Geburtsdatum']}</div>}
+                      {det['Einzugsdatum'] && <div><strong>Einzugsdatum:</strong> {det['Einzugsdatum']}</div>}
                       {det['Nettoeinkommen'] && <div><strong>Nettoeinkommen:</strong> {det['Nettoeinkommen']} €</div>}
                       {det['Geburtsort'] && <div><strong>Geburtsort:</strong> {det['Geburtsort']}</div>}
                       {det['Staatsangehörigkeit'] && <div><strong>Staatsangehörigkeit:</strong> {det['Staatsangehörigkeit']}</div>}

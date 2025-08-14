@@ -36,6 +36,7 @@ const [plz, setPlz] = useState('');
 const [geburtsort, setGeburtsort] = useState('');
 const [staatsangehoerigkeit, setStaatsangehoerigkeit] = useState('');
 const [geburtsdatum, setGeburtsdatum] = useState('');
+const [einzugsdatum, setEinzugsdatum] = useState('');
 const [nettoeinkommen, setNettoeinkommen] = useState('');
 
 const [datenschutz, setDatenschutz] = useState(false);
@@ -59,7 +60,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       nummer: '',
       plz,
       ort: '',
-      nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nNettoeinkommen: ${nettoeinkommen}`,
+      nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nEinzugsdatum: ${einzugsdatum}\nNettoeinkommen: ${nettoeinkommen}`,
       datenschutz: true
     };
 
@@ -86,6 +87,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setGeburtsort('');
     setStaatsangehoerigkeit('');
     setGeburtsdatum('');
+    setEinzugsdatum('');
     setNettoeinkommen('');
     setDatenschutz(false);
 
@@ -214,18 +216,30 @@ const handleSubmit = async (e: React.FormEvent) => {
           />
         </div>
         <div>
-          <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+          <Label htmlFor="einzugsdatum">Einzugsdatum *</Label>
           <Input
-            id="nettoeinkommen"
-            type="number"
-            min={0}
-            step="1"
-            value={nettoeinkommen}
-            onChange={(e) => setNettoeinkommen(e.target.value)}
+            id="einzugsdatum"
+            type="date"
+            value={einzugsdatum}
+            onChange={(e) => setEinzugsdatum(e.target.value)}
             required
             className="mt-2"
           />
         </div>
+      </div>
+
+      <div>
+        <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+        <Input
+          id="nettoeinkommen"
+          type="number"
+          min={0}
+          step="1"
+          value={nettoeinkommen}
+          onChange={(e) => setNettoeinkommen(e.target.value)}
+          required
+          className="mt-2"
+        />
       </div>
 
       <div className="text-sm leading-relaxed">
