@@ -155,7 +155,7 @@ const PropertyDetails = () => {
                       {property.city?.name || 'Stadt nicht verfügbar'}
                     </div>
                   </div>
-                  <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
+                  <h1 className="text-xl md:text-2xl font-bold mb-2">{property.title}</h1>
                   <p className="text-lg text-muted-foreground">
                     {property.address}, {property.neighborhood}
                   </p>
@@ -175,7 +175,7 @@ const PropertyDetails = () => {
             {/* Property Details */}
             <Card className="mb-6">
               <CardHeader>
-                <CardTitle>Objektbeschreibung</CardTitle>
+                <CardTitle className="text-lg md:text-xl">Objektbeschreibung</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-muted-foreground leading-relaxed mb-6">
@@ -206,7 +206,7 @@ const PropertyDetails = () => {
                 {property.features_description && (
                   <>
                     <div className="mb-6">
-                      <CardTitle className="mb-3">Ausstattung</CardTitle>
+                      <CardTitle className="mb-3 text-lg md:text-xl">Ausstattung</CardTitle>
                       <div className="text-muted-foreground leading-relaxed">
                         <div dangerouslySetInnerHTML={{
                           __html: property.features_description.replace(/\n/g, '<br />')
@@ -280,7 +280,7 @@ const PropertyDetails = () => {
 
                 {/* Address Section */}
                 <div className="mb-6">
-                  <CardTitle className="mb-3">Adresse</CardTitle>
+                  <CardTitle className="mb-3 text-lg md:text-xl">Adresse</CardTitle>
                   <div className="space-y-2">
                     <div className="text-lg font-medium">{property.address}</div>
                     <div className="text-muted-foreground">
@@ -300,7 +300,7 @@ const PropertyDetails = () => {
 
                 {/* Energy Information */}
                 <div className="mb-6">
-                  <CardTitle className="mb-3">
+                  <CardTitle className="mb-3 text-lg md:text-xl">
                     Energie & Heizung
                   </CardTitle>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -328,7 +328,7 @@ const PropertyDetails = () => {
             {/* Contact Details */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <CardHeader>
-                <CardTitle>Kontakt</CardTitle>
+                <CardTitle className="text-lg md:text-xl">Kontakt</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
@@ -347,7 +347,7 @@ const PropertyDetails = () => {
             {/* Operation Hours */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <CardHeader>
-                <CardTitle>Öffnungszeiten</CardTitle>
+                <CardTitle className="text-lg md:text-xl">Öffnungszeiten</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
@@ -383,7 +383,7 @@ const PropertyDetails = () => {
             {/* Location */}
             <Card className="border-0 shadow-sm rounded-xl bg-muted/40 overflow-hidden">
               <CardHeader>
-                <CardTitle>Lage</CardTitle>
+                <CardTitle className="text-lg md:text-xl">Lage</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <SimpleLocationDisplay 
