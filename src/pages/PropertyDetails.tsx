@@ -161,7 +161,7 @@ const PropertyDetails = () => {
                   </p>
                 </div>
                 <div className="text-left sm:text-right">
-                  <div className="text-3xl font-bold text-primary">
+                  <div className="text-xl md:text-3xl font-bold text-primary">
                     {property.warmmiete_monthly 
                       ? formatPrice(property.warmmiete_monthly) 
                       : formatPrice(property.price_monthly + (property.additional_costs_monthly || 0))
