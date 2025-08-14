@@ -87,21 +87,21 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 <div className="grid grid-cols-3 gap-3 sm:hidden">
                   <div className="flex items-center justify-center">
                     <div className="text-center">
-                      <div className="font-medium text-sm">{property.area_sqm} m²</div>
-                      <div className="text-xs text-muted-foreground">Fläche</div>
+                      <div className="font-medium text-base text-muted-foreground">{property.area_sqm} m²</div>
+                      <div className="text-xs text-foreground">Wohnfläche</div>
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <div className="text-center">
-                      <div className="font-medium text-sm">{property.rooms}</div>
-                      <div className="text-xs text-muted-foreground">Zimmer</div>
+                      <div className="font-medium text-base text-muted-foreground">{property.rooms}</div>
+                      <div className="text-xs text-foreground">Räume</div>
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg font-bold text-foreground">
+                    <div className="text-base font-medium text-muted-foreground">
                       {formatPrice(property.price_monthly)}
                     </div>
-                    <div className="text-xs text-muted-foreground">Warmmiete</div>
+                    <div className="text-xs text-foreground">Warmmiete</div>
                   </div>
                 </div>
 
@@ -110,20 +110,20 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                     <div className="flex items-center gap-6">
                       <div className="flex items-center">
                         <div>
-                          <div className="font-medium text-sm">{property.area_sqm} m²</div>
-                          <div className="text-xs text-muted-foreground">Wohnfläche</div>
+                          <div className="font-medium text-base text-muted-foreground">{property.area_sqm} m²</div>
+                          <div className="text-xs text-foreground">Wohnfläche</div>
                         </div>
                       </div>
                       <div className="flex items-center">
                         <div>
-                          <div className="font-medium text-sm">{property.rooms} Zimmer</div>
-                          <div className="text-xs text-muted-foreground">Räume</div>
+                          <div className="font-medium text-base text-muted-foreground">{property.rooms} Zimmer</div>
+                          <div className="text-xs text-foreground">Räume</div>
                         </div>
                       </div>
                       <div className="flex items-center">
                         <div>
-                          <div className="font-bold text-lg text-foreground">{formatPrice(property.price_monthly)}</div>
-                          <div className="text-xs text-muted-foreground">Warmmiete</div>
+                          <div className="font-medium text-base text-muted-foreground">{formatPrice(property.price_monthly)}</div>
+                          <div className="text-xs text-foreground">Warmmiete</div>
                         </div>
                       </div>
                     </div>
