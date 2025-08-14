@@ -88,20 +88,20 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                   <div className="flex items-center justify-center">
                     <div className="text-center">
                       <div className="font-medium text-base text-muted-foreground">{property.area_sqm} m²</div>
-                      <div className="text-xs text-foreground">Wohnfläche</div>
+                      <div className="text-xs text-foreground font-bold">Wohnfläche</div>
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <div className="text-center">
                       <div className="font-medium text-base text-muted-foreground">{property.rooms}</div>
-                      <div className="text-xs text-foreground">Räume</div>
+                      <div className="text-xs text-foreground font-bold">Räume</div>
                     </div>
                   </div>
                   <div className="text-center">
                     <div className="text-base font-medium text-muted-foreground">
                       {formatPrice(property.price_monthly)}
                     </div>
-                    <div className="text-xs text-foreground">Warmmiete</div>
+                    <div className="text-xs text-foreground font-bold">Warmmiete</div>
                   </div>
                 </div>
 
@@ -111,19 +111,19 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                       <div className="flex items-center">
                         <div>
                           <div className="font-medium text-base text-muted-foreground">{property.area_sqm} m²</div>
-                          <div className="text-xs text-foreground">Wohnfläche</div>
+                          <div className="text-xs text-foreground font-bold">Wohnfläche</div>
                         </div>
                       </div>
                       <div className="flex items-center">
                         <div>
                           <div className="font-medium text-base text-muted-foreground">{property.rooms} Zimmer</div>
-                          <div className="text-xs text-foreground">Räume</div>
+                          <div className="text-xs text-foreground font-bold">Räume</div>
                         </div>
                       </div>
                       <div className="flex items-center">
                         <div>
                           <div className="font-medium text-base text-muted-foreground">{formatPrice(property.price_monthly)}</div>
-                          <div className="text-xs text-foreground">Warmmiete</div>
+                          <div className="text-xs text-foreground font-bold">Warmmiete</div>
                         </div>
                       </div>
                     </div>
