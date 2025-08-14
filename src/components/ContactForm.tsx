@@ -64,14 +64,6 @@ const [formData, setFormData] = useState<ContactFormData>({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.datenschutz) {
-      toast({
-        title: "Datenschutz erforderlich",
-        description: "Bitte stimmen Sie der Datenschutzerklärung zu.",
-        variant: "destructive"
-      });
-      return;
-    }
 
     setIsSubmitting(true);
     
@@ -85,7 +77,7 @@ const [formData, setFormData] = useState<ContactFormData>({
         plz: formData.plz,
         ort: '',
         nachricht: `Geburtsort: ${formData.geburtsort}\nStaatsangehörigkeit: ${formData.staatsangehoerigkeit}\nGeburtsdatum: ${formData.geburtsdatum}\nNettoeinkommen: ${formData.nettoeinkommen}`,
-        datenschutz: formData.datenschutz
+        datenschutz: true
       };
 
       const { data, error } = await supabase.functions.invoke('contact-submit', {
@@ -229,20 +221,8 @@ const [formData, setFormData] = useState<ContactFormData>({
         </div>
       </div>
 
-      <div className="flex items-start space-x-2">
-        <Checkbox
-          id="datenschutz"
-          checked={formData.datenschutz}
-          onCheckedChange={(checked) => handleInputChange('datenschutz', checked as boolean)}
-        />
-        <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
-          Ich habe die{' '}
-          <a href="#" className="text-primary hover:underline">
-            Datenschutzerklärung
-          </a>{' '}
-          gelesen und willige der Verarbeitung meiner Daten zum Zweck 
-          der Bearbeitung meiner Anfrage ein. *
-        </Label>
+      <div className="text-sm leading-relaxed">
+        Mit dem Absenden der Anfrage erkläre ich mich damit einverstanden, dass meine angegebenen personenbezogenen Daten gemäß der Datenschutzerklärung verarbeitet und zum Zweck der Bearbeitung meiner Anfrage gespeichert werden.
       </div>
 
       <Button 
@@ -254,10 +234,7 @@ const [formData, setFormData] = useState<ContactFormData>({
         {isSubmitting ? (
           "Wird gesendet..."
         ) : (
-          <>
-            <Send className="h-5 w-5 mr-2" />
-            Jetzt Anfrage senden
-          </>
+          "Anfrage senden"
         )}
       </Button>
     </form>

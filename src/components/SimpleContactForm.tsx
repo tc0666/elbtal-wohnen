@@ -45,14 +45,6 @@ const [open, setOpen] = useState(false);
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
-  if (!datenschutz) {
-    toast({
-      title: "Datenschutz erforderlich",
-      description: "Bitte stimmen Sie der Datenschutzerklärung zu.",
-      variant: "destructive"
-    });
-    return;
-  }
 
   setIsSubmitting(true);
 
@@ -68,7 +60,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       plz,
       ort: '',
       nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nNettoeinkommen: ${nettoeinkommen}`,
-      datenschutz
+      datenschutz: true
     };
 
     const { data, error } = await supabase.functions.invoke('contact-submit', {
@@ -236,20 +228,8 @@ const handleSubmit = async (e: React.FormEvent) => {
         </div>
       </div>
 
-      <div className="flex items-start space-x-2">
-        <Checkbox
-          id="datenschutz"
-          checked={datenschutz}
-          onCheckedChange={(checked) => setDatenschutz(checked as boolean)}
-        />
-        <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
-          Ich habe die{' '}
-          <a href="#" className="text-primary hover:underline">
-            Datenschutzerklärung
-          </a>{' '}
-          gelesen und willige der Verarbeitung meiner Daten zum Zweck 
-          der Bearbeitung meiner Anfrage ein. *
-        </Label>
+      <div className="text-sm leading-relaxed">
+        Mit dem Absenden der Anfrage erkläre ich mich damit einverstanden, dass meine angegebenen personenbezogenen Daten gemäß der Datenschutzerklärung verarbeitet und zum Zweck der Bearbeitung meiner Anfrage gespeichert werden.
       </div>
 
       <Button 
@@ -261,10 +241,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         {isSubmitting ? (
           "Wird gesendet..."
         ) : (
-          <>
-            <Send className="h-5 w-5 mr-2" />
-            Jetzt Anfrage senden
-          </>
+          "Anfrage senden"
         )}
       </Button>
     </form>
