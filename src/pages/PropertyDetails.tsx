@@ -175,7 +175,7 @@ const PropertyDetails = () => {
             {/* Property Details */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <div className="p-6 pb-0">
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Objektbeschreibung</CardTitle>
+                <CardTitle className="text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block mb-6">Objektbeschreibung</CardTitle>
               </div>
               <CardContent>
                 <div className="text-muted-foreground leading-relaxed mb-6">
@@ -206,7 +206,7 @@ const PropertyDetails = () => {
                 {property.features_description && (
                   <>
                     <div className="mb-6">
-                      <CardTitle className="mb-3 text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">Ausstattung</CardTitle>
+                      <CardTitle className="mb-3 text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block">Ausstattung</CardTitle>
                       <div className="text-muted-foreground leading-relaxed">
                         <div dangerouslySetInnerHTML={{
                           __html: property.features_description.replace(/\n/g, '<br />')
@@ -280,7 +280,7 @@ const PropertyDetails = () => {
 
                 {/* Address Section */}
                 <div className="mb-6">
-                  <CardTitle className="mb-3 text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">Adresse</CardTitle>
+                  <CardTitle className="mb-3 text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block">Adresse</CardTitle>
                   <div className="space-y-2">
                     <div className="text-lg font-medium">{property.address}</div>
                     <div className="text-muted-foreground">
@@ -300,7 +300,7 @@ const PropertyDetails = () => {
 
                 {/* Energy Information */}
                 <div className="mb-6">
-                  <CardTitle className="mb-3 text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">
+                  <CardTitle className="mb-3 text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block">
                     Energie & Heizung
                   </CardTitle>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -328,7 +328,7 @@ const PropertyDetails = () => {
             {/* Contact Details */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <div className="p-6 pb-0">
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Kontakt</CardTitle>
+                <CardTitle className="text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block mb-6">Kontakt</CardTitle>
               </div>
               <CardContent>
                 <div className="space-y-2 text-sm">
@@ -347,7 +347,7 @@ const PropertyDetails = () => {
             {/* Operation Hours */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <div className="p-6 pb-0">
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Öffnungszeiten</CardTitle>
+                <CardTitle className="text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block mb-6">Öffnungszeiten</CardTitle>
               </div>
               <CardContent>
                 <div className="space-y-2 text-sm">
@@ -383,7 +383,7 @@ const PropertyDetails = () => {
             {/* Location */}
             <Card className="border-0 shadow-sm rounded-xl bg-muted/40 overflow-hidden">
               <div className="p-6 pb-0">
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Lage</CardTitle>
+                <CardTitle className="text-lg md:text-xl border-b-2 border-[#1169D4] pb-2 inline-block mb-6">Lage</CardTitle>
               </div>
               <CardContent className="p-0">
                 <SimpleLocationDisplay 
