@@ -115,6 +115,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-1">
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Anrede</label>
               <Select value={anrede ?? 'none'} onValueChange={(v) => setAnrede(v === 'none' ? undefined : v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Anrede" />
@@ -127,31 +128,58 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
                 </SelectContent>
               </Select>
             </div>
-            <Input placeholder="Vorname" value={vorname} onChange={(e) => setVorname(e.target.value)} required />
-            <Input placeholder="Nachname" value={nachname} onChange={(e) => setNachname(e.target.value)} required />
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Vorname *</label>
+              <Input value={vorname} onChange={(e) => setVorname(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Nachname *</label>
+              <Input value={nachname} onChange={(e) => setNachname(e.target.value)} required />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input type="email" placeholder="E‑Mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <Input placeholder="Telefon" value={telefon} onChange={(e) => setTelefon(e.target.value)} required />
-            <Select value={leadLabel} onValueChange={setLeadLabel}>
-              <SelectTrigger>
-                <SelectValue placeholder="Label" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">Ohne Label</SelectItem>
-                {labels.map(l => (
-                  <SelectItem key={l} value={l}>{l}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">E-Mail *</label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Telefon *</label>
+              <Input value={telefon} onChange={(e) => setTelefon(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Label</label>
+              <Select value={leadLabel} onValueChange={setLeadLabel}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Label" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Ohne Label</SelectItem>
+                  {labels.map(l => (
+                    <SelectItem key={l} value={l}>{l}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Input placeholder="Straße" value={strasse} onChange={(e) => setStrasse(e.target.value)} />
-            <Input placeholder="Nr." value={nummer} onChange={(e) => setNummer(e.target.value)} />
-            <Input placeholder="PLZ" value={plz} onChange={(e) => setPlz(e.target.value)} />
-            <Input placeholder="Ort" value={ort} onChange={(e) => setOrt(e.target.value)} />
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Straße</label>
+              <Input value={strasse} onChange={(e) => setStrasse(e.target.value)} />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Nr.</label>
+              <Input value={nummer} onChange={(e) => setNummer(e.target.value)} />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">PLZ</label>
+              <Input value={plz} onChange={(e) => setPlz(e.target.value)} />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Ort</label>
+              <Input value={ort} onChange={(e) => setOrt(e.target.value)} />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -180,7 +208,10 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
             </div>
           </div>
 
-          <Textarea placeholder="Freitext (optional)" value={freieNachricht} onChange={(e) => setFreieNachricht(e.target.value)} rows={5} />
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Freitext (optional)</label>
+            <Textarea placeholder="Zusätzliche Informationen..." value={freieNachricht} onChange={(e) => setFreieNachricht(e.target.value)} rows={5} />
+          </div>
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => { reset(); onOpenChange(false); }}>Abbrechen</Button>
