@@ -173,7 +173,7 @@ const PropertyDetails = () => {
             </div>
 
             {/* Property Details */}
-            <Card className="mb-6">
+            <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
               <CardHeader>
                 <CardTitle className="text-lg md:text-xl">Objektbeschreibung</CardTitle>
               </CardHeader>
