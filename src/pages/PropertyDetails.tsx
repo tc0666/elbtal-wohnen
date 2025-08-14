@@ -174,9 +174,9 @@ const PropertyDetails = () => {
 
             {/* Property Details */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">Objektbeschreibung</CardTitle>
-              </CardHeader>
+              <div className="p-6 pb-0">
+                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Objektbeschreibung</CardTitle>
+              </div>
               <CardContent>
                 <div className="text-muted-foreground leading-relaxed mb-6">
                   <div dangerouslySetInnerHTML={{
@@ -327,9 +327,9 @@ const PropertyDetails = () => {
           <div className="lg:col-span-2">
             {/* Contact Details */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">Kontakt</CardTitle>
-              </CardHeader>
+              <div className="p-6 pb-0">
+                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Kontakt</CardTitle>
+              </div>
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center justify-between">
@@ -346,9 +346,9 @@ const PropertyDetails = () => {
 
             {/* Operation Hours */}
             <Card className="mb-6 border-0 shadow-sm rounded-xl bg-muted/40">
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">Öffnungszeiten</CardTitle>
-              </CardHeader>
+              <div className="p-6 pb-0">
+                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Öffnungszeiten</CardTitle>
+              </div>
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
@@ -382,9 +382,9 @@ const PropertyDetails = () => {
 
             {/* Location */}
             <Card className="border-0 shadow-sm rounded-xl bg-muted/40 overflow-hidden">
-              <CardHeader>
-                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block">Lage</CardTitle>
-              </CardHeader>
+              <div className="p-6 pb-0">
+                <CardTitle className="text-lg md:text-xl border-b-2 border-primary/30 pb-2 inline-block mb-6">Lage</CardTitle>
+              </div>
               <CardContent className="p-0">
                 <SimpleLocationDisplay 
                   address={property.address}
