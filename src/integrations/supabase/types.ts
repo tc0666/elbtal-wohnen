@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.12 (cd3cf9e)"
@@ -79,6 +79,30 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_log: {
+        Row: {
+          details: Json | null
+          id: string
+          operation: string
+          table_name: string
+          timestamp: string
+        }
+        Insert: {
+          details?: Json | null
+          id?: string
+          operation: string
+          table_name: string
+          timestamp?: string
+        }
+        Update: {
+          details?: Json | null
+          id?: string
+          operation?: string
+          table_name?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       cities: {
         Row: {
           created_at: string
@@ -115,6 +139,7 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          lead_label: string | null
           nachname: string
           nachricht: string
           nummer: string | null
@@ -132,6 +157,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          lead_label?: string | null
           nachname: string
           nachricht: string
           nummer?: string | null
@@ -149,6 +175,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          lead_label?: string | null
           nachname?: string
           nachricht?: string
           nummer?: string | null
@@ -374,7 +401,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_contact_requests_secure: {
+        Args: { admin_token: string }
+        Returns: {
+          anrede: string
+          created_at: string
+          email: string
+          id: string
+          lead_label: string
+          nachname: string
+          nachricht: string
+          property_id: string
+          status: string
+          telefon: string
+          vorname: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
