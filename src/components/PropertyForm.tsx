@@ -626,15 +626,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="energy_certificate_value">Energiekennwert</Label>
-                <Input
-                  id="energy_certificate_value"
-                  placeholder="Energiekennwert (z.B. 120 kWh/(m²·a))"
-                  value={formData.energy_certificate_value}
-                  onChange={(e) => setFormData({ ...formData, energy_certificate_value: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
                 <Label htmlFor="heating_type">Heizungsart</Label>
                 <Input
                   id="heating_type"
@@ -866,23 +857,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onClose }) => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Weitere Beschreibung</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="additional_description">Weitere Beschreibung</Label>
-              <Textarea
-                id="additional_description"
-                placeholder="Weitere Beschreibung (z.B. Exklusives Wohnen in bester Lage. Das Gebäude verfügt über einen Concierge-Service und gepflegte Grünanlagen. Fitnessraum und Gemeinschaftsräume stehen den Bewohnern zur Verfügung.)"
-                value={formData.additional_description || ''}
-                onChange={(e) => setFormData({ ...formData, additional_description: e.target.value })}
-                rows={4}
-              />
-            </div>
-          </CardContent>
-        </Card>
 
 
         <Card>

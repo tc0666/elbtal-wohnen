@@ -309,35 +309,16 @@ const PropertyDetails = () => {
                       <p className="font-medium">{property.energy_certificate_type || 'Nicht angegeben'}</p>
                     </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">Energieeffizienzklasse:</span>
-                      <p className="font-medium">{property.energy_certificate_value || 'Nicht angegeben'}</p>
-                    </div>
-                    <div>
                       <span className="text-sm text-muted-foreground">Heizungsart:</span>
                       <p className="font-medium">{property.heating_type || 'Nicht angegeben'}</p>
                     </div>
                     <div>
-                      <span className="text-sm text-muted-foreground">Befeuerung:</span>
+                      <span className="text-sm text-muted-foreground">Energieträger:</span>
                       <p className="font-medium">{property.heating_energy_source || 'Nicht angegeben'}</p>
                     </div>
                   </div>
                 </div>
 
-                <Separator className="my-6" />
-
-                {/* Additional Description */}
-                <div className="mb-6">
-                  <CardTitle className="mb-3">Weitere Beschreibung</CardTitle>
-                  <div className="text-muted-foreground leading-relaxed">
-                    {property.additional_description ? (
-                      <div dangerouslySetInnerHTML={{
-                        __html: property.additional_description.replace(/\n/g, '<br />')
-                      }} />
-                    ) : (
-                      'Weitere Informationen werden in Kürze ergänzt.'
-                    )}
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
