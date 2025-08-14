@@ -155,14 +155,29 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input placeholder="Geburtsort" value={geburtsort} onChange={(e) => setGeburtsort(e.target.value)} required />
-            <Input placeholder="Staatsangehörigkeit" value={staatsangehoerigkeit} onChange={(e) => setStaatsangehoerigkeit(e.target.value)} required />
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Geburtsort *</label>
+              <Input value={geburtsort} onChange={(e) => setGeburtsort(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Staatsangehörigkeit *</label>
+              <Input value={staatsangehoerigkeit} onChange={(e) => setStaatsangehoerigkeit(e.target.value)} required />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input type="date" placeholder="Geburtsdatum" value={geburtsdatum} onChange={(e) => setGeburtsdatum(e.target.value)} required />
-            <Input type="date" placeholder="Einzugsdatum" value={einzugsdatum} onChange={(e) => setEinzugsdatum(e.target.value)} required />
-            <Input type="number" min={0} step="1" placeholder="Nettoeinkommen (€/Monat)" value={nettoeinkommen} onChange={(e) => setNettoeinkommen(e.target.value)} required />
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Geburtsdatum *</label>
+              <Input type="date" value={geburtsdatum} onChange={(e) => setGeburtsdatum(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Einzugsdatum *</label>
+              <Input type="date" value={einzugsdatum} onChange={(e) => setEinzugsdatum(e.target.value)} required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Nettoeinkommen (€/Monat) *</label>
+              <Input type="number" min={0} step="1" value={nettoeinkommen} onChange={(e) => setNettoeinkommen(e.target.value)} required />
+            </div>
           </div>
 
           <Textarea placeholder="Freitext (optional)" value={freieNachricht} onChange={(e) => setFreieNachricht(e.target.value)} rows={5} />
