@@ -392,7 +392,7 @@ const PropertyDetails = () => {
                   postalCode={property.postal_code || undefined}
                   neighborhood={property.neighborhood || undefined}
                   locationDescription={(property as any).eigenschaften_description || undefined}
-                  className="w-full p-6"
+                  className="w-full p-6 pt-2"
                 />
               </CardContent>
             </Card>
