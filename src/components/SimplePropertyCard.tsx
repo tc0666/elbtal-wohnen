@@ -84,21 +84,15 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 </div>
 
                 {/* Mobile: Price, Size, Rooms in same row */}
-                <div className="grid grid-cols-3 gap-3 sm:hidden">
-                  <div className="flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-base text-foreground"><span className="font-bold">Wohnfläche:</span> <span className="font-bold">{property.area_sqm} m²</span></div>
-                    </div>
+                <div className="flex items-center gap-4 sm:hidden">
+                  <div className="text-base text-foreground">
+                    <span className="font-bold">Wohnfläche:</span> <span className="font-bold">{property.area_sqm} m²</span>
                   </div>
-                  <div className="flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="text-base text-foreground"><span className="font-bold">Zimmer:</span> <span className="font-bold">{property.rooms}</span></div>
-                    </div>
+                  <div className="text-base text-foreground">
+                    <span className="font-bold">Zimmer:</span> <span className="font-bold">{property.rooms}</span>
                   </div>
-                  <div className="text-center">
-                    <div className="text-base text-muted-foreground">
-                      <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.price_monthly)}</span>
-                    </div>
+                  <div className="text-base text-muted-foreground">
+                    <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.price_monthly)}</span>
                   </div>
                 </div>
 
