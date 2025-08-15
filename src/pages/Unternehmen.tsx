@@ -8,7 +8,7 @@ import { Building, Users, Award, Target, Heart, Shield, TrendingUp, Clock, Star,
 const Unternehmen = () => {
   const milestones = [{
     year: "1988",
-    title: "Gründung in München",
+    title: "Gründung in Dresden",
     description: "Start als kleine Immobilienverwaltung mit Fokus auf persönlichen Service"
   }, {
     year: "1995",
@@ -106,10 +106,7 @@ const Unternehmen = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Amiel Immobilienverwaltung
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Seit 1988 Ihr vertrauensvoller Partner für Immobilienverwaltung in Dresden und Umgebung. 
-            Mit über 35 Jahren Erfahrung und persönlichem Service.
-          </p>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">Seit 1988 Ihr vertrauensvoller Partner für Immobilienverwaltung in München und Umgebung. Mit über 35 Jahren Erfahrung und persönlichem Service.</p>
         </div>
 
         {/* Achievements */}
