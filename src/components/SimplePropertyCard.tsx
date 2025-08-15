@@ -87,16 +87,16 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 <div className="grid grid-cols-3 gap-3 sm:hidden">
                   <div className="flex items-center justify-center">
                     <div className="text-center">
-                      <div className="text-sm text-foreground"><span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²</div>
+                      <div className="text-base text-foreground"><span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²</div>
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <div className="text-center">
-                      <div className="text-sm text-foreground"><span className="font-medium">Räume:</span> {property.rooms}</div>
+                      <div className="text-base text-foreground"><span className="font-medium">Räume:</span> {property.rooms}</div>
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-base text-muted-foreground">
                       <span className="font-medium">Warmmiete:</span> {formatPrice(property.price_monthly)}
                     </div>
                   </div>
@@ -105,13 +105,13 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 {/* Desktop: Size and Rooms in same row */}
                 <div className="hidden sm:flex sm:items-center sm:gap-6">
                     <div className="flex items-center gap-6">
-                      <div className="text-sm text-foreground">
+                      <div className="text-base text-foreground">
                         <span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²
                       </div>
-                      <div className="text-sm text-foreground">
+                      <div className="text-base text-foreground">
                         <span className="font-medium">Räume:</span> {property.rooms}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-base text-muted-foreground">
                         <span className="font-medium">Warmmiete:</span> {formatPrice(property.price_monthly)}
                       </div>
                     </div>
