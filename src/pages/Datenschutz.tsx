@@ -37,7 +37,7 @@ const Datenschutz = () => {
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
                 <p className="font-medium">Amiel Immobilienverwaltung GmbH</p>
-                <p className="text-muted-foreground">Hauptstraße 123, 01069 Dresden</p>
+                <p className="text-muted-foreground">Leuchtenbergring 54, 81677 München</p>
                 <p className="text-muted-foreground">Telefon: +49 351 123 456 789</p>
                 <p className="text-muted-foreground">E-Mail: info@amiel-immobilienverwaltung.de</p>
               </div>
@@ -230,7 +230,7 @@ const Datenschutz = () => {
               <div className="bg-muted/50 p-4 rounded-lg">
                 <p className="font-medium">Amiel Immobilienverwaltung GmbH</p>
                 <p className="text-muted-foreground">Datenschutz</p>
-                <p className="text-muted-foreground">Hauptstraße 123, 01069 Dresden</p>
+                <p className="text-muted-foreground">Leuchtenbergring 54, 81677 München</p>
                 <p className="text-muted-foreground">E-Mail: datenschutz@elbtal-immobilien.de</p>
               </div>
               <p className="text-muted-foreground mt-4">

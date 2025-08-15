@@ -60,7 +60,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       nummer: '',
       plz,
       ort: '',
-      nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nEinzugsdatum: ${einzugsdatum}\nNettoeinkommen: ${nettoeinkommen}`,
+      nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}${isDialog ? `\nEinzugsdatum: ${einzugsdatum}` : ''}\nNettoeinkommen: ${nettoeinkommen}`,
       datenschutz: true
     };
 
@@ -87,7 +87,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setGeburtsort('');
     setStaatsangehoerigkeit('');
     setGeburtsdatum('');
-    setEinzugsdatum('');
+    if (isDialog) setEinzugsdatum('');
     setNettoeinkommen('');
     setDatenschutz(false);
 
@@ -215,17 +215,19 @@ const handleSubmit = async (e: React.FormEvent) => {
             className="mt-2"
           />
         </div>
-        <div>
-          <Label htmlFor="einzugsdatum">Einzugsdatum *</Label>
-          <Input
-            id="einzugsdatum"
-            type="date"
-            value={einzugsdatum}
-            onChange={(e) => setEinzugsdatum(e.target.value)}
-            required
-            className="mt-2"
-          />
-        </div>
+        {isDialog && (
+          <div>
+            <Label htmlFor="einzugsdatum">Einzugsdatum *</Label>
+            <Input
+              id="einzugsdatum"
+              type="date"
+              value={einzugsdatum}
+              onChange={(e) => setEinzugsdatum(e.target.value)}
+              required
+              className="mt-2"
+            />
+          </div>
+        )}
       </div>
 
       <div>

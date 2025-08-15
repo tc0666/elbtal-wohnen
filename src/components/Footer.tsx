@@ -44,7 +44,7 @@ export const Footer = () => {
             <h4 className="font-semibold text-foreground">Kontakt</h4>
             <div className="space-y-3 text-sm text-muted-foreground">
               <div>
-                <span>Hauptstraße 123<br />01069 Dresden</span>
+                <span>Leuchtenbergring 54<br />81677 München</span>
               </div>
               <div>
                 <span>+49 351 123 456 789</span>

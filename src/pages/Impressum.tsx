@@ -73,8 +73,8 @@ const Impressum = () => {
               <CardContent>
                 <div className="space-y-2">
                   <p className="font-medium">Amiel Immobilienverwaltung GmbH</p>
-                  <p className="text-muted-foreground">Hauptstraße 123</p>
-                  <p className="text-muted-foreground">01069 Dresden</p>
+                  <p className="text-muted-foreground">Leuchtenbergring 54</p>
+                  <p className="text-muted-foreground">81677 München</p>
                   <p className="text-muted-foreground">Deutschland</p>
                 </div>
               </CardContent>
@@ -111,8 +111,8 @@ const Impressum = () => {
               <CardContent>
                 <div className="space-y-2">
                   <p className="font-medium">Dr. Michael Schmidt</p>
-                  <p className="text-muted-foreground">Hauptstraße 123</p>
-                  <p className="text-muted-foreground">01069 Dresden</p>
+                  <p className="text-muted-foreground">Leuchtenbergring 54</p>
+                  <p className="text-muted-foreground">81677 München</p>
                 </div>
               </CardContent>
             </Card>

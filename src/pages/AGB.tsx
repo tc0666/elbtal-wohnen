@@ -265,7 +265,7 @@ const AGB = () => {
                   <p className="text-sm">
                     <strong>Stand:</strong> Januar 2025<br />
                     <strong>Amiel Immobilienverwaltung GmbH</strong><br />
-                    Hauptstraße 123, 01069 Dresden
+                    Leuchtenbergring 54, 81677 München
                   </p>
                 </div>
               </div>

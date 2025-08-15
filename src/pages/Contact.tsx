@@ -38,7 +38,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Adresse",
-      details: ["Hauptstraße 123", "01069 Dresden"],
+      details: ["Leuchtenbergring 54", "81677 München"],
       description: "Direkt im Stadtzentrum gelegen"
     },
     {
