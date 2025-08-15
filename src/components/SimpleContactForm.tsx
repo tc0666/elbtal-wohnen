@@ -215,34 +215,34 @@ const handleSubmit = async (e: React.FormEvent) => {
             className="mt-2"
           />
         </div>
-        {isDialog && (
-          <div>
-            <Label htmlFor="einzugsdatum">Einzugsdatum *</Label>
-            <Input
-              id="einzugsdatum"
-              type="date"
-              value={einzugsdatum}
-              onChange={(e) => setEinzugsdatum(e.target.value)}
-              required
-              className="mt-2"
-            />
-          </div>
-        )}
+        <div>
+          <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
+          <Input
+            id="nettoeinkommen"
+            type="number"
+            min={0}
+            step="1"
+            value={nettoeinkommen}
+            onChange={(e) => setNettoeinkommen(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
       </div>
 
-      <div>
-        <Label htmlFor="nettoeinkommen">Nettoeinkommen (€/Monat) *</Label>
-        <Input
-          id="nettoeinkommen"
-          type="number"
-          min={0}
-          step="1"
-          value={nettoeinkommen}
-          onChange={(e) => setNettoeinkommen(e.target.value)}
-          required
-          className="mt-2"
-        />
-      </div>
+      {isDialog && (
+        <div>
+          <Label htmlFor="einzugsdatum">Einzugsdatum *</Label>
+          <Input
+            id="einzugsdatum"
+            type="date"
+            value={einzugsdatum}
+            onChange={(e) => setEinzugsdatum(e.target.value)}
+            required
+            className="mt-2"
+          />
+        </div>
+      )}
 
       <div className="text-sm leading-relaxed">
         Mit dem Absenden der Anfrage erkläre ich mich damit einverstanden, dass meine angegebenen personenbezogenen Daten gemäß der Datenschutzerklärung verarbeitet und zum Zweck der Bearbeitung meiner Anfrage gespeichert werden.
