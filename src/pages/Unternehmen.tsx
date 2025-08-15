@@ -8,7 +8,7 @@ import { Building, Users, Award, Target, Heart, Shield, TrendingUp, Clock, Star,
 const Unternehmen = () => {
   const milestones = [{
     year: "1988",
-    title: "Gründung in Dresden",
+    title: "Gründung in München",
     description: "Start als kleine Immobilienverwaltung mit Fokus auf persönlichen Service"
   }, {
     year: "1995",
