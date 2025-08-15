@@ -72,9 +72,11 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-lg sm:text-xl text-[hsl(var(--brand-blue))] line-clamp-1 mb-1">
-                      {property.title}
-                    </h3>
+                    <Link to={`/immobilie/${property.id}`}>
+                      <h3 className="font-bold text-lg sm:text-xl text-[hsl(var(--brand-blue))] line-clamp-1 mb-1 hover:underline cursor-pointer">
+                        {property.title}
+                      </h3>
+                    </Link>
                     <div className="flex items-center text-muted-foreground text-sm mb-2">
                       <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
                       <span className="truncate">{`${property.postal_code ? property.postal_code + ' ' : ''}${property.city?.name || 'Stadt nicht verfügbar'}`}</span>
