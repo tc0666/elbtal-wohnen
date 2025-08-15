@@ -40,6 +40,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
   const [nettoeinkommen, setNettoeinkommen] = useState('');
   const [leadLabel, setLeadLabel] = useState<string>('none');
   const [freieNachricht, setFreieNachricht] = useState('');
+  const [deineNachricht, setDeineNachricht] = useState('');
 
   const labels = useMemo(() => Array.from(new Set(availableLabels)), [availableLabels]);
 
@@ -60,6 +61,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
     setNettoeinkommen('');
     setLeadLabel('none');
     setFreieNachricht('');
+    setDeineNachricht('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,7 +71,7 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
       const token = localStorage.getItem('adminToken');
       if (!token) throw new Error('Kein Admin-Token gefunden');
 
-      const combinedNachricht = `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nEinzugsdatum: ${einzugsdatum}\nNettoeinkommen: ${nettoeinkommen}${freieNachricht ? `\n\n${freieNachricht}` : ''}`;
+      const combinedNachricht = `${deineNachricht}\n\nGeburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}\nEinzugsdatum: ${einzugsdatum}\nNettoeinkommen: ${nettoeinkommen}${freieNachricht ? `\n\n${freieNachricht}` : ''}`;
 
       const payload = {
         action: 'create_contact_request',
@@ -209,8 +211,13 @@ const AddLeadDialog: React.FC<AddLeadDialogProps> = ({ open, onOpenChange, avail
           </div>
 
           <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Deine Nachricht *</label>
+            <Textarea placeholder="Beschreiben Sie Ihr Anliegen..." value={deineNachricht} onChange={(e) => setDeineNachricht(e.target.value)} rows={4} required />
+          </div>
+
+          <div>
             <label className="text-sm font-medium text-gray-700 mb-1 block">Freitext (optional)</label>
-            <Textarea placeholder="Zusätzliche Informationen..." value={freieNachricht} onChange={(e) => setFreieNachricht(e.target.value)} rows={5} />
+            <Textarea placeholder="Zusätzliche Informationen..." value={freieNachricht} onChange={(e) => setFreieNachricht(e.target.value)} rows={3} />
           </div>
 
           <div className="flex justify-end gap-2">

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -38,6 +39,7 @@ const [staatsangehoerigkeit, setStaatsangehoerigkeit] = useState('');
 const [geburtsdatum, setGeburtsdatum] = useState('');
 const [einzugsdatum, setEinzugsdatum] = useState('');
 const [nettoeinkommen, setNettoeinkommen] = useState('');
+const [deineNachricht, setDeineNachricht] = useState('');
 
 const [datenschutz, setDatenschutz] = useState(false);
 const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,7 +62,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       nummer: '',
       plz,
       ort: '',
-      nachricht: `Geburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}${isDialog ? `\nEinzugsdatum: ${einzugsdatum}` : ''}\nNettoeinkommen: ${nettoeinkommen}`,
+      nachricht: `${deineNachricht}\n\nGeburtsort: ${geburtsort}\nStaatsangehörigkeit: ${staatsangehoerigkeit}\nGeburtsdatum: ${geburtsdatum}${isDialog ? `\nEinzugsdatum: ${einzugsdatum}` : ''}\nNettoeinkommen: ${nettoeinkommen}`,
       datenschutz: true
     };
 
@@ -89,6 +91,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setGeburtsdatum('');
     if (isDialog) setEinzugsdatum('');
     setNettoeinkommen('');
+    setDeineNachricht('');
     setDatenschutz(false);
 
     if (isDialog) {
@@ -243,6 +246,19 @@ const handleSubmit = async (e: React.FormEvent) => {
           />
         </div>
       )}
+
+      <div>
+        <Label htmlFor="deineNachricht">Deine Nachricht *</Label>
+        <Textarea
+          id="deineNachricht"
+          value={deineNachricht}
+          onChange={(e) => setDeineNachricht(e.target.value)}
+          required
+          placeholder="Beschreiben Sie Ihr Anliegen..."
+          className="mt-2"
+          rows={4}
+        />
+      </div>
 
       <div className="text-sm leading-relaxed">
         Mit dem Absenden der Anfrage erkläre ich mich damit einverstanden, dass meine angegebenen personenbezogenen Daten gemäß der Datenschutzerklärung verarbeitet und zum Zweck der Bearbeitung meiner Anfrage gespeichert werden.
