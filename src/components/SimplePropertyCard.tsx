@@ -11,6 +11,7 @@ export interface Property {
   title: string;
   description: string;
   price_monthly: number;
+  warmmiete_monthly?: number;
   area_sqm: number;
   rooms: string;
   address: string;
@@ -96,7 +97,7 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                     </div>
                   </div>
                   <div className="text-base text-muted-foreground">
-                    <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.price_monthly)}</span>
+                    <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.warmmiete_monthly || property.price_monthly)}</span>
                   </div>
                 </div>
 
@@ -110,7 +111,7 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                         <span className="font-bold">Zimmer:</span> <span className="font-bold">{property.rooms}</span>
                       </div>
                       <div className="text-base text-muted-foreground">
-                        <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.price_monthly)}</span>
+                        <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.warmmiete_monthly || property.price_monthly)}</span>
                       </div>
                     </div>
                 </div>
