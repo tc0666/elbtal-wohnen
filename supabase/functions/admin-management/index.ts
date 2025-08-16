@@ -108,13 +108,23 @@ serve(async (req) => {
       case 'get_cities':
         const { data: cities, error: citiesError } = await supabase
           .from('cities')
-          .select('*')
+          .select(`
+            *,
+            properties(count)
+          `)
           .order('display_order', { ascending: true })
 
         if (citiesError) throw citiesError
 
+        // Transform the data to include property_count
+        const citiesWithCounts = cities?.map(city => ({
+          ...city,
+          property_count: city.properties?.[0]?.count || 0,
+          properties: undefined // Remove the properties array from the response
+        }))
+
         return new Response(
-          JSON.stringify({ cities }),
+          JSON.stringify({ cities: citiesWithCounts }),
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         )
 

@@ -14,6 +14,7 @@ interface City {
   slug: string;
   display_order: number;
   is_active: boolean;
+  property_count?: number;
 }
 
 const CitiesManagement = () => {
@@ -286,6 +287,14 @@ const CitiesManagement = () => {
               </div>
               <div className="text-sm text-muted-foreground">
                 <span className="font-medium">Reihenfolge:</span> {city.display_order}
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-muted-foreground">
+                  <span className="font-medium">Immobilien:</span>
+                </div>
+                <Badge variant="secondary" className="text-xs">
+                  {city.property_count || 0} Objekte
+                </Badge>
               </div>
               <div className="flex items-center gap-2 pt-2">
                 <Button
