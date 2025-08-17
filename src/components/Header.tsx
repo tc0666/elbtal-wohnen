@@ -15,22 +15,25 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50 shadow-sm">
+    <header className="bg-background border-b border-border sticky top-0 z-50 shadow-sm" role="banner">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="block">
+            <Link to="/" className="block" aria-label="AMIEL Immobilienverwaltung Startseite">
               <img 
                 src="/lovable-uploads/f4bd2064-0f8f-4de3-9863-bc4d9797aa3f.png" 
-                alt="AMIEL - Immobilienverwaltung seit 1988" 
+                alt="AMIEL Immobilienverwaltung Logo - Seit 1988 Ihr Partner für Premium Mietwohnungen" 
                 className="h-12 w-auto lg:h-12 md:h-10 h-8"
+                loading="eager"
+                width="auto"
+                height="48"
               />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <NavigationMenu className="hidden lg:flex">
+          <NavigationMenu className="hidden lg:flex" role="navigation" aria-label="Hauptnavigation">
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link to="/">
