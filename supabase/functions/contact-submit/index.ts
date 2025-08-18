@@ -124,7 +124,6 @@ async function sendEmailNotifications(formData: any, requestId: string) {
     },
   })
 
-  const currentDate = new Date().toISOString()
   const messageId = `<${requestId}@amiel-immobilienverwaltung.de>`
 
   try {
@@ -171,14 +170,13 @@ async function sendEmailNotifications(formData: any, requestId: string) {
       from: fromEmail,
       to: adminEmail,
       subject: "Neue Kontaktanfrage von der Website",
-      content: adminEmailContent,
       html: adminEmailContent,
       headers: {
         "Message-ID": messageId + "-admin",
-        "Date": currentDate,
         "Return-Path": fromEmail,
         "Reply-To": formData.email,
         "MIME-Version": "1.0",
+        "Content-Type": "text/html; charset=UTF-8",
         "X-Mailer": "Amiel Immobilienverwaltung Contact System"
       }
     })
@@ -216,14 +214,13 @@ async function sendEmailNotifications(formData: any, requestId: string) {
       from: fromEmail,
       to: formData.email,
       subject: "Vielen Dank für Ihre Anfrage",
-      content: userConfirmationContent,
       html: userConfirmationContent,
       headers: {
         "Message-ID": messageId + "-user",
-        "Date": currentDate,
         "Return-Path": fromEmail,
         "Reply-To": fromEmail,
         "MIME-Version": "1.0",
+        "Content-Type": "text/html; charset=UTF-8",
         "X-Mailer": "Amiel Immobilienverwaltung Contact System"
       }
     })
