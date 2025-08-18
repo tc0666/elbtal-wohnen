@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
-import { Resend } from 'npm:resend@2.0.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,12 +12,15 @@ serve(async (req) => {
   }
 
   try {
+    console.log('=== CONTACT SUBMIT FUNCTION START ===')
+    
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
     const formData = await req.json()
+    console.log('Form data received:', JSON.stringify(formData, null, 2))
 
     // Insert contact request into database
     const { data: request, error } = await supabase
@@ -45,17 +47,22 @@ serve(async (req) => {
       throw error
     }
 
-    console.log('Contact request created:', request.id)
+    console.log('Contact request created with ID:', request.id)
 
     // Send emails using Resend
+    console.log('Starting email sending process...')
     try {
       await sendEmailNotifications(formData, request.id)
-      console.log('Emails sent successfully via Resend')
+      console.log('=== EMAIL SENDING COMPLETED SUCCESSFULLY ===')
     } catch (emailError) {
-      console.error('Email error caught:', emailError)
-      // We still return 200 so the user gets success on the site, but we log the error for debugging
+      console.error('=== EMAIL SENDING FAILED ===')
+      console.error('Email error details:', emailError)
+      console.error('Email error message:', emailError?.message)
+      console.error('Email error stack:', emailError?.stack)
+      // Continue anyway so user gets success message
     }
 
+    console.log('=== RETURNING SUCCESS RESPONSE ===')
     return new Response(
       JSON.stringify({
         success: true,
@@ -66,7 +73,11 @@ serve(async (req) => {
     )
 
   } catch (error: any) {
-    console.error('Error:', error)
+    console.error('=== MAIN FUNCTION ERROR ===')
+    console.error('Main error:', error)
+    console.error('Main error message:', error?.message)
+    console.error('Main error stack:', error?.stack)
+    
     return new Response(
       JSON.stringify({
         error: 'Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut.',
@@ -81,35 +92,32 @@ serve(async (req) => {
 })
 
 async function sendEmailNotifications(formData: any, requestId: string) {
-  console.log('Starting email notifications for request:', requestId)
+  console.log('=== STARTING EMAIL NOTIFICATIONS ===')
+  console.log('Request ID:', requestId)
 
   const resendApiKey = Deno.env.get('RESEND_API_KEY')
-  const fromEmail = Deno.env.get('FROM_EMAIL') || 'noreply@resend.dev'
+  const fromEmail = Deno.env.get('FROM_EMAIL') || 'onboarding@resend.dev'
   const adminEmail = Deno.env.get('ADMIN_EMAIL')
 
-  console.log('Resend Configuration:', {
-    hasApiKey: !!resendApiKey,
-    fromEmail: fromEmail,
-    adminEmail: adminEmail
-  })
+  console.log('Email configuration check:')
+  console.log('- Has Resend API Key:', !!resendApiKey)
+  console.log('- From Email:', fromEmail)
+  console.log('- Admin Email:', adminEmail)
+  console.log('- User Email:', formData.email)
 
-  if (!resendApiKey || !adminEmail) {
-    console.error('Missing Resend configuration - API key or admin email missing')
-    throw new Error('Missing Resend configuration')
+  if (!resendApiKey) {
+    throw new Error('RESEND_API_KEY is missing')
+  }
+  
+  if (!adminEmail) {
+    throw new Error('ADMIN_EMAIL is missing')
   }
 
-  const resend = new Resend(resendApiKey)
+  console.log('Attempting to send emails using fetch to Resend API...')
 
-  // Admin email HTML
-  const adminHtml = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Neue Kontaktanfrage</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+  // Admin email content
+  const adminHtmlContent = `
     <h2>Neue Kontaktanfrage eingegangen</h2>
-    
     <h3>Kontaktdaten:</h3>
     <ul>
         <li><strong>Anrede:</strong> ${formData.anrede || 'Nicht angegeben'}</li>
@@ -118,7 +126,6 @@ async function sendEmailNotifications(formData: any, requestId: string) {
         <li><strong>E-Mail:</strong> ${formData.email}</li>
         <li><strong>Telefon:</strong> ${formData.telefon}</li>
     </ul>
-    
     <h3>Adresse:</h3>
     <ul>
         <li><strong>Straße:</strong> ${formData.strasse || 'Nicht angegeben'}</li>
@@ -126,68 +133,81 @@ async function sendEmailNotifications(formData: any, requestId: string) {
         <li><strong>PLZ:</strong> ${formData.plz || 'Nicht angegeben'}</li>
         <li><strong>Ort:</strong> ${formData.ort || 'Nicht angegeben'}</li>
     </ul>
-    
     <h3>Nachricht:</h3>
     <p style="background-color: #f4f4f4; padding: 15px; border-radius: 5px;">${formData.nachricht}</p>
-    
     ${formData.propertyId ? `<p><strong>Immobilien-ID:</strong> ${formData.propertyId}</p>` : ''}
-    
     <hr>
     <p><small>Anfrage-ID: ${requestId}</small></p>
-</body>
-</html>`
+  `
 
-  // User confirmation email HTML
-  const userHtml = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Vielen Dank für Ihre Anfrage</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+  // User confirmation content
+  const userHtmlContent = `
     <h2>Vielen Dank für Ihre Anfrage</h2>
-    
     <p>Sehr geehrte Damen und Herren,</p>
-    
     <p>Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich mit Ihnen in Verbindung setzen.</p>
-    
-    <p>Mit freundlichen Grüßen<br>
-    Amiel Immobilienverwaltung</p>
-    
+    <p>Mit freundlichen Grüßen<br>Amiel Immobilienverwaltung</p>
     <hr>
     <p style="font-size: 12px; color: #666;">
         Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese E-Mail.<br>
         Bei Fragen kontaktieren Sie uns unter: info@amiel-immobilienverwaltung.de
     </p>
-</body>
-</html>`
+  `
 
   try {
-    // Send admin notification
-    console.log('Sending admin email to:', adminEmail)
-    const adminEmailResponse = await resend.emails.send({
-      from: fromEmail,
-      to: adminEmail,
-      subject: 'Neue Kontaktanfrage von der Website',
-      html: adminHtml,
-      reply_to: formData.email
+    // Send admin email
+    console.log('Sending admin email...')
+    const adminEmailResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [adminEmail],
+        subject: 'Neue Kontaktanfrage von der Website',
+        html: adminHtmlContent,
+        reply_to: formData.email
+      }),
     })
-    
-    console.log('Admin email sent successfully:', adminEmailResponse)
 
-    // Send user confirmation
-    console.log('Sending user confirmation to:', formData.email)
-    const userEmailResponse = await resend.emails.send({
-      from: fromEmail,
-      to: formData.email,
-      subject: 'Vielen Dank für Ihre Anfrage',
-      html: userHtml
+    const adminResult = await adminEmailResponse.json()
+    console.log('Admin email response status:', adminEmailResponse.status)
+    console.log('Admin email response:', JSON.stringify(adminResult, null, 2))
+
+    if (!adminEmailResponse.ok) {
+      throw new Error(`Admin email failed: ${JSON.stringify(adminResult)}`)
+    }
+
+    // Send user confirmation email
+    console.log('Sending user confirmation email...')
+    const userEmailResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [formData.email],
+        subject: 'Vielen Dank für Ihre Anfrage',
+        html: userHtmlContent
+      }),
     })
-    
-    console.log('User email sent successfully:', userEmailResponse)
+
+    const userResult = await userEmailResponse.json()
+    console.log('User email response status:', userEmailResponse.status)
+    console.log('User email response:', JSON.stringify(userResult, null, 2))
+
+    if (!userEmailResponse.ok) {
+      throw new Error(`User email failed: ${JSON.stringify(userResult)}`)
+    }
+
+    console.log('=== BOTH EMAILS SENT SUCCESSFULLY ===')
 
   } catch (error) {
-    console.error('Failed to send emails via Resend:', error)
+    console.error('=== EMAIL SENDING ERROR ===')
+    console.error('Fetch error details:', error)
     throw error
   }
 }
