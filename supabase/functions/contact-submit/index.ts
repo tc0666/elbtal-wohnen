@@ -53,26 +53,28 @@ serve(async (req) => {
 
     console.log('6. Contact request saved successfully with ID:', request.id)
 
-    console.log('7. Checking environment variables...')
-    const resendApiKey = Deno.env.get('RESEND_API_KEY')
+    console.log('7. Checking SMTP environment variables...')
+    const smtpHost = Deno.env.get('SMTP_HOST')
+    const smtpPort = Number(Deno.env.get('SMTP_PORT') || '465')
+    const smtpUser = Deno.env.get('SMTP_USERNAME')
+    const smtpPass = Deno.env.get('SMTP_PASSWORD')
     const adminEmail = Deno.env.get('ADMIN_EMAIL')
     const fromEmail = Deno.env.get('FROM_EMAIL')
-    
+
     console.log('Environment check results:')
-    console.log('- RESEND_API_KEY exists:', !!resendApiKey)
+    console.log('- SMTP_HOST exists:', !!smtpHost)
+    console.log('- SMTP_PORT exists:', !!Deno.env.get('SMTP_PORT'))
+    console.log('- SMTP_USERNAME exists:', !!smtpUser)
+    console.log('- SMTP_PASSWORD exists:', !!smtpPass)
     console.log('- ADMIN_EMAIL exists:', !!adminEmail)
     console.log('- FROM_EMAIL exists:', !!fromEmail)
 
-    if (!resendApiKey) {
-      throw new Error('RESEND_API_KEY environment variable is missing')
-    }
-
-    if (!adminEmail) {
-      throw new Error('ADMIN_EMAIL environment variable is missing')
+    if (!smtpHost || !smtpUser || !smtpPass || !adminEmail || !fromEmail) {
+      throw new Error('SMTP/Email environment variables are missing')
     }
 
     console.log('8. Preparing email content...')
-    const emailFrom = fromEmail || 'onboarding@resend.dev'
+    const emailFrom = fromEmail
     
     const adminEmailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -102,63 +104,45 @@ serve(async (req) => {
       </div>
     `
 
-    console.log('9. Sending admin notification email...')
-    const adminEmailPayload = {
-      from: emailFrom,
-      to: [adminEmail],
+    console.log('9. Creating SMTP client...')
+    const smtpClient = new SMTPClient({
+      connection: {
+        hostname: smtpHost!,
+        port: smtpPort,
+        tls: true,
+        auth: { username: smtpUser!, password: smtpPass! },
+      },
+    })
+
+    console.log('10. Sending admin notification email via SMTP...')
+    await smtpClient.send({
+      from: emailFrom!,
+      to: adminEmail!,
       subject: 'Neue Kontaktanfrage von der Website',
+      content: 'Ihre E-Mail unterstützt kein HTML.',
       html: adminEmailHtml,
-      reply_to: formData.email
-    }
-    
-    const adminResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(adminEmailPayload),
+      headers: { 'Reply-To': formData.email },
     })
 
-    console.log('10. Admin email response status:', adminResponse.status)
-    
-    if (!adminResponse.ok) {
-      const adminError = await adminResponse.text()
-      console.error('ADMIN EMAIL FAILED:', adminError)
-      throw new Error(`Admin email failed with status ${adminResponse.status}: ${adminError}`)
-    }
-    
-    const adminResult = await adminResponse.json()
-    console.log('11. Admin email sent successfully:', adminResult.id)
+    console.log('11. Admin email sent successfully')
 
-    console.log('12. Sending user confirmation email...')
-    const userEmailPayload = {
-      from: emailFrom,
-      to: [formData.email],
-      subject: 'Bestätigung Ihrer Anfrage - Amiel Immobilienverwaltung',
-      html: userEmailHtml
-    }
-    
-    const userResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userEmailPayload),
-    })
-
-    console.log('13. User email response status:', userResponse.status)
-    
-    if (!userResponse.ok) {
-      const userError = await userResponse.text()
-      console.error('USER EMAIL FAILED:', userError)
-      // Don't throw error for user email failure, just log it
+    console.log('12. Sending user confirmation email via SMTP...')
+    try {
+      await smtpClient.send({
+        from: emailFrom!,
+        to: formData.email,
+        subject: 'Bestätigung Ihrer Anfrage - Amiel Immobilienverwaltung',
+        content: 'Ihre E-Mail unterstützt kein HTML.',
+        html: userEmailHtml,
+      })
+      console.log('13. User email sent successfully')
+    } catch (userErr) {
+      console.error('USER EMAIL FAILED:', userErr?.message || userErr)
       console.log('Continuing despite user email failure...')
-    } else {
-      const userResult = await userResponse.json()
-      console.log('14. User email sent successfully:', userResult.id)
     }
+
+    await smtpClient.close()
+    console.log('14. SMTP client closed')
 
     console.log('15. === CONTACT FORM PROCESSING COMPLETED SUCCESSFULLY ===')
 
