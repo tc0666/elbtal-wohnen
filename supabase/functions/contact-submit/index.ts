@@ -4,6 +4,7 @@ import { SMTPClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts"
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
 serve(async (req) => {
@@ -11,7 +12,7 @@ serve(async (req) => {
   
   if (req.method === 'OPTIONS') {
     console.log('OPTIONS request - returning CORS headers')
-    return new Response(null, { headers: corsHeaders })
+    return new Response('ok', { status: 204, headers: corsHeaders })
   }
 
   try {
