@@ -47,10 +47,22 @@ serve(async (req) => {
 
     console.log('Contact request created:', request.id)
 
-    // Send emails in background
-    sendEmailNotifications(formData, request.id).catch(error => {
+    // Send emails in background with better error handling
+    const emailPromise = sendEmailNotifications(formData, request.id)
+    
+    emailPromise.catch(error => {
       console.error('Email sending failed:', error)
+      console.error('Error details:', JSON.stringify(error, null, 2))
     })
+    
+    // Wait for email sending to complete
+    try {
+      await emailPromise
+      console.log('Emails sent successfully')
+    } catch (emailError) {
+      console.error('Email error caught:', emailError)
+      // Don't fail the request if emails fail, but log the error
+    }
 
     return new Response(
       JSON.stringify({ 
@@ -77,6 +89,8 @@ serve(async (req) => {
 })
 
 async function sendEmailNotifications(formData: any, requestId: string) {
+  console.log('Starting email notifications for request:', requestId)
+  
   const smtpHost = Deno.env.get('SMTP_HOST')
   const smtpPort = parseInt(Deno.env.get('SMTP_PORT') || '465')
   const smtpUsername = Deno.env.get('SMTP_USERNAME')
@@ -84,9 +98,18 @@ async function sendEmailNotifications(formData: any, requestId: string) {
   const fromEmail = Deno.env.get('FROM_EMAIL')
   const adminEmail = Deno.env.get('ADMIN_EMAIL')
 
+  console.log('SMTP Configuration:', {
+    host: smtpHost,
+    port: smtpPort,
+    username: smtpUsername,
+    fromEmail: fromEmail,
+    adminEmail: adminEmail,
+    hasPassword: !!smtpPassword
+  })
+
   if (!smtpHost || !smtpUsername || !smtpPassword || !fromEmail || !adminEmail) {
-    console.error('Missing SMTP configuration')
-    return
+    console.error('Missing SMTP configuration - stopping email send')
+    throw new Error('Missing SMTP configuration')
   }
 
   const client = new SMTPClient({
