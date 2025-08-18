@@ -8,11 +8,13 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  const origin = req.headers.get('Origin') || '*'
+  const headers = { ...corsHeaders, 'Access-Control-Allow-Origin': origin, 'Access-Control-Max-Age': '86400' }
   console.log('=== CONTACT REQUEST RECEIVED ===', new Date().toISOString())
   
   if (req.method === 'OPTIONS') {
     console.log('OPTIONS request - returning CORS headers')
-    return new Response('ok', { status: 204, headers: corsHeaders })
+    return new Response('ok', { status: 200, headers })
   }
 
   try {
@@ -155,7 +157,7 @@ serve(async (req) => {
       }),
       { 
         headers: { 
-          ...corsHeaders, 
+          ...headers, 
           'Content-Type': 'application/json' 
         } 
       }
@@ -175,7 +177,7 @@ serve(async (req) => {
       }),
       {
         headers: { 
-          ...corsHeaders, 
+          ...headers, 
           'Content-Type': 'application/json' 
         },
         status: 500
