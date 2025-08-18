@@ -139,8 +139,6 @@ async function sendEmailNotifications(formData: any, requestId: string) {
         "Message-ID": messageId + "-admin",
         "Return-Path": fromEmail,
         "Reply-To": formData.email,
-        "MIME-Version": "1.0",
-        "Content-Type": "text/html; charset=UTF-8",
         "X-Mailer": "Amiel Immobilienverwaltung Contact System"
       }
     })
@@ -159,8 +157,6 @@ async function sendEmailNotifications(formData: any, requestId: string) {
         "Message-ID": messageId + "-user",
         "Return-Path": fromEmail,
         "Reply-To": fromEmail,
-        "MIME-Version": "1.0",
-        "Content-Type": "text/html; charset=UTF-8",
         "X-Mailer": "Amiel Immobilienverwaltung Contact System"
       }
     })
