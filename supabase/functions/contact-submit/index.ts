@@ -135,12 +135,8 @@ async function sendEmailNotifications(formData: any, requestId: string) {
       from: fromEmail,
       to: adminEmail,
       subject: "Neue Kontaktanfrage von der Website",
-      html: adminEmailContent,
-      headers: {
-        "Message-ID": messageIdAdmin,
-        "Reply-To": formData.email,
-        "X-Mailer": "Amiel Immobilienverwaltung Contact System"
-      }
+      content: "Neue Kontaktanfrage eingegangen",
+      html: adminEmailContent
     })
 
     console.log('Admin notification sent successfully')
@@ -152,12 +148,8 @@ async function sendEmailNotifications(formData: any, requestId: string) {
       from: fromEmail,
       to: formData.email,
       subject: "Vielen Dank für Ihre Anfrage",
-      html: userConfirmationContent,
-      headers: {
-        "Message-ID": messageIdUser,
-        "Reply-To": fromEmail,
-        "X-Mailer": "Amiel Immobilienverwaltung Contact System"
-      }
+      content: "Vielen Dank für Ihre Anfrage – wir melden uns schnellstmöglich.",
+      html: userConfirmationContent
     })
 
     console.log('User confirmation sent successfully')
