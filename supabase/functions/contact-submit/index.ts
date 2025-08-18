@@ -124,7 +124,8 @@ async function sendEmailNotifications(formData: any, requestId: string) {
     },
   })
 
-  const messageId = `<${requestId}@amiel-immobilienverwaltung.de>`
+  const messageIdAdmin = `<${requestId}-admin@amiel-immobilienverwaltung.de>`
+  const messageIdUser = `<${requestId}-user@amiel-immobilienverwaltung.de>`
 
   try {
     // 1. Send admin notification
@@ -136,8 +137,7 @@ async function sendEmailNotifications(formData: any, requestId: string) {
       subject: "Neue Kontaktanfrage von der Website",
       html: adminEmailContent,
       headers: {
-        "Message-ID": messageId + "-admin",
-        "Return-Path": fromEmail,
+        "Message-ID": messageIdAdmin,
         "Reply-To": formData.email,
         "X-Mailer": "Amiel Immobilienverwaltung Contact System"
       }
@@ -154,8 +154,7 @@ async function sendEmailNotifications(formData: any, requestId: string) {
       subject: "Vielen Dank für Ihre Anfrage",
       html: userConfirmationContent,
       headers: {
-        "Message-ID": messageId + "-user",
-        "Return-Path": fromEmail,
+        "Message-ID": messageIdUser,
         "Reply-To": fromEmail,
         "X-Mailer": "Amiel Immobilienverwaltung Contact System"
       }
