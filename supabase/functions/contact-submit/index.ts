@@ -128,43 +128,7 @@ async function sendEmailNotifications(formData: any, requestId: string) {
 
   try {
     // 1. Send admin notification
-    const adminEmailContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Neue Kontaktanfrage</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-    <h2>Neue Kontaktanfrage eingegangen</h2>
-    
-    <h3>Kontaktdaten:</h3>
-    <ul>
-        <li><strong>Anrede:</strong> ${formData.anrede || 'Nicht angegeben'}</li>
-        <li><strong>Vorname:</strong> ${formData.vorname}</li>
-        <li><strong>Nachname:</strong> ${formData.nachname}</li>
-        <li><strong>E-Mail:</strong> ${formData.email}</li>
-        <li><strong>Telefon:</strong> ${formData.telefon}</li>
-    </ul>
-    
-    <h3>Adresse:</h3>
-    <ul>
-        <li><strong>Straße:</strong> ${formData.strasse || 'Nicht angegeben'}</li>
-        <li><strong>Nummer:</strong> ${formData.nummer || 'Nicht angegeben'}</li>
-        <li><strong>PLZ:</strong> ${formData.plz || 'Nicht angegeben'}</li>
-        <li><strong>Ort:</strong> ${formData.ort || 'Nicht angegeben'}</li>
-    </ul>
-    
-    <h3>Nachricht:</h3>
-    <p style="background-color: #f4f4f4; padding: 15px; border-radius: 5px;">${formData.nachricht}</p>
-    
-    ${formData.propertyId ? `<p><strong>Immobilien-ID:</strong> ${formData.propertyId}</p>` : ''}
-    
-    <hr>
-    <p><small>Anfrage-ID: ${requestId}</small></p>
-</body>
-</html>
-    `
+    const adminEmailContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Neue Kontaktanfrage</title></head><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;"><h2>Neue Kontaktanfrage eingegangen</h2><h3>Kontaktdaten:</h3><ul><li><strong>Anrede:</strong> ${formData.anrede || 'Nicht angegeben'}</li><li><strong>Vorname:</strong> ${formData.vorname}</li><li><strong>Nachname:</strong> ${formData.nachname}</li><li><strong>E-Mail:</strong> ${formData.email}</li><li><strong>Telefon:</strong> ${formData.telefon}</li></ul><h3>Adresse:</h3><ul><li><strong>Straße:</strong> ${formData.strasse || 'Nicht angegeben'}</li><li><strong>Nummer:</strong> ${formData.nummer || 'Nicht angegeben'}</li><li><strong>PLZ:</strong> ${formData.plz || 'Nicht angegeben'}</li><li><strong>Ort:</strong> ${formData.ort || 'Nicht angegeben'}</li></ul><h3>Nachricht:</h3><p style="background-color: #f4f4f4; padding: 15px; border-radius: 5px;">${formData.nachricht}</p>${formData.propertyId ? `<p><strong>Immobilien-ID:</strong> ${formData.propertyId}</p>` : ''}<hr><p><small>Anfrage-ID: ${requestId}</small></p></body></html>`
 
     await client.send({
       from: fromEmail,
@@ -184,31 +148,7 @@ async function sendEmailNotifications(formData: any, requestId: string) {
     console.log('Admin notification sent successfully')
 
     // 2. Send user confirmation
-    const userConfirmationContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Vielen Dank für Ihre Anfrage</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-    <h2>Vielen Dank für Ihre Anfrage</h2>
-    
-    <p>Sehr geehrte Damen und Herren,</p>
-    
-    <p>Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich mit Ihnen in Verbindung setzen.</p>
-    
-    <p>Mit freundlichen Grüßen<br>
-    Amiel Immobilienverwaltung</p>
-    
-    <hr>
-    <p style="font-size: 12px; color: #666;">
-        Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese E-Mail.<br>
-        Bei Fragen kontaktieren Sie uns unter: info@amiel-immobilienverwaltung.de
-    </p>
-</body>
-</html>
-    `
+    const userConfirmationContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Vielen Dank für Ihre Anfrage</title></head><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;"><h2>Vielen Dank für Ihre Anfrage</h2><p>Sehr geehrte Damen und Herren,</p><p>Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich mit Ihnen in Verbindung setzen.</p><p>Mit freundlichen Grüßen<br>Amiel Immobilienverwaltung</p><hr><p style="font-size: 12px; color: #666;">Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese E-Mail.<br>Bei Fragen kontaktieren Sie uns unter: info@amiel-immobilienverwaltung.de</p></body></html>`
 
     await client.send({
       from: fromEmail,
