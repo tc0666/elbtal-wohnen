@@ -47,42 +47,34 @@ serve(async (req) => {
 
     console.log('Contact request created:', request.id)
 
-    // Send emails in background with better error handling
-    const emailPromise = sendEmailNotifications(formData, request.id)
-    
-    emailPromise.catch(error => {
-      console.error('Email sending failed:', error)
-      console.error('Error details:', JSON.stringify(error, null, 2))
-    })
-    
-    // Wait for email sending to complete
+    // Send emails (we await to guarantee delivery or clear error logging)
     try {
-      await emailPromise
+      await sendEmailNotifications(formData, request.id)
       console.log('Emails sent successfully')
     } catch (emailError) {
-      console.error('Email error caught:', emailError)
-      // Don't fail the request if emails fail, but log the error
+      console.error('Email error caught (top-level):', emailError)
+      // We still return 200 so the user gets success on the site, but we log the error for debugging
     }
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: 'Ihre Anfrage wurde erfolgreich übermittelt.',
-        requestId: request.id 
+        requestId: request.id
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error:', error)
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         error: 'Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut.',
-        details: error.message 
+        details: error?.message
       }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-        status: 500 
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500
       }
     )
   }
@@ -90,7 +82,7 @@ serve(async (req) => {
 
 async function sendEmailNotifications(formData: any, requestId: string) {
   console.log('Starting email notifications for request:', requestId)
-  
+
   const smtpHost = Deno.env.get('SMTP_HOST')
   const smtpPort = parseInt(Deno.env.get('SMTP_PORT') || '465')
   const smtpUsername = Deno.env.get('SMTP_USERNAME')
@@ -98,12 +90,12 @@ async function sendEmailNotifications(formData: any, requestId: string) {
   const fromEmail = Deno.env.get('FROM_EMAIL')
   const adminEmail = Deno.env.get('ADMIN_EMAIL')
 
-  console.log('SMTP Configuration:', {
-    host: smtpHost,
+  console.log('SMTP Configuration (sanitized):', {
+    host: smtpHost ? '[set]' : '[missing]',
     port: smtpPort,
-    username: smtpUsername,
-    fromEmail: fromEmail,
-    adminEmail: adminEmail,
+    username: smtpUsername ? '[set]' : '[missing]',
+    fromEmail: fromEmail ? '[set]' : '[missing]',
+    adminEmail: adminEmail ? '[set]' : '[missing]',
     hasPassword: !!smtpPassword
   })
 
@@ -116,7 +108,7 @@ async function sendEmailNotifications(formData: any, requestId: string) {
     connection: {
       hostname: smtpHost,
       port: smtpPort,
-      tls: true,
+      tls: true, // Using implicit TLS (465). If your server is on 587, set SMTP_PORT=587 and we can switch to STARTTLS if needed.
       auth: {
         username: smtpUsername,
         password: smtpPassword,
@@ -124,35 +116,34 @@ async function sendEmailNotifications(formData: any, requestId: string) {
     },
   })
 
-  const messageIdAdmin = `<${requestId}-admin@amiel-immobilienverwaltung.de>`
-  const messageIdUser = `<${requestId}-user@amiel-immobilienverwaltung.de>`
+  // Keep HTML on a single line to avoid quoted-printable hard wraps (=20)
+  const adminHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Neue Kontaktanfrage</title></head><body style="font-family:Arial,sans-serif;line-height:1.6;color:#333"><h2>Neue Kontaktanfrage eingegangen</h2><h3>Kontaktdaten:</h3><ul><li><strong>Anrede:</strong> ${formData.anrede || 'Nicht angegeben'}</li><li><strong>Vorname:</strong> ${formData.vorname}</li><li><strong>Nachname:</strong> ${formData.nachname}</li><li><strong>E-Mail:</strong> ${formData.email}</li><li><strong>Telefon:</strong> ${formData.telefon}</li></ul><h3>Adresse:</h3><ul><li><strong>Straße:</strong> ${formData.strasse || 'Nicht angegeben'}</li><li><strong>Nummer:</strong> ${formData.nummer || 'Nicht angegeben'}</li><li><strong>PLZ:</strong> ${formData.plz || 'Nicht angegeben'}</li><li><strong>Ort:</strong> ${formData.ort || 'Nicht angegeben'}</li></ul><h3>Nachricht:</h3><p style="background:#f4f4f4;padding:15px;border-radius:5px;margin:0">${formData.nachricht}</p>${formData.propertyId ? `<p><strong>Immobilien-ID:</strong> ${formData.propertyId}</p>` : ''}<hr><p style="margin:0"><small>Anfrage-ID: ${requestId}</small></p></body></html>`
+  const adminText = `Neue Kontaktanfrage eingegangen\n\nKontaktdaten:\nAnrede: ${formData.anrede || 'Nicht angegeben'}\nVorname: ${formData.vorname}\nNachname: ${formData.nachname}\nE-Mail: ${formData.email}\nTelefon: ${formData.telefon}\n\nAdresse:\nStraße: ${formData.strasse || 'Nicht angegeben'}\nNummer: ${formData.nummer || 'Nicht angegeben'}\nPLZ: ${formData.plz || 'Nicht angegeben'}\nOrt: ${formData.ort || 'Nicht angegeben'}\n\nNachricht:\n${formData.nachricht}\n${formData.propertyId ? `\nImmobilien-ID: ${formData.propertyId}` : ''}\n\nAnfrage-ID: ${requestId}`
+
+  const userHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Vielen Dank für Ihre Anfrage</title></head><body style="font-family:Arial,sans-serif;line-height:1.6;color:#333"><h2>Vielen Dank für Ihre Anfrage</h2><p>Sehr geehrte Damen und Herren,</p><p>Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich mit Ihnen in Verbindung setzen.</p><p>Mit freundlichen Grüßen<br>Amiel Immobilienverwaltung</p><hr><p style="font-size:12px;color:#666;margin:0">Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese E-Mail.<br>Bei Fragen kontaktieren Sie uns unter: info@amiel-immobilienverwaltung.de</p></body></html>`
+  const userText = `Vielen Dank für Ihre Anfrage\n\nSehr geehrte Damen und Herren,\n\nWir haben Ihre Anfrage erhalten und werden uns schnellstmöglich mit Ihnen in Verbindung setzen.\n\nMit freundlichen Grüßen\nAmiel Immobilienverwaltung\n\nDiese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese E-Mail.\nBei Fragen kontaktieren Sie uns unter: info@amiel-immobilienverwaltung.de`
 
   try {
-    // 1. Send admin notification
-    const adminEmailContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Neue Kontaktanfrage</title></head><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;"><h2>Neue Kontaktanfrage eingegangen</h2><h3>Kontaktdaten:</h3><ul><li><strong>Anrede:</strong> ${formData.anrede || 'Nicht angegeben'}</li><li><strong>Vorname:</strong> ${formData.vorname}</li><li><strong>Nachname:</strong> ${formData.nachname}</li><li><strong>E-Mail:</strong> ${formData.email}</li><li><strong>Telefon:</strong> ${formData.telefon}</li></ul><h3>Adresse:</h3><ul><li><strong>Straße:</strong> ${formData.strasse || 'Nicht angegeben'}</li><li><strong>Nummer:</strong> ${formData.nummer || 'Nicht angegeben'}</li><li><strong>PLZ:</strong> ${formData.plz || 'Nicht angegeben'}</li><li><strong>Ort:</strong> ${formData.ort || 'Nicht angegeben'}</li></ul><h3>Nachricht:</h3><p style="background-color: #f4f4f4; padding: 15px; border-radius: 5px;">${formData.nachricht}</p>${formData.propertyId ? `<p><strong>Immobilien-ID:</strong> ${formData.propertyId}</p>` : ''}<hr><p><small>Anfrage-ID: ${requestId}</small></p></body></html>`
-
-    await client.send({
-      from: fromEmail,
-      to: adminEmail,
-      subject: "Neue Kontaktanfrage von der Website",
-      content: "Neue Kontaktanfrage eingegangen",
-      html: adminEmailContent
+    console.log('Sending admin email to', adminEmail)
+    const adminResult = await client.send({
+      from: fromEmail!,
+      to: adminEmail!,
+      subject: 'Neue Kontaktanfrage von der Website',
+      content: adminText,
+      html: adminHtml,
+      // No custom headers to avoid conflicts; SMTP server sets Date/Message-ID/Return-Path
     })
+    console.log('Admin email send result:', adminResult)
 
-    console.log('Admin notification sent successfully')
-
-    // 2. Send user confirmation
-    const userConfirmationContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Vielen Dank für Ihre Anfrage</title></head><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;"><h2>Vielen Dank für Ihre Anfrage</h2><p>Sehr geehrte Damen und Herren,</p><p>Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich mit Ihnen in Verbindung setzen.</p><p>Mit freundlichen Grüßen<br>Amiel Immobilienverwaltung</p><hr><p style="font-size: 12px; color: #666;">Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese E-Mail.<br>Bei Fragen kontaktieren Sie uns unter: info@amiel-immobilienverwaltung.de</p></body></html>`
-
-    await client.send({
-      from: fromEmail,
+    console.log('Sending user email to', formData.email)
+    const userResult = await client.send({
+      from: fromEmail!,
       to: formData.email,
-      subject: "Vielen Dank für Ihre Anfrage",
-      content: "Vielen Dank für Ihre Anfrage – wir melden uns schnellstmöglich.",
-      html: userConfirmationContent
+      subject: 'Vielen Dank für Ihre Anfrage',
+      content: userText,
+      html: userHtml,
     })
-
-    console.log('User confirmation sent successfully')
+    console.log('User email send result:', userResult)
 
   } catch (error) {
     console.error('Failed to send emails:', error)
