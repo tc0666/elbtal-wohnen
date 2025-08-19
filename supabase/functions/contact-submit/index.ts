@@ -109,6 +109,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('=== DATABASE SAVE SUCCESS ===');
     console.log('Contact request saved with ID:', request.id);
+    console.log('Starting email notifications...');
 
     // Send email notifications using SMTP
     try {
