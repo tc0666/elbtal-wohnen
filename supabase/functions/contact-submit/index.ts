@@ -1,9 +1,24 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
+
+console.log('Edge function loaded - contact-submit with SMTP');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+// Function to encode email headers with non-ASCII characters (RFC 2047)
+function encodeEmailHeader(text: string): string {
+  // Check if the text contains only ASCII characters
+  if (/^[\x00-\x7F]*$/.test(text)) {
+    return text; // Return as-is if only ASCII
+  }
+  
+  // Encode as UTF-8 Base64 for non-ASCII characters
+  const utf8Bytes = new TextEncoder().encode(text);
+  const base64 = btoa(String.fromCharCode(...utf8Bytes));
+  return `=?UTF-8?B?${base64}?=`;
 }
 
 interface ContactFormData {
@@ -20,21 +35,49 @@ interface ContactFormData {
   nachricht: string;
 }
 
-serve(async (req) => {
+const handler = async (req: Request): Promise<Response> => {
+  console.log('=== HANDLER STARTED ===');
+  
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    console.log('Handling CORS preflight');
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  if (req.method !== 'POST') {
+    console.log('Invalid method:', req.method);
+    return new Response('Method not allowed', { 
+      status: 405, 
+      headers: corsHeaders 
+    });
   }
 
   try {
+    console.log('=== PROCESSING REQUEST ===');
+    const formData: ContactFormData = await req.json();
+    console.log('Form data received:', JSON.stringify(formData, null, 2));
+    
+    // Validate required fields
+    if (!formData.vorname || !formData.nachname || !formData.email || !formData.nachricht) {
+      console.log('Validation failed - missing required fields');
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields: vorname, nachname, email, and nachricht' }),
+        { 
+          status: 400, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        }
+      );
+    }
+
+    console.log('=== SAVING TO DATABASE ===');
+    // Initialize Supabase client
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    );
 
-    const formData: ContactFormData = await req.json()
-
-    // Insert contact request into database
-    const { data: request, error } = await supabase
+    // Store the inquiry in the database
+    const { data: request, error: dbError } = await supabase
       .from('contact_requests')
       .insert([{
         property_id: formData.propertyId || null,
@@ -51,50 +94,68 @@ serve(async (req) => {
         status: 'new'
       }])
       .select()
-      .single()
+      .single();
 
-    if (error) {
-      console.error('Database error:', error)
-      throw error
+    if (dbError) {
+      console.error('Database error:', dbError);
+      return new Response(
+        JSON.stringify({ error: 'Failed to store inquiry' }),
+        { 
+          status: 500, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        }
+      );
     }
 
-    console.log('Contact request created:', request.id)
+    console.log('=== DATABASE SAVE SUCCESS ===');
+    console.log('Contact request saved with ID:', request.id);
 
-    // Send emails using SMTP
+    // Send email notifications using SMTP
     try {
+      console.log('=== STARTING SMTP EMAIL SEND ===');
+      
       await Promise.all([
         sendAdminNotification(formData),
         sendUserConfirmation(formData)
       ]);
-      console.log('Both emails sent successfully');
+      
+      console.log('=== BOTH EMAILS SENT SUCCESSFULLY ===');
     } catch (emailError) {
+      console.error('=== EMAIL ERROR ===');
       console.error('Email sending failed:', emailError);
-      // Don't fail the request if emails fail - the contact is already saved
+      console.error('Error message:', emailError.message);
+      // Don't fail the entire request if email fails - inquiry is already stored
     }
 
+    console.log('=== RETURNING SUCCESS RESPONSE ===');
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Ihre Anfrage wurde erfolgreich übermittelt.',
-        requestId: request.id 
+        id: request.id 
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
-
-  } catch (error) {
-    console.error('Error:', error)
-    return new Response(
-      JSON.stringify({ 
-        error: 'Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut.',
-        details: error.message 
-      }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
-        status: 500 
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
       }
-    )
+    );
+
+  } catch (error: any) {
+    console.error('=== MAIN ERROR ===');
+    console.error('Error in contact-submit function:', error);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      }
+    );
   }
-})
+};
+
+serve(handler);
 
 async function sendAdminNotification(formData: ContactFormData) {
   const subject = `Neue Anfrage von ${formData.vorname} ${formData.nachname}`;
@@ -170,19 +231,23 @@ async function sendEmailSMTP(emailData: { to: string[]; subject: string; text: s
   console.log('Connecting to SMTP server...');
   
   const smtpHost = Deno.env.get('SMTP_HOST') || '';
-  const smtpPort = parseInt(Deno.env.get('SMTP_PORT') || '587');
+  const smtpPort = parseInt(Deno.env.get('SMTP_PORT') || '465');
   const smtpUser = Deno.env.get('SMTP_USERNAME') || '';
   const smtpPass = Deno.env.get('SMTP_PASSWORD') || '';
   const fromEmail = Deno.env.get('FROM_EMAIL') || 'info@amiel-immobilienverwaltung.de';
 
-  // Create SMTP connection
-  const conn = smtpPort === 465 
-    ? await Deno.connectTls({ hostname: smtpHost, port: smtpPort })
-    : await Deno.connect({ hostname: smtpHost, port: smtpPort });
+  console.log('SMTP Config:', { host: smtpHost, port: smtpPort, user: smtpUser });
+
+  // Create SMTP connection - use TLS for port 465
+  const conn = await Deno.connectTls({
+    hostname: smtpHost,
+    port: smtpPort,
+  });
 
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
+  // Helper function to send command and read response
   async function sendCommand(command: string): Promise<string> {
     if (command) {
       console.log('SMTP Command:', command.replace(smtpPass, '***PASSWORD***'));
@@ -201,16 +266,6 @@ async function sendEmailSMTP(emailData: { to: string[]; subject: string; text: s
     
     // EHLO
     response = await sendCommand(`EHLO ${smtpHost}`);
-    
-    // STARTTLS for port 587
-    if (smtpPort === 587) {
-      response = await sendCommand('STARTTLS');
-      // Upgrade to TLS
-      const tlsConn = await Deno.startTls(conn, { hostname: smtpHost });
-      conn.close();
-      // Continue with TLS connection
-      response = await sendCommand(`EHLO ${smtpHost}`);
-    }
     
     // AUTH LOGIN
     response = await sendCommand('AUTH LOGIN');
@@ -234,20 +289,26 @@ async function sendEmailSMTP(emailData: { to: string[]; subject: string; text: s
     // DATA
     response = await sendCommand('DATA');
     
-    // Generate email headers
+    // Generate proper email headers for better deliverability
     const messageId = `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@amiel-immobilienverwaltung.de>`;
     const currentDate = new Date().toUTCString();
+    
+    // Encode subject to handle German characters properly
+    const encodedSubject = encodeEmailHeader(emailData.subject);
     
     const emailContent = [
       `From: Amiel Immobilienverwaltung <${fromEmail}>`,
       `To: ${emailData.to.join(', ')}`,
       `Reply-To: ${emailData.replyTo || fromEmail}`,
+      `Return-Path: ${fromEmail}`,
       `Message-ID: ${messageId}`,
       `Date: ${currentDate}`,
-      `Subject: ${emailData.subject}`,
+      `Subject: ${encodedSubject}`,
       'MIME-Version: 1.0',
       'Content-Type: text/plain; charset=UTF-8',
       'Content-Transfer-Encoding: 8bit',
+      'X-Mailer: Amiel Immobilienverwaltung Contact System',
+      'X-Priority: 3',
       '',
       emailData.text,
       '.'
