@@ -10,20 +10,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main role="main">
+      <main>
         <HeroSection />
-        <section aria-label="Ansprechpartner">
-          <AnsprechpartnerSection />
-        </section>
-        <section aria-label="Unsere Services">
-          <NewServicesSection />
-        </section>
-        <section aria-label="Unsere Projekte">
-          <ProjectsSection />
-        </section>
-        <section aria-label="Kundenbewertungen">
-          <CustomerReviewsSection />
-        </section>
+        <AnsprechpartnerSection />
+        <NewServicesSection />
+        <ProjectsSection />
+        <CustomerReviewsSection />
       </main>
       <Footer />
     </div>

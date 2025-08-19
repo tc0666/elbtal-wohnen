@@ -11,7 +11,6 @@ export interface Property {
   title: string;
   description: string;
   price_monthly: number;
-  warmmiete_monthly?: number;
   area_sqm: number;
   rooms: string;
   address: string;
@@ -73,11 +72,9 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
                   <div className="flex-1 min-w-0">
-                    <Link to={`/immobilie/${property.id}`}>
-                      <h3 className="font-bold text-lg sm:text-xl text-[hsl(var(--brand-blue))] line-clamp-1 mb-1 hover:underline cursor-pointer">
-                        {property.title}
-                      </h3>
-                    </Link>
+                    <h3 className="font-bold text-lg sm:text-xl text-[hsl(var(--brand-blue))] line-clamp-1 mb-1">
+                      {property.title}
+                    </h3>
                     <div className="flex items-center text-muted-foreground text-sm mb-2">
                       <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
                       <span className="truncate">{`${property.postal_code ? property.postal_code + ' ' : ''}${property.city?.name || 'Stadt nicht verfügbar'}`}</span>
@@ -87,31 +84,35 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 </div>
 
                 {/* Mobile: Price, Size, Rooms in same row */}
-                <div className="space-y-2 sm:hidden">
-                  <div className="flex items-center justify-between">
-                    <div className="text-base text-foreground">
-                      <span className="font-bold">Wohnfläche:</span> <span className="font-bold">{property.area_sqm} m²</span>
-                    </div>
-                    <div className="text-base text-foreground">
-                      <span className="font-bold">Zimmer:</span> <span className="font-bold">{property.rooms}</span>
+                <div className="grid grid-cols-3 gap-3 sm:hidden">
+                  <div className="flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-sm text-foreground"><span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²</div>
                     </div>
                   </div>
-                  <div className="text-base text-muted-foreground">
-                    <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.warmmiete_monthly || property.price_monthly)}</span>
+                  <div className="flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-sm text-foreground"><span className="font-medium">Räume:</span> {property.rooms}</div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-muted-foreground">
+                      <span className="font-medium">Warmmiete:</span> {formatPrice(property.price_monthly)}
+                    </div>
                   </div>
                 </div>
 
                 {/* Desktop: Size and Rooms in same row */}
                 <div className="hidden sm:flex sm:items-center sm:gap-6">
                     <div className="flex items-center gap-6">
-                      <div className="text-base text-foreground">
-                        <span className="font-bold">Wohnfläche:</span> <span className="font-bold">{property.area_sqm} m²</span>
+                      <div className="text-sm text-foreground">
+                        <span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²
                       </div>
-                      <div className="text-base text-foreground">
-                        <span className="font-bold">Zimmer:</span> <span className="font-bold">{property.rooms}</span>
+                      <div className="text-sm text-foreground">
+                        <span className="font-medium">Räume:</span> {property.rooms}
                       </div>
-                      <div className="text-base text-muted-foreground">
-                        <span className="font-bold">Warmmiete:</span> <span className="font-bold">{formatPrice(property.warmmiete_monthly || property.price_monthly)}</span>
+                      <div className="text-sm text-muted-foreground">
+                        <span className="font-medium">Warmmiete:</span> {formatPrice(property.price_monthly)}
                       </div>
                     </div>
                 </div>

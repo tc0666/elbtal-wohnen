@@ -43,22 +43,22 @@ const Impressum = () => {
                 <div>
                   <h3 className="font-semibold mb-2">Geschäftsführer</h3>
                   <p className="text-muted-foreground">
-                    Daniel Amiel, Geschäftsführer
+                    Dr. Michael Schmidt
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold mb-2">Amtsgericht</h3>
+                  <h3 className="font-semibold mb-2">Handelsregister</h3>
                   <p className="text-muted-foreground">
-                    Amtsgericht München<br />
-                    HRB 90221
+                    Amtsgericht Dresden<br />
+                    HRB 12345
                   </p>
                 </div>
 
                 <div>
                   <h3 className="font-semibold mb-2">Umsatzsteuer-ID</h3>
                   <p className="text-muted-foreground">
-                    DE9741089
+                    DE123456789
                   </p>
                 </div>
               </CardContent>
@@ -92,7 +92,7 @@ const Impressum = () => {
               <CardContent className="space-y-4">
                 <div>
                   <p className="font-medium">Telefon</p>
-                  <p className="text-muted-foreground">+49 89 123 456 789</p>
+                  <p className="text-muted-foreground">+49 351 123 456 789</p>
                 </div>
 
                 <div>
@@ -110,7 +110,7 @@ const Impressum = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <p className="font-medium">Daniel Amiel</p>
+                  <p className="font-medium">Dr. Michael Schmidt</p>
                   <p className="text-muted-foreground">Leuchtenbergring 54</p>
                   <p className="text-muted-foreground">81677 München</p>
                 </div>
@@ -126,9 +126,9 @@ const Impressum = () => {
               <CardContent>
                 <div className="space-y-2">
                   <p className="text-muted-foreground">
-                    Industrie- und Handelskammer für München und Oberbayern<br />
-                    Balanstraße 55–59<br />
-                    81541 München
+                    Industrie- und Handelskammer Dresden<br />
+                    Langer Weg 4<br />
+                    01239 Dresden
                   </p>
                 </div>
               </CardContent>

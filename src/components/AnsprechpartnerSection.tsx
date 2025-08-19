@@ -7,7 +7,7 @@ const ansprechpartner = [
   {
     id: 1,
     title: "Ihr Verwalter",
-    name: "Daniel Amiel",
+    name: "Thomas Müller",
     phone: "+49 30 123456789",
     email: "info@amiel-immobilienverwaltung.de",
     description: "Allgemeine Verwaltungsangelegenheiten",
@@ -16,7 +16,7 @@ const ansprechpartner = [
   {
     id: 2,
     title: "Ihr Techniker", 
-    name: "Thomas Karlstein",
+    name: "Stefan Weber",
     phone: "+49 30 987654321",
     email: "info@amiel-immobilienverwaltung.de",
     description: "Technische Angelegenheiten & Schadensmeldungen",
@@ -25,7 +25,7 @@ const ansprechpartner = [
   {
     id: 3,
     title: "Schadensbearbeitung",
-    name: "Maria Rosenthal",
+    name: "Marina Schmidt",
     phone: "+49 30 555123456",
     email: "info@amiel-immobilienverwaltung.de", 
     description: "Schadensmeldungen & Versicherungsangelegenheiten",
