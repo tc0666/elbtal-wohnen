@@ -87,12 +87,12 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 <div className="grid grid-cols-3 gap-3 sm:hidden">
                   <div className="flex items-center justify-center">
                     <div className="text-center">
-                      <div className="text-sm text-foreground"><span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²</div>
+                      <div className="text-sm text-foreground"><span className="font-medium">Wohnfläche:</span> <span className="font-bold">{property.area_sqm} m²</span></div>
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <div className="text-center">
-                      <div className="text-sm text-foreground"><span className="font-medium">Räume:</span> {property.rooms}</div>
+                      <div className="text-sm text-foreground"><span className="font-medium">Zimmer:</span> <span className="font-bold">{property.rooms}</span></div>
                     </div>
                   </div>
                   <div className="text-center">
@@ -106,10 +106,10 @@ export const SimplePropertyCard = ({ property }: SimplePropertyCardProps) => {
                 <div className="hidden sm:flex sm:items-center sm:gap-6">
                     <div className="flex items-center gap-6">
                       <div className="text-sm text-foreground">
-                        <span className="font-medium">Wohnfläche:</span> {property.area_sqm} m²
+                        <span className="font-medium">Wohnfläche:</span> <span className="font-bold">{property.area_sqm} m²</span>
                       </div>
                       <div className="text-sm text-foreground">
-                        <span className="font-medium">Räume:</span> {property.rooms}
+                        <span className="font-medium">Zimmer:</span> <span className="font-bold">{property.rooms}</span>
                       </div>
                       <div className="text-sm text-muted-foreground">
                         <span className="font-medium">Warmmiete:</span> {formatPrice(property.price_monthly)}
